@@ -140,8 +140,9 @@
             target: this.token_op.transfer_to
           })
         })
-        .then(x => {
-          console.log(x)
+        .catch(err => {
+          if (err) 
+            this.state.loading.tip += `token balance insufficient`
         })
       },
       token_approve: function(){
@@ -158,9 +159,6 @@
             amount: Math.round(this.token_op.approve_amount * precision),
             target: this.token_op.approve_to
           })
-        })
-        .then(x => {
-          console.log(x)
         })
       },
       token_withdraw: function(){
@@ -179,10 +177,10 @@
             source: this.token_op.withdraw_from
           })
         })
-        .then(x => {
-          console.log(x)
+        .catch(err => {
+          if (err) 
+            this.state.loading.tip += `insufficient amount of approval`
         })
-
       },
       load_orders: function(){
         if (!this.selected_token) return
@@ -253,6 +251,7 @@
         if (direction) {
           const amount_tez = window.prompt(`Total: ${order.amount.tez} XTZ\nInput the amount you want to spend`)
           if (!amount_tez || !amount_tez.trim() || isNaN(parseFloat(amount_tez))) return
+          if (amount_tez > order.amount.tez) return
 
           this.tezbridge({
             method: 'transfer', 
@@ -261,14 +260,21 @@
             parameters: window.TEZEX.parameter.execute(
               Object.assign({symbol: this.selected_token, amount_nat: 0}, order))
           })
-          .then(x => {
-            console.log(x)
+          .catch(err => {
+            if (err) {
+              if (err.contract === contracts.execute.contract) {
+                if (err.location === 334)
+                  this.state.loading.tip += `this order is locked and being executed\nplease try again later`
+              }
+            }
           })
+
         } else {
           const amount_nat = window.prompt(`Total: ${order.amount.nat / precision} ${this.selected_token}\nInput the amount you want to spend`)
           if (!amount_nat || !amount_nat.trim() || isNaN(parseFloat(amount_nat))) return
 
           const calculated_amount_nat = Math.round(amount_nat * precision)
+          if (calculated_amount_nat > order.amount.nat) return
 
           this.tezbridge({
             method: 'transfer', 
@@ -288,8 +294,14 @@
                 Object.assign({symbol: this.selected_token, amount_nat: calculated_amount_nat}, order))
             })
           })
-          .then(x => {
-            console.log(x)
+          .catch(err => {
+            if (err) {
+              if (err.contract === contracts.execute.contract) {
+                if (err.location === 334)
+                  this.state.loading.tip += `this order is locked and being executed\nplease try again later`
+              } else if (err.contract === this.tokens[this.selected_token].token_contract) 
+                this.state.loading.tip += `insufficient amount of approval`
+            }
           })
         }
       },
@@ -300,8 +312,10 @@
           destination: contracts.main.contract,
           parameters: window.TEZEX.parameter.redeem_tez(this.selected_token)
         })
-        .then(x => {
-          console.log(x)
+        .catch(err => {
+          if (err) {
+            this.state.loading.tip += `zero amount`
+          }
         })
       },
       redeem_token: function(){
@@ -314,8 +328,10 @@
           destination: contract,
           parameters: window.TEZEX.parameter.redeem_token()
         })
-        .then(x => {
-          console.log(x)
+        .catch(err => {
+          if (err) {
+            this.state.loading.tip += `zero amount`
+          }
         })
       },
       cancel_order: function(order){
@@ -324,9 +340,6 @@
           amount: 0, 
           destination: contracts.main.contract,
           parameters: window.TEZEX.parameter.cancel_order({symbol: this.selected_token, order_id: order.id})
-        })
-        .then(x => {
-          console.log(x)
         })
       },
       submit_order: function(direction){
@@ -345,12 +358,6 @@
               direction: this.direction, 
               amount: this.amount
             })
-          })
-          .then(x => {
-            console.log(x)
-          })
-          .catch(err => {
-            console.error(err)
           })
 
         } else {
@@ -375,11 +382,9 @@
               })
             })
           })
-          .then(x => {
-            console.log(x)
-          })
           .catch(err => {
-            console.error(err)
+            if (err)
+              this.state.loading.tip += `insufficient amount of approval`
           })
         }
       },
