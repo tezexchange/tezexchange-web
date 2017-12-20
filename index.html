@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>TezExchange (Alpha)</title>
+    <link rel="stylesheet" href="css/global.css" />
+
+    <script src="js/vue.js"></script>
+    <script src="js/tezex.js"></script>
+    <script src="js/parameter.js"></script>
+  </head>
+  <body>
+    <!-- <iframe src="http://127.0.0.1:8081/plugin.html" id="tezbridge"></iframe> -->
+    <iframe src="https://tezbridge.github.io/plugin.html" id="tezbridge"></iframe>
+
+    <div id="tezex-app">
+      <div id="loading" v-if="state.loading.type !== 'none'">
+        <pre :class="state.loading.type">{{state.loading.tip.replace(/\n+/g, '\n') || 'RPC CALLING...'}}</pre>
+      </div>
+
+      <h4>
+        <b id="logo">TexExchange</b>
+      </h4>
+      <div class="splash" v-if="state.splash">
+        Loading tezbridge...
+      </div>
+      <div v-if="!state.splash">
+        <div id="account" class="content">
+          <p class="title">ACCOUNT:</p>
+          <p>{{account.pkh}}</p>
+          <p class="title">BALANCE:</p>
+          <p>{{account.balance}}</p>
+          <button @click="refresh_account">REFRESH</button>
+        </div>
+        <div id="console">
+          <select v-model="selected_token" @change="load_orders">
+            <option value="" v-if="!Object.keys(tokens).length">PLEASE REFRESH ACCOUNT</option>
+            <option value="" v-if="Object.keys(tokens).length">PLEASE SELECT TOKEN</option>
+            <option :value="token.name" v-for="token in tokens">{{token.name}}</option>
+          </select>
+          <div class="token-operations" v-if="selected_token && tokens[selected_token].token_contract">
+            <span>MY {{selected_token}} BALANCE: {{tokens[selected_token].balance}}</span>
+            <button @click="refresh_token_balance">CHECK</button>
+            <br>
+            <a id="token-utility-btn" @click="token_op.display_more_token_op = true" v-if="!token_op.display_more_token_op">token utility</a>
+            <div v-if="token_op.display_more_token_op">
+              <table>
+                <tr>
+                  <td>TARGET</td>
+                  <td>AMOUNT</td>
+                  <td>OPERATION</td>
+                </tr>
+                <tr>
+                  <td><input class="address" v-model="token_op.transfer_to" /></td>
+                  <td><input type="number" v-model.number="token_op.transfer_amount" /></td>
+                  <td><button @click="token_transfer">TRANSFER</button></td>
+                </tr>
+                <tr>
+                  <td><input class="address" v-model="token_op.approve_to" /></td>
+                  <td><input type="number" v-model.number="token_op.approve_amount" /></td>
+                  <td><button @click="token_approve">APPROVE</button></td>
+                </tr>
+                <tr>
+                  <td><input class="address" v-model="token_op.withdraw_from" /></td>
+                  <td><input type="number" v-model.number="token_op.withdraw_amount" /></td>
+                  <td><button @click="token_withdraw">WITHDRAW</button></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <h4>
+          <b>REDEEM</b>
+          <span @click="refresh_redeem_both" class="refresh-icon">🔄</span>
+        </h4>
+        <div id="redeem">
+          <table>
+            <tr>
+              <td><b>{{redeem_xtz}}</b></td>
+              <td>XTZ</td>
+              <td><button @click="redeem_tez" :disabled="redeem_xtz == 0">REDEEM XTZ</button></td>
+            </tr>
+            <tr v-if="selected_token && tokens[selected_token].token_contract">
+              <td><b>{{tokens[selected_token].redeem / tokens[selected_token].precision}}</b></td>
+              <td>{{selected_token}}</td>
+              <td><button @click="redeem_token" :disabled="tokens[selected_token].redeem == 0">REDEEM {{selected_token}}</button></td>
+            </tr>
+          </table>
+        </div>
+
+        <h4>
+          <b>ORDER BOOK</b>
+          <span @click="load_orders" class="refresh-icon">🔄</span>
+        </h4>
+        <div id="orders" v-if="selected_token">
+          <div class="tab">
+            <a @click="order_tab = 'buy'" :class="{active: order_tab === 'buy'}">BUYING</a>
+            <a @click="order_tab = 'sell'" :class="{active: order_tab === 'sell'}">SELLING</a>
+          </div>
+          <div class="tab-content">
+            <div v-if="order_tab === 'buy'">
+              <p>
+                <button @click="submit_order('0')">SELL</button>
+                <input v-model.number="amount.decimal" type="number"/>
+                <span>{{selected_token}} FOR</span>
+                <input v-model.number="amount.tez" type="number"/>
+                <span>XTZ</span>
+                <br>
+                <span>@ PRICE</span> 
+                <b>{{amount.tez == 0 ? '0' : (amount.tez / amount.nat * tokens[selected_token].precision).toFixed(8)}}</b>
+                <span>{{selected_token}}/XTZ</span>
+              </p>
+
+              <span class="dim-tip">
+                (This operation contains two steps: <br>
+                1. Approve token transfer 2. Submit order)
+              </span>
+
+              <table>
+                <tr>
+                  <td>PRICE</td>
+                  <td>ASK AMOUNT</td>
+                  <td>OPERATION</td>
+                </tr>
+                <tr v-for="order in orders.buy">
+                  <td>
+                    <b>{{order.price.toFixed(8)}}</b>   
+                  </td>              
+                  <td>
+                    {{order.amount.nat / tokens[selected_token].precision}} {{selected_token}}
+                  </td>
+                  <td>
+                    <button v-if="order.key !== account.pkh" @click="execute(false, order)">EXECUTE</button>
+                    <button @click="cancel_order(order)" class="cancel-btn" v-if="order.key === account.pkh">CANCEL</button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+
+            <div v-if="order_tab === 'sell'">
+              <p>
+                <button @click="submit_order('1')">BUY</button>
+                <input v-model.number="amount.decimal" type="number"/>
+                <span>{{selected_token}} WITH</span>
+                <input v-model.number="amount.tez" type="number"/>
+                <span>XTZ</span>
+                <br>
+                <span>@ PRICE</span> 
+                <b>{{amount.tez == 0 ? '0' : (amount.tez / amount.nat * tokens[selected_token].precision).toFixed(8)}}</b>
+                <span>{{selected_token}}/XTZ</span>
+              </p>
+
+              <table>
+                <tr>
+                  <td>PRICE</td>
+                  <td>BID AMOUNT</td>
+                  <td>OPERATION</td>
+                </tr>
+                <tr v-for="order in orders.sell">
+                  <td>
+                    <b>{{order.price.toFixed(8)}}</b>   
+                  </td>              
+                  <td>
+                    {{order.amount.nat / tokens[selected_token].precision}} {{selected_token}}
+                  </td>
+                  <td>
+                    <button v-if="order.key !== account.pkh" @click="execute(true, order)">EXECUTE</button>
+                    <button @click="cancel_order(order)" class="cancel-btn" v-if="order.key === account.pkh">CANCEL</button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+
+    </div>
+
+    <script src="js/components.js"></script>
+  </body>
+</html>

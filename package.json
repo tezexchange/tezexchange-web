@@ -1,0 +1,19 @@
+{
+  "name": "tezexchange",
+  "version": "1.0.0",
+  "description": "tezexchange build system",
+  "scripts": {
+    "liq": "cd contracts && liq --compact *.liq",
+    "build": "node build.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tezexchange/tezexchange.github.io.git"
+  },
+  "author": "catsigma",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tezexchange/tezexchange.github.io/issues"
+  },
+  "homepage": "https://github.com/tezexchange/tezexchange.github.io#readme"
+}
