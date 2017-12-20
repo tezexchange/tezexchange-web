@@ -10,7 +10,6 @@
     <script src="js/parameter.js"></script>
   </head>
   <body>
-    <!-- <iframe src="http://127.0.0.1:8081/plugin.html" id="tezbridge"></iframe> -->
     <iframe src="https://tezbridge.github.io/plugin.html" id="tezbridge"></iframe>
 
     <div id="tezex-app">
@@ -95,8 +94,8 @@
         </h4>
         <div id="orders" v-if="selected_token">
           <div class="tab">
-            <a @click="order_tab = 'buy'" :class="{active: order_tab === 'buy'}">BUYING</a>
-            <a @click="order_tab = 'sell'" :class="{active: order_tab === 'sell'}">SELLING</a>
+            <a @click="order_tab = 'buy'" :class="{active: order_tab === 'buy'}">BUYING {{selected_token}}</a>
+            <a @click="order_tab = 'sell'" :class="{active: order_tab === 'sell'}">SELLING {{selected_token}}</a>
           </div>
           <div class="tab-content">
             <div v-if="order_tab === 'buy'">
