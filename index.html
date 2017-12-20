@@ -99,10 +99,11 @@
           </div>
           <div class="tab-content">
             <div v-if="order_tab === 'buy'">
-              <p>
-                <button @click="submit_order('0')">SELL</button>
+              <button v-if="!state.display_creating_buying" @click="state.display_creating_buying = true">CREATE NEW BUYING ORDER</button>
+              <p v-if="state.display_creating_buying">
+                <button @click="submit_order('1')">BUY</button>
                 <input v-model.number="amount.decimal" type="number"/>
-                <span>{{selected_token}} FOR</span>
+                <span>{{selected_token}} WITH</span>
                 <input v-model.number="amount.tez" type="number"/>
                 <span>XTZ</span>
                 <br>
@@ -111,10 +112,7 @@
                 <span>{{selected_token}}/XTZ</span>
               </p>
 
-              <span class="dim-tip">
-                (This operation contains two steps: <br>
-                1. Approve token transfer 2. Submit order)
-              </span>
+              
 
               <table>
                 <tr>
@@ -138,10 +136,11 @@
             </div>
 
             <div v-if="order_tab === 'sell'">
-              <p>
-                <button @click="submit_order('1')">BUY</button>
+              <button v-if="!state.display_creating_selling" @click="state.display_creating_selling = true">CREATE NEW SELLING ORDER</button>
+              <p v-if="state.display_creating_selling">
+                <button @click="submit_order('0')">SELL</button>
                 <input v-model.number="amount.decimal" type="number"/>
-                <span>{{selected_token}} WITH</span>
+                <span>{{selected_token}} FOR</span>
                 <input v-model.number="amount.tez" type="number"/>
                 <span>XTZ</span>
                 <br>
@@ -149,7 +148,11 @@
                 <b>{{amount.tez == 0 ? '0' : (amount.tez / amount.nat * tokens[selected_token].precision).toFixed(8)}}</b>
                 <span>{{selected_token}}/XTZ</span>
               </p>
-
+              <span class="dim-tip" v-if="state.display_creating_selling">
+                (This operation contains two steps: <br>
+                1. Approve token transfer 2. Submit order)
+              </span>
+              
               <table>
                 <tr>
                   <td>PRICE</td>

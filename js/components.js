@@ -18,18 +18,6 @@
     TEZEXApp.state.splash = false
   }  
 
-  // components
-  // const rewardList = {
-  //   props: ['data'],
-  //   template: `
-  //     <div class="reward-list">
-  //       <p v-for="(v, k) in data">
-  //         <b>{{v}}tz</b> {{k}}
-  //       </p>
-  //     </div>
-  //   `
-  // }
-
   const TEZEXApp = new Vue({
     el: '#tezex-app',
     components: {
@@ -45,7 +33,9 @@
           type: 'none', // call | pass | fail | none
           tip: '',
           timeout: 0
-        }
+        },
+        display_creating_buying: false,
+        display_creating_selling: false
       },
       selected_token: '',
       token_op: {
