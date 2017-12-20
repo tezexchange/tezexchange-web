@@ -2,10 +2,11 @@
   const req_func = {}
   const req_reject_func = {}
 
+  let id = 1
   const tezbridgeCreator = (iframe_window) => {
     return (param) => {
       return new Promise(function(resolve, reject){
-        const tick = +new Date()
+        const tick = id++
         param.tezbridge = tick
         iframe_window.contentWindow.postMessage(param, '*')
         req_func[tick] = resolve

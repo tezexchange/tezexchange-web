@@ -37,6 +37,7 @@
         display_creating_buying: false,
         display_creating_selling: false
       },
+      operations: [],
       selected_token: '',
       token_op: {
         display_more_token_op: false,
@@ -92,6 +93,9 @@
         return tezbridge(params)
         .then(x => {
           this.state.loading.type = 'pass'
+          if (x.injectedOperation)
+            this.operations.push(x.injectedOperation)
+
           return x
         })
         .catch(err => {
@@ -448,9 +452,24 @@
               contract: x.args[1].args[1].string
             }
           })
+
+          setInterval(() => {
+            if (this.state.loading.type === 'call') return
+
+            tezbridge({method: 'get_block_head'})
+            .then(x => {
+              const hashes = {}
+              x.operations[0].forEach(x => hashes[x.hash] = true)
+
+              const uncommitted_operations = this.operations.filter(x => !(x in hashes))
+              this.operations = uncommitted_operations
+            })
+          }, 60000)
         })
         .catch(err => {})
       }
     }
   })
+
+  
 })(window, document)

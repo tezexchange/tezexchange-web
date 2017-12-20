@@ -19,6 +19,11 @@
 
       <h4>
         <b id="logo">TexExchange</b>
+
+        <span id="progress">
+          <span v-for="x in operations" :title="x"></span>
+        </span>
+        
       </h4>
       <div class="splash" v-if="state.splash">
         Loading tezbridge...
@@ -152,7 +157,7 @@
                 (This operation contains two steps: <br>
                 1. Approve token transfer 2. Submit order)
               </span>
-              
+
               <table>
                 <tr>
                   <td>PRICE</td>
