@@ -75,5 +75,4 @@ div.content span.indent { display: block; margin-left: 16px; }
 .refresh-icon {cursor: pointer; font-size: 14px; display: inline-block; }
 
 #progress { display: inline-block; margin-left: 4px;  }
-#progress span { display: inline-block; width: 6px; margin-right: 4px; height: 6px; background: yellow; border-radius: 3px; animation-duration: 2s; animation-iteration-count:infinite; animation-name: blink;}
-@keyframes blink {0% {box-shadow: 0px 0px 6px 2px yellow;} 50% {box-shadow: 0px 0px 0px 0px yellow;} 100% {box-shadow: 0px 0px 6px 2px yellow;}}
+#progress span { display: inline-block; box-shadow: 0px 0px 5px 1px yellow; width: 5px; margin-right: 4px; height: 5px; background: yellow; border-radius: 2px;}

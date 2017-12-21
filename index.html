@@ -127,7 +127,7 @@
                 </tr>
                 <tr v-for="order in orders.buy">
                   <td>
-                    <b>{{order.price.toFixed(8)}}</b>   
+                    <b>{{(order.price / 100000000 * tokens[selected_token].precision).toFixed(8)}}</b>   
                   </td>              
                   <td>
                     {{order.amount.nat / tokens[selected_token].precision}} {{selected_token}}
@@ -166,7 +166,7 @@
                 </tr>
                 <tr v-for="order in orders.sell">
                   <td>
-                    <b>{{order.price.toFixed(8)}}</b>   
+                    <b>{{(order.price / 100000000 * tokens[selected_token].precision).toFixed(8)}}</b>   
                   </td>              
                   <td>
                     {{order.amount.nat / tokens[selected_token].precision}} {{selected_token}}

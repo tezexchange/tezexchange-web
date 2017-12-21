@@ -63,10 +63,7 @@
                           {int: info.id + ''},
                           prim('Pair', [
                               {int: info.direction ? '1' : '0'},
-                              prim('Pair', [
-                                  {int: info.amount.nat + ''},
-                                  {string: fix_tez(info.amount.tez)}
-                                ])
+                              {string: fix_tez(info.price)}
                             ])
                         ])
                     ])
@@ -94,13 +91,7 @@
   }
 
   const redeem_token = () => {
-    return prim('Right', [
-        prim('Right', [
-            prim('Right', [
-                prim('Unit', [])
-              ])
-          ])
-      ])
+    return prim('None', [])
   }
 
   const token_transfer = info => {

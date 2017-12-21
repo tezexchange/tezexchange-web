@@ -197,12 +197,13 @@
           const orders_parsed = orders.map(x => {
             const nat = parseInt(x.args[1].args[1].args[0].args[0].int)
             const tez = window.TEZEX.util.get_tez(x.args[1].args[1].args[0].args[1].string)
+            const price = window.TEZEX.util.get_tez(x.args[1].args[1].args[1].args[0].string)
             return {
               id: x.args[0].int,
               direction: x.args[1].args[0].int === '1' ? true : false,
-              key: x.args[1].args[1].args[1].string,
+              key: x.args[1].args[1].args[1].args[1].string,
               amount: {nat, tez},
-              price: tez / (nat / this.tokens[this.selected_token].precision)
+              price
             }
           })
 
@@ -260,14 +261,6 @@
             parameters: window.TEZEX.parameter.execute(
               Object.assign({symbol: this.selected_token, amount_nat: 0}, order))
           })
-          .catch(err => {
-            if (err) {
-              if (err.contract === contracts.execute.contract) {
-                if (err.location === 334)
-                  this.state.loading.tip += `this order is locked and being executed\nplease try again later`
-              }
-            }
-          })
 
         } else {
           const amount_nat = window.prompt(`Total: ${order.amount.nat / precision} ${this.selected_token}\nInput the amount you want to spend`)
@@ -296,10 +289,7 @@
           })
           .catch(err => {
             if (err) {
-              if (err.contract === contracts.execute.contract) {
-                if (err.location === 334)
-                  this.state.loading.tip += `this order is locked and being executed\nplease try again later`
-              } else if (err.contract === this.tokens[this.selected_token].token_contract) 
+              if (err.contract === this.tokens[this.selected_token].token_contract) 
                 this.state.loading.tip += `insufficient amount of approval`
             }
           })
