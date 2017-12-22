@@ -453,6 +453,8 @@
 
             tezbridge({method: 'get_block_head'})
             .then(x => {
+              if (!x) return
+                
               const hashes = {}
               x.operations[0].forEach(x => hashes[x.hash] = true)
 
