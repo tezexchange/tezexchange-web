@@ -1,1 +1,748 @@
-parameter (or unit (or key_hash (or unit (or (pair key_hash nat) (or (pair key_hash nat) (or (pair key_hash (pair key_hash nat)) (pair key_hash key_hash))))))); storage (pair (pair nat (pair nat (pair string string))) (pair (map key_hash nat) (map key_hash (map key_hash nat)))); return (or unit (or (pair nat (pair nat (pair string string))) (or nat (map key_hash nat)))); code { DUP ; DIP { CDR ; } ; CAR ; DUP ; IF_LEFT { DROP ; DUUP ; DUUUP ; CAR ; LEFT (or nat (map key_hash nat)) ; RIGHT unit ; PAIR ; } { IF_LEFT { DUUUP ; DUUUUP ; CDAR ; DUUUP ; GET ; IF_NONE { PUSH nat 0 ; } {} ; DIIP { DROP ; } ; LEFT (map key_hash nat) ; RIGHT (pair nat (pair nat (pair string string))) ; RIGHT unit ; PAIR ; } { IF_LEFT { DROP ; DUUP ; DUUUP ; CDAR ; RIGHT nat ; RIGHT (pair nat (pair nat (pair string string))) ; RIGHT unit ; PAIR ; } { IF_LEFT { SOURCE unit unit ; MANAGER ; DUUP ; CAR ; DUUUP ; CDR ; DUP ; DUUUUUUUP ; CDAR ; DUUUUUP ; GET ; IF_NONE { PUSH nat 0 ; } {} ; SUB ; DUP ; ABS ; SWAP ; GE ; IF { DUUUUUUUP ; DUP ; CAR ; SWAP ; CDR ; CDR ; DUUUUUUUUUP ; CDAR ; DUUUUP ; SOME ; DUUUUUUUUP ; UPDATE ; DUUUUUUUUUUP ; CDAR ; DUUUUUUUP ; GET ; IF_NONE { PUSH nat 0 ; } {} ; DIIIIP { DROP ; } ; DUUUUUP ; ADD ; SOME ; DUUUUUUP ; UPDATE ; PAIR ; SWAP ; PAIR ; PUSH (or unit (or (pair nat (pair nat (pair string string))) (or nat (map key_hash nat)))) (Left Unit) ; PAIR ; } { FAIL ; } ; DIP { DROP ; DROP ; DROP ; DROP ; } ; } { IF_LEFT { SOURCE unit unit ; MANAGER ; DUUUUP ; DUP ; CAR ; SWAP ; CDR ; DUP ; CAR ; SWAP ; DROP ; DUUUUUUP ; CDDR ; DUUUUUUUP ; CDDR ; DUUUUUP ; GET ; IF_NONE { PUSH (map key_hash nat) (Map) ; } {} ; DUUUUUUP ; CDR ; SOME ; DUUUUUUUP ; DIIIIIIIP { DROP ; } ; CAR ; UPDATE ; SOME ; DUUUUUP ; DIIIIIP { DROP ; } ; UPDATE ; SWAP ; PAIR ; SWAP ; PAIR ; PUSH (or unit (or (pair nat (pair nat (pair string string))) (or nat (map key_hash nat)))) (Left Unit) ; PAIR ; } { IF_LEFT { DUP ; CAR ; DUUP ; CDAR ; DUUUP ; CDDR ; DUUUUUUP ; CDDR ; DUUUUP ; GET ; IF_NONE { FAIL ; } { DUP ; DUUUUP ; GET ; IF_NONE { FAIL ; } { DUUUP ; DUUP ; SUB ; DUP ; ABS ; SWAP ; GE ; IF { DUUUUP ; DUUUUUUUUUUP ; CDAR ; DUUUUUUUUP ; GET ; IF_NONE { PUSH nat 0 ; } {} ; SUB ; DUP ; ABS ; SWAP ; GE ; IF { DUUUUUUUUUUP ; DUP ; CAR ; SWAP ; CDR ; CDR ; DUUUUUUUUUUUUP ; CDAR ; DUUUUUUUUUUUUUP ; CDAR ; DUUUUUUUUUUP ; GET ; IF_NONE { PUSH nat 0 ; } {} ; DUUUUUUUUUP ; ADD ; SOME ; DUUUUUUUUUUP ; UPDATE ; DUUUUP ; SOME ; DUUUUUUUUUUUP ; UPDATE ; PAIR ; SWAP ; PAIR ; DUP ; DUP ; CAR ; SWAP ; CDR ; DUP ; CAR ; SWAP ; DROP ; DIIIP { DROP ; } ; DUUUP ; DIIIP { DROP ; } ; CDDR ; DUUUUUUP ; DUUUUUP ; SOME ; DUUUUUUUUUUP ; UPDATE ; SOME ; DUUUUUUUUUUP ; UPDATE ; SWAP ; PAIR ; SWAP ; PAIR ; PUSH (or unit (or (pair nat (pair nat (pair string string))) (or nat (map key_hash nat)))) (Left Unit) ; PAIR ; } { FAIL ; } ; DIP { DROP ; } ; } { FAIL ; } ; DIP { DROP ; } ; } ; DIP { DROP ; } ; } ; DIP { DROP ; DROP ; DROP ; DROP ; } ; } { DUUUP ; CDDR ; DUUP ; CAR ; GET ; IF_NONE { DUUUP ; PUSH (or unit (or (pair nat (pair nat (pair string string))) (or nat (map key_hash nat)))) (Right (Right (Left 0))) ; PAIR ; } { DUP ; DUUUP ; CDR ; GET ; IF_NONE { DUUUUP ; PUSH (or unit (or (pair nat (pair nat (pair string string))) (or nat (map key_hash nat)))) (Right (Right (Left 0))) ; PAIR ; } { DUUUUUP ; SWAP ; LEFT (map key_hash nat) ; RIGHT (pair nat (pair nat (pair string string))) ; RIGHT unit ; PAIR ; } ; DIP { DROP ; } ; } ; DIP { DROP ; } ; } ; } ; } ; } ; } ; } ; DIP { DROP ; DROP ; } ; } 
+parameter
+  (or
+    unit
+    (or
+      key_hash
+      (or
+        unit
+        (or
+          (pair
+            key_hash
+            nat)
+          (or
+            (pair
+              key_hash
+              nat)
+            (or
+              (pair
+                key_hash
+                (pair
+                  key_hash
+                  nat))
+              (pair
+                key_hash
+                key_hash)))))));
+storage
+  (pair
+    (pair
+      nat
+      (pair
+        nat
+        (pair
+          string
+          string)))
+    (pair
+      (map
+        key_hash
+        nat)
+      (map
+        key_hash
+        (map
+          key_hash
+          nat))));
+return
+  (or
+    unit
+    (or
+      (pair
+        nat
+        (pair
+          nat
+          (pair
+            string
+            string)))
+      (or
+        nat
+        (map
+          key_hash
+          nat))));
+code
+  {
+    DUP ;
+    DIP
+      {
+        CDR ;
+      }
+      ;
+    CAR ;
+    DUP ;
+    { @parameter }
+    IF_LEFT
+      {
+        DUUUP ;
+        { @storage }
+        DIP
+          {
+            DROP ;
+          }
+          ;
+        DUUUP ;
+        CAR ;
+        LEFT
+          (or
+            nat
+            (map
+              key_hash
+              nat))
+          ;
+        RIGHT
+          unit
+          ;
+        PAIR ;
+      }
+      {
+        IF_LEFT
+          {
+            DUUUP ;
+            { @storage }
+            DUUUUP ;
+            CDAR ;
+            DUUUP ;
+            { @from }
+            GET ;
+            IF_NONE
+              {
+                PUSH
+                  nat
+                  0 ;
+              }
+              {
+                DUP ;
+                { @x }
+                DIP
+                  {
+                    DROP ;
+                  }
+                  ;
+              }
+              ;
+            { @result }
+            DIIP
+              {
+                DROP ;
+              }
+              ;
+            LEFT
+              (map
+                key_hash
+                nat)
+              ;
+            RIGHT
+              (pair
+                nat
+                (pair
+                  nat
+                  (pair
+                    string
+                    string)))
+              ;
+            RIGHT
+              unit
+              ;
+            PAIR ;
+          }
+          {
+            IF_LEFT
+              {
+                DUUUP ;
+                { @storage }
+                DIP
+                  {
+                    DROP ;
+                  }
+                  ;
+                DUUUP ;
+                CDAR ;
+                RIGHT
+                  nat
+                  ;
+                RIGHT
+                  (pair
+                    nat
+                    (pair
+                      nat
+                      (pair
+                        string
+                        string)))
+                  ;
+                RIGHT
+                  unit
+                  ;
+                PAIR ;
+              }
+              {
+                IF_LEFT
+                  {
+                    SOURCE
+                      unit
+                      unit
+                      ;
+                    MANAGER ;
+                    { @source }
+                    DUUP ;
+                    { @x }
+                    CAR ;
+                    { @target }
+                    DUUUP ;
+                    { @x }
+                    CDR ;
+                    { @amount }
+                    DUP ;
+                    { @amount }
+                    DUUUUUUUP ;
+                    CDAR ;
+                    DUUUUUP ;
+                    { @source }
+                    GET ;
+                    IF_NONE
+                      {
+                        PUSH
+                          nat
+                          0 ;
+                      }
+                      {
+                        DUP ;
+                        { @x }
+                        DIP
+                          {
+                            DROP ;
+                          }
+                          ;
+                      }
+                      ;
+                    { @source_balance }
+                    SUB ;
+                    DUP ;
+                    ABS ;
+                    SWAP ;
+                    GE ;
+                    IF
+                      {
+                        DUUUUUUUP ;
+                        { @storage }
+                        DUP ;
+                        CAR ;
+                        SWAP ;
+                        CDR ;
+                        CDR ;
+                        DUUUUUUUUUP ;
+                        CDAR ;
+                        DUUUUP ;
+                        { @diff }
+                        SOME ;
+                        DUUUUUUUUP ;
+                        { @source }
+                        UPDATE ;
+                        { @balance }
+                        DUUUUUUUUUUP ;
+                        CDAR ;
+                        DUUUUUUUP ;
+                        { @target }
+                        GET ;
+                        IF_NONE
+                          {
+                            PUSH
+                              nat
+                              0 ;
+                          }
+                          {
+                            DUP ;
+                            { @x }
+                            DIP
+                              {
+                                DROP ;
+                              }
+                              ;
+                          }
+                          ;
+                        DUUUUUUP ;
+                        { @amount }
+                        ADD ;
+                        { @new_target_balance }
+                        SOME ;
+                        DUUUUUUUP ;
+                        { @target }
+                        UPDATE ;
+                        { @balance }
+                        DIIIP
+                          {
+                            DROP ;
+                          }
+                          ;
+                        PAIR ;
+                        SWAP ;
+                        PAIR ;
+                        PUSH
+                          (or
+                            unit
+                            (or
+                              (pair
+                                nat
+                                (pair
+                                  nat
+                                  (pair
+                                    string
+                                    string)))
+                              (or
+                                nat
+                                (map
+                                  key_hash
+                                  nat))))
+                          (Left
+                            Unit) ;
+                        PAIR ;
+                      }
+                      {
+                        FAIL ;
+                      }
+                      ;
+                    DIP
+                      {
+                        DROP ;
+                        DROP ;
+                        DROP ;
+                        DROP ;
+                      }
+                      ;
+                  }
+                  {
+                    IF_LEFT
+                      {
+                        SOURCE
+                          unit
+                          unit
+                          ;
+                        MANAGER ;
+                        { @source }
+                        DUUUUP ;
+                        { @storage }
+                        DUP ;
+                        CAR ;
+                        SWAP ;
+                        CDR ;
+                        DUP ;
+                        CAR ;
+                        SWAP ;
+                        DROP ;
+                        DUUUUUUP ;
+                        CDDR ;
+                        DUUUUUUUP ;
+                        CDDR ;
+                        DUUUUUP ;
+                        { @source }
+                        GET ;
+                        IF_NONE
+                          {
+                            PUSH
+                              (map
+                                key_hash
+                                nat)
+                              (Map) ;
+                          }
+                          {
+                            DUP ;
+                            { @x }
+                            DIP
+                              {
+                                DROP ;
+                              }
+                              ;
+                          }
+                          ;
+                        { @inner_approve_dict }
+                        DUUUUUUP ;
+                        { @x }
+                        CDR ;
+                        { @amount }
+                        SOME ;
+                        DUUUUUUUP ;
+                        { @x }
+                        CAR ;
+                        { @target }
+                        UPDATE ;
+                        { @inner_approve_dict }
+                        SOME ;
+                        DUUUUUP ;
+                        { @source }
+                        UPDATE ;
+                        SWAP ;
+                        PAIR ;
+                        SWAP ;
+                        PAIR ;
+                        { @storage }
+                        DIP
+                          {
+                            DROP ;
+                            DROP ;
+                          }
+                          ;
+                        PUSH
+                          (or
+                            unit
+                            (or
+                              (pair
+                                nat
+                                (pair
+                                  nat
+                                  (pair
+                                    string
+                                    string)))
+                              (or
+                                nat
+                                (map
+                                  key_hash
+                                  nat))))
+                          (Left
+                            Unit) ;
+                        PAIR ;
+                      }
+                      {
+                        IF_LEFT
+                          {
+                            DUP ;
+                            { @x }
+                            CAR ;
+                            { @source }
+                            DUUP ;
+                            { @x }
+                            CDAR ;
+                            { @target }
+                            DUUUP ;
+                            { @x }
+                            CDDR ;
+                            { @amount }
+                            DUUUUUUP ;
+                            CDDR ;
+                            DUUUUP ;
+                            { @source }
+                            GET ;
+                            IF_NONE
+                              {
+                                FAIL ;
+                              }
+                              {
+                                DUP ;
+                                { @approve_dict_lst }
+                                DUUUUP ;
+                                { @target }
+                                GET ;
+                                IF_NONE
+                                  {
+                                    FAIL ;
+                                  }
+                                  {
+                                    DUUUP ;
+                                    { @amount }
+                                    DUUP ;
+                                    { @approved_amount }
+                                    SUB ;
+                                    DUP ;
+                                    ABS ;
+                                    SWAP ;
+                                    GE ;
+                                    IF
+                                      {
+                                        DUUUUP ;
+                                        { @amount }
+                                        DUUUUUUUUUUP ;
+                                        CDAR ;
+                                        DUUUUUUUUP ;
+                                        { @source }
+                                        GET ;
+                                        IF_NONE
+                                          {
+                                            PUSH
+                                              nat
+                                              0 ;
+                                          }
+                                          {
+                                            DUP ;
+                                            { @x }
+                                            DIP
+                                              {
+                                                DROP ;
+                                              }
+                                              ;
+                                          }
+                                          ;
+                                        { @origin_source_balance }
+                                        SUB ;
+                                        DUP ;
+                                        ABS ;
+                                        SWAP ;
+                                        GE ;
+                                        IF
+                                          {
+                                            DUUUUUUUUUUP ;
+                                            { @storage }
+                                            DUP ;
+                                            CAR ;
+                                            SWAP ;
+                                            CDR ;
+                                            CDR ;
+                                            DUUUUUUUUUUUUP ;
+                                            CDAR ;
+                                            DUUUUUUUUUUUUUP ;
+                                            CDAR ;
+                                            DUUUUUUUUUUP ;
+                                            { @target }
+                                            GET ;
+                                            IF_NONE
+                                              {
+                                                PUSH
+                                                  nat
+                                                  0 ;
+                                              }
+                                              {
+                                                DUP ;
+                                                { @x }
+                                                DIP
+                                                  {
+                                                    DROP ;
+                                                  }
+                                                  ;
+                                              }
+                                              ;
+                                            DUUUUUUUUUP ;
+                                            { @amount }
+                                            ADD ;
+                                            { @new_target_balance }
+                                            SOME ;
+                                            DUUUUUUUUUUP ;
+                                            { @target }
+                                            UPDATE ;
+                                            { @balance }
+                                            DUUUUP ;
+                                            { @origin_source_balance_diff }
+                                            SOME ;
+                                            DUUUUUUUUUUUP ;
+                                            { @source }
+                                            UPDATE ;
+                                            { @balance }
+                                            PAIR ;
+                                            SWAP ;
+                                            PAIR ;
+                                            { @storage }
+                                            DUP ;
+                                            { @storage }
+                                            DUP ;
+                                            CAR ;
+                                            SWAP ;
+                                            CDR ;
+                                            DUP ;
+                                            CAR ;
+                                            SWAP ;
+                                            DROP ;
+                                            DUUUP ;
+                                            CDDR ;
+                                            DUUUUUUUUP ;
+                                            { @approve_dict_lst }
+                                            DUUUUUUUP ;
+                                            { @approved_amount_diff }
+                                            SOME ;
+                                            DUUUUUUUUUUUUP ;
+                                            { @target }
+                                            UPDATE ;
+                                            { @new_approve_dict_lst }
+                                            SOME ;
+                                            DUUUUUUUUUUUUP ;
+                                            { @source }
+                                            UPDATE ;
+                                            { @new_approve_dict }
+                                            SWAP ;
+                                            PAIR ;
+                                            SWAP ;
+                                            PAIR ;
+                                            { @storage }
+                                            DIP
+                                              {
+                                                DROP ;
+                                                DROP ;
+                                              }
+                                              ;
+                                            PUSH
+                                              (or
+                                                unit
+                                                (or
+                                                  (pair
+                                                    nat
+                                                    (pair
+                                                      nat
+                                                      (pair
+                                                        string
+                                                        string)))
+                                                  (or
+                                                    nat
+                                                    (map
+                                                      key_hash
+                                                      nat))))
+                                              (Left
+                                                Unit) ;
+                                            PAIR ;
+                                          }
+                                          {
+                                            FAIL ;
+                                          }
+                                          ;
+                                        DIP
+                                          {
+                                            DROP ;
+                                          }
+                                          ;
+                                      }
+                                      {
+                                        FAIL ;
+                                      }
+                                      ;
+                                    DIP
+                                      {
+                                        DROP ;
+                                      }
+                                      ;
+                                  }
+                                  ;
+                                DIP
+                                  {
+                                    DROP ;
+                                  }
+                                  ;
+                              }
+                              ;
+                            DIP
+                              {
+                                DROP ;
+                                DROP ;
+                                DROP ;
+                                DROP ;
+                              }
+                              ;
+                          }
+                          {
+                            DUUUP ;
+                            CDDR ;
+                            DUUP ;
+                            { @x }
+                            CAR ;
+                            { @source }
+                            GET ;
+                            IF_NONE
+                              {
+                                DUUUP ;
+                                { @storage }
+                                PUSH
+                                  (or
+                                    unit
+                                    (or
+                                      (pair
+                                        nat
+                                        (pair
+                                          nat
+                                          (pair
+                                            string
+                                            string)))
+                                      (or
+                                        nat
+                                        (map
+                                          key_hash
+                                          nat))))
+                                  (Right
+                                    (Right
+                                      (Left
+                                        0))) ;
+                                PAIR ;
+                              }
+                              {
+                                DUP ;
+                                { @x }
+                                DUUUP ;
+                                { @x }
+                                CDR ;
+                                { @target }
+                                GET ;
+                                IF_NONE
+                                  {
+                                    DUUUUP ;
+                                    { @storage }
+                                    PUSH
+                                      (or
+                                        unit
+                                        (or
+                                          (pair
+                                            nat
+                                            (pair
+                                              nat
+                                              (pair
+                                                string
+                                                string)))
+                                          (or
+                                            nat
+                                            (map
+                                              key_hash
+                                              nat))))
+                                      (Right
+                                        (Right
+                                          (Left
+                                            0))) ;
+                                    PAIR ;
+                                  }
+                                  {
+                                    DUUUUUP ;
+                                    { @storage }
+                                    DUUP ;
+                                    { @x }
+                                    DIIP
+                                      {
+                                        DROP ;
+                                      }
+                                      ;
+                                    LEFT
+                                      (map
+                                        key_hash
+                                        nat)
+                                      ;
+                                    RIGHT
+                                      (pair
+                                        nat
+                                        (pair
+                                          nat
+                                          (pair
+                                            string
+                                            string)))
+                                      ;
+                                    RIGHT
+                                      unit
+                                      ;
+                                    PAIR ;
+                                  }
+                                  ;
+                                DIP
+                                  {
+                                    DROP ;
+                                  }
+                                  ;
+                              }
+                              ;
+                            DIP
+                              {
+                                DROP ;
+                              }
+                              ;
+                          }
+                          ;
+                      }
+                      ;
+                  }
+                  ;
+              }
+              ;
+          }
+          ;
+      }
+      ;
+    DIP
+      {
+        DROP ;
+        DROP ;
+      }
+      ;
+  }
