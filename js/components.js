@@ -261,6 +261,13 @@
             parameters: window.TEZEX.parameter.execute(
               Object.assign({symbol: this.selected_token, amount_nat: 0}, order))
           })
+          .catch(err => {
+            if (err) {
+              if (err.contract === contracts.execute.contract && err.location === 888) {
+                this.state.loading.tip += `the total amount may be consumed by others\nplease reduce the amount and try again`
+              }
+            }
+          })
 
         } else {
           const amount_nat = window.prompt(`Total: ${order.amount.nat / precision} ${this.selected_token}\nInput the amount you want to spend`)
@@ -289,7 +296,9 @@
           })
           .catch(err => {
             if (err) {
-              if (err.contract === this.tokens[this.selected_token].token_contract) 
+              if (err.contract === contracts.execute.contract && err.location === 888) {
+                this.state.loading.tip += `the total amount may be consumed by others\nplease reduce the amount and try again`
+              } else if (err.contract === this.tokens[this.selected_token].token_contract)
                 this.state.loading.tip += `insufficient amount of approval`
             }
           })
