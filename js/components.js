@@ -160,7 +160,7 @@
         })
         .catch(err => {
           if (err) 
-            this.state.loading.tip += `token balance insufficient`
+            this.state.loading.tip += `\ntoken balance insufficient`
         })
       },
       token_approve: function(){
@@ -197,7 +197,7 @@
         })
         .catch(err => {
           if (err) 
-            this.state.loading.tip += `insufficient amount of approval`
+            this.state.loading.tip += `\ninsufficient amount of approval`
         })
       },
       load_orders: function(){
@@ -295,7 +295,7 @@
           .catch(err => {
             if (err) {
               if (err.contract === contracts.execute.contract && err.location === 888) {
-                this.state.loading.tip += `the total amount may be consumed by others\nplease reduce the amount and try again`
+                this.state.loading.tip += `\nthe total amount may be consumed by others\nplease reduce the amount and try again`
               }
             }
           })
@@ -330,9 +330,9 @@
           .catch(err => {
             if (err) {
               if (err.contract === contracts.execute.contract && err.location === 888) {
-                this.state.loading.tip += `the total amount may be consumed by others\nplease reduce the amount and try again`
+                this.state.loading.tip += `\nthe total amount may be consumed by others\nplease reduce the amount and try again`
               } else if (err.contract === this.tokens[this.selected_token].token_contract)
-                this.state.loading.tip += `insufficient amount of approval`
+                this.state.loading.tip += `\ninsufficient amount of approval`
             }
           })
         }
@@ -346,7 +346,7 @@
         })
         .catch(err => {
           if (err) {
-            this.state.loading.tip += `zero amount`
+            this.state.loading.tip += `\nzero amount`
           }
         })
       },
@@ -362,7 +362,7 @@
         })
         .catch(err => {
           if (err) {
-            this.state.loading.tip += `zero amount`
+            this.state.loading.tip += `\nzero amount`
           }
         })
       },
@@ -416,7 +416,7 @@
           })
           .catch(err => {
             if (err)
-              this.state.loading.tip += `insufficient amount of approval`
+              this.state.loading.tip += `\ninsufficient amount of approval`
           })
         }
       },
