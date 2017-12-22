@@ -13,6 +13,40 @@
     <iframe src="https://tezbridge.github.io/plugin.html" id="tezbridge"></iframe>
 
     <div id="tezex-app">
+      <div id="dialog" v-if="execution.order">
+        <div class="content">
+          <table>
+            <tr>
+              <td> <input v-model="execution.decimal" @focus="execution.focus = 1" /> </td>
+              <td> {{this.selected_token}} </td>
+            </tr>
+            <tr>
+              <td> <input v-model="execution.tez" @focus="execution.focus = 2"/> </td>
+              <td> XTZ </td>
+            </tr>
+            <tr>
+              <td v-if="execution.order.direction">
+                You will get {{execution.tez}} XTZ <br>
+                by spending {{execution.decimal}} {{this.selected_token}}
+              </td>
+              <td v-if="!execution.order.direction">
+                You will get {{execution.decimal}} {{this.selected_token}}<br>
+                by spending {{execution.tez}} XTZ
+              </td>
+              <td>@ PRICE <br>{{(execution.order.price / 100000000 * tokens[selected_token].precision).toFixed(8)}}</td>
+            </tr>
+            <tr> 
+              <td>
+                <button @click="execute">OK</button> 
+                <button @click="execution.order = null">CANCEL</button> 
+              </td>
+              <td>
+              </td>
+            </tr>
+          </table>
+        </div>  
+      </div>
+
       <div id="loading" v-if="state.loading.type !== 'none'">
         <pre :class="state.loading.type">{{state.loading.tip.replace(/\n+/g, '\n') || 'RPC CALLING...'}}</pre>
       </div>
@@ -133,7 +167,7 @@
                     {{order.amount.nat / tokens[selected_token].precision}} {{selected_token}}
                   </td>
                   <td>
-                    <button v-if="order.key !== account.pkh" @click="execute(false, order)">EXECUTE</button>
+                    <button v-if="order.key !== account.pkh" @click="show_execution_dialog(order)">EXECUTE</button>
                     <button @click="cancel_order(order)" class="cancel-btn" v-if="order.key === account.pkh">CANCEL</button>
                   </td>
                 </tr>
@@ -172,7 +206,7 @@
                     {{order.amount.nat / tokens[selected_token].precision}} {{selected_token}}
                   </td>
                   <td>
-                    <button v-if="order.key !== account.pkh" @click="execute(true, order)">EXECUTE</button>
+                    <button v-if="order.key !== account.pkh" @click="show_execution_dialog(order)">EXECUTE</button>
                     <button @click="cancel_order(order)" class="cancel-btn" v-if="order.key === account.pkh">CANCEL</button>
                   </td>
                 </tr>

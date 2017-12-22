@@ -60,9 +60,25 @@
         buy: [],
         sell: []
       },
+      execution: {
+        order: null,
+        decimal: 0,
+        tez: 0,
+        focus: 0
+      },
       order_tab: 'buy'
     },
     watch: {
+      'execution.decimal'(x) {
+        if (this.execution.focus !== 1) return
+        const price = this.execution.order.price / 100000000 * this.tokens[this.selected_token].precision
+        this.execution.tez = (x * price).toFixed(2)
+      },
+      'execution.tez'(x) {
+        if (this.execution.focus !== 2) return
+        const price = this.execution.order.price / 100000000 * this.tokens[this.selected_token].precision
+        this.execution.decimal = (x / price).toFixed(this.tokens[this.selected_token].decimal)
+      },
       'amount.decimal'(x) {
         this.amount.nat = Math.round(x * this.tokens[this.selected_token].precision)
       },
@@ -246,13 +262,23 @@
 
         })
       },
-      execute: function(direction, order){
+      show_execution_dialog: function(order){
+        this.execution.order = order
+        this.execution.decimal = order.amount.nat / this.tokens[this.selected_token].precision
+        this.execution.tez = order.amount.tez
+      },
+      execute: function(){
         const precision = this.tokens[this.selected_token].precision
+        const order = this.execution.order
+        const direction = this.execution.order.direction
+        const amount_tez = this.execution.tez
+        const amount_nat = Math.round(this.execution.decimal * this.tokens[this.selected_token].precision)
 
-        if (direction) {
-          const amount_tez = window.prompt(`Total: ${order.amount.tez} XTZ\nInput the amount you want to spend`)
-          if (!amount_tez || !amount_tez.trim() || isNaN(parseFloat(amount_tez))) return
-          if (amount_tez > order.amount.tez) return
+        if (!direction) {
+          if (amount_tez > order.amount.tez) {
+            alert('amount of XTZ is out of range')
+            return
+          }
 
           this.tezbridge({
             method: 'transfer', 
@@ -260,6 +286,9 @@
             destination: contracts.main.contract,
             parameters: window.TEZEX.parameter.execute(
               Object.assign({symbol: this.selected_token, amount_nat: 0}, order))
+          })
+          .then(x => {
+            this.execution.order = null
           })
           .catch(err => {
             if (err) {
@@ -270,11 +299,10 @@
           })
 
         } else {
-          const amount_nat = window.prompt(`Total: ${order.amount.nat / precision} ${this.selected_token}\nInput the amount you want to spend`)
-          if (!amount_nat || !amount_nat.trim() || isNaN(parseFloat(amount_nat))) return
-
-          const calculated_amount_nat = Math.round(amount_nat * precision)
-          if (calculated_amount_nat > order.amount.nat) return
+          if (amount_nat > order.amount.nat) {
+            alert(`amount of ${this.selected_token} is out of range`)
+            return
+          }
 
           this.tezbridge({
             method: 'transfer', 
@@ -282,7 +310,7 @@
             destination: contracts.token.contract,
             parameters: window.TEZEX.parameter.approve_token({
               target: window.TEZEX.key, 
-              amount_nat: calculated_amount_nat
+              amount_nat: amount_nat
             })
           })
           .then(x => {
@@ -291,8 +319,11 @@
               amount: 0, 
               destination: contracts.main.contract,
               parameters: window.TEZEX.parameter.execute(
-                Object.assign({symbol: this.selected_token, amount_nat: calculated_amount_nat}, order))
+                Object.assign({symbol: this.selected_token, amount_nat: amount_nat}, order))
             })
+          })
+          .then(x => {
+            this.execution.order = null
           })
           .catch(err => {
             if (err) {
