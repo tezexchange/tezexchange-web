@@ -56,6 +56,10 @@
         tez: 0
       },
       tokens: {},
+      token_description: {
+        TES: '(TezExchangeShare)',
+        BTW: '(BettingWin)'
+      },
       orders: {
         buy: [],
         sell: []
@@ -309,7 +313,7 @@
           this.tezbridge({
             method: 'transfer', 
             amount: 0, 
-            destination: contracts.token.contract,
+            destination: contracts.token[this.selected_token].contract,
             parameters: window.TEZEX.parameter.approve_token({
               target: window.TEZEX.key, 
               amount_nat: amount_nat
@@ -396,7 +400,7 @@
           this.tezbridge({
             method: 'transfer', 
             amount: 0, 
-            destination: contracts.token.contract,
+            destination: contracts.token[this.selected_token].contract,
             parameters: window.TEZEX.parameter.approve_token({
               target: window.TEZEX.key, 
               amount_nat: this.amount.nat, 
@@ -478,7 +482,7 @@
 
           const tokens = unpair(storage, 1, 0).args
           this.tokens = {}
-          tokens.forEach(x => {
+          tokens.reverse().forEach(x => {
             const name = x.args[0].string
             this.tokens[name] = {
               name,

@@ -33,7 +33,7 @@
                 You will get {{execution.decimal}} {{this.selected_token}}<br>
                 by spending {{execution.tez}} XTZ
               </td>
-              <td>@ PRICE <br>{{(execution.order.price / 100000000 * tokens[selected_token].precision).toFixed(8)}}</td>
+              <td>@ PRICE <br>{{(execution.order.price / 100000000 * tokens[selected_token].precision).toPrecision(8)}}</td>
             </tr>
             <tr> 
               <td>
@@ -52,7 +52,7 @@
       </div>
 
       <h4>
-        <b id="logo">TexExchange</b>
+        <b id="logo">TezExchange</b>
 
         <span id="progress">
           <span v-for="x in operations" :title="x"></span>
@@ -74,7 +74,7 @@
           <select v-model="selected_token" @change="load_orders">
             <option value="" v-if="!Object.keys(tokens).length">PLEASE REFRESH ACCOUNT</option>
             <option value="" v-if="Object.keys(tokens).length">PLEASE SELECT TOKEN</option>
-            <option :value="token.name" v-for="token in tokens">{{token.name}}</option>
+            <option :value="token.name" v-for="token in tokens">{{token.name}}{{token_description[token.name]}}</option>
           </select>
           <div class="token-operations" v-if="selected_token && tokens[selected_token].token_contract">
             <span>MY {{selected_token}} BALANCE: {{tokens[selected_token].balance}}</span>
@@ -147,7 +147,7 @@
                 <span>XTZ</span>
                 <br>
                 <span>@ PRICE</span> 
-                <b>{{amount.tez == 0 ? '0' : (amount.tez / amount.nat * tokens[selected_token].precision).toFixed(8)}}</b>
+                <b>{{amount.tez == 0 ? '0' : (amount.tez / amount.nat * tokens[selected_token].precision).toPrecision(8)}}</b>
                 <span>{{selected_token}}/XTZ</span>
               </p>
 
@@ -161,7 +161,7 @@
                 </tr>
                 <tr v-for="order in orders.buy">
                   <td>
-                    <b>{{(order.price / 100000000 * tokens[selected_token].precision).toFixed(8)}}</b>   
+                    <b>{{(order.price / 100000000 * tokens[selected_token].precision).toPrecision(8)}}</b>   
                   </td>              
                   <td>
                     {{order.amount.nat / tokens[selected_token].precision}} {{selected_token}}
@@ -184,7 +184,7 @@
                 <span>XTZ</span>
                 <br>
                 <span>@ PRICE</span> 
-                <b>{{amount.tez == 0 ? '0' : (amount.tez / amount.nat * tokens[selected_token].precision).toFixed(8)}}</b>
+                <b>{{amount.tez == 0 ? '0' : (amount.tez / amount.nat * tokens[selected_token].precision).toPrecision(8)}}</b>
                 <span>{{selected_token}}/XTZ</span>
               </p>
               <span class="dim-tip" v-if="state.display_creating_selling">
@@ -200,7 +200,7 @@
                 </tr>
                 <tr v-for="order in orders.sell">
                   <td>
-                    <b>{{(order.price / 100000000 * tokens[selected_token].precision).toFixed(8)}}</b>   
+                    <b>{{(order.price / 100000000 * tokens[selected_token].precision).toPrecision(8)}}</b>   
                   </td>              
                   <td>
                     {{order.amount.nat / tokens[selected_token].precision}} {{selected_token}}
