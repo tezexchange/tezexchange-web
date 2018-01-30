@@ -77,7 +77,7 @@
             <option :value="token.name" v-for="token in tokens">{{token.name}}{{token_description[token.name]}}</option>
           </select>
           <div class="token-operations" v-if="selected_token && tokens[selected_token].token_contract">
-            <span>MY {{selected_token}} BALANCE: {{tokens[selected_token].balance}}</span>
+            <span>MY {{selected_token}} BALANCE: {{tokens[selected_token].balance.toFixed(tokens[selected_token].decimal)}}</span>
             <button @click="refresh_token_balance">CHECK</button>
             <br>
             <a id="token-utility-btn" @click="token_op.display_more_token_op = true" v-if="!token_op.display_more_token_op">token utility</a>
