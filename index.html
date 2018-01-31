@@ -71,7 +71,7 @@
           <button @click="refresh_account">REFRESH</button>
         </div>
         <div id="console">
-          <select v-model="selected_token" @change="load_orders">
+          <select v-model="selected_token" @change="change_selected_token">
             <option value="" v-if="!Object.keys(tokens).length">PLEASE REFRESH ACCOUNT</option>
             <option value="" v-if="Object.keys(tokens).length">PLEASE SELECT TOKEN</option>
             <option :value="token.name" v-for="token in tokens">{{token.name}}{{token_description[token.name]}}</option>
@@ -79,8 +79,13 @@
           <div class="token-operations" v-if="selected_token && tokens[selected_token].token_contract">
             <span>MY {{selected_token}} BALANCE: {{tokens[selected_token].balance.toFixed(tokens[selected_token].decimal)}}</span>
             <button @click="refresh_token_balance">CHECK</button>
-            <br>
-            <a id="token-utility-btn" @click="token_op.display_more_token_op = true" v-if="!token_op.display_more_token_op">token utility</a>
+            <div v-if="selected_token === 'TES'">
+              <span>MY TES SHARE REWARD: {{account.tes_share}}</span>
+              <button @click="share_withdraw">WITHDRAW</button>
+            </div>
+            <div>            
+              <a id="token-utility-btn" @click="token_op.display_more_token_op = true" v-if="!token_op.display_more_token_op">token utility</a>
+            </div>
             <div v-if="token_op.display_more_token_op">
               <table>
                 <tr>

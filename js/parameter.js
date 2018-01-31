@@ -74,9 +74,9 @@
     
   }
 
-  const redeem_tez = symbol => {
+  const redeem_tez = () => {
     return prim('Pair', [
-        {string: symbol},
+        {string: 'TES'},
         prim('Right', [
           prim('Right', [
               prim('Right', [
@@ -148,11 +148,29 @@
       ])
   }
 
+  const share_distribute = () => {
+    return prim('Right', [
+        prim('Right', [
+            prim('Unit', [])
+          ])
+      ])
+  }
+
+  const share_withdraw = () => {
+    return prim('Right', [
+        prim('Left', [
+            prim('Unit', [])
+          ])
+      ])
+  }
+
   window.TEZEX.parameter = {
     add_order,
     cancel_order,
     approve_token,
     execute,
+    share_distribute,
+    share_withdraw,
     redeem_tez,
     redeem_token,
     token_transfer,

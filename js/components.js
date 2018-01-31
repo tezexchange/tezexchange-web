@@ -25,7 +25,8 @@
     data: {
       account: {
         pkh: '',
-        balance: 0
+        balance: 0,
+        tes_share: 0
       },
       state: {
         splash: true,
@@ -204,6 +205,55 @@
             this.state.loading.tip += `\ninsufficient amount of approval`
         })
       },
+      share_distribute: function(){
+        this.tezbridge({
+          method: 'transfer', 
+          amount: 0, 
+          destination: contracts.share_reward.contract,
+          parameters: window.TEZEX.parameter.share_distribute()
+        })
+        .then(x => {
+          console.log(x)
+        })
+      },
+      share_withdraw: function(){
+        if (!this.account.tes_share) return
+
+        this.tezbridge({
+          method: 'transfer', 
+          amount: 0, 
+          destination: contracts.share_reward.contract,
+          parameters: window.TEZEX.parameter.share_withdraw()
+        })
+        .catch(err => {
+          if (err) 
+            this.state.loading.tip += `\nreward has been withdrawn`
+        })
+      },
+      change_selected_token: function(){
+        let p = Promise.resolve()
+        if (this.selected_token === 'TES') {
+          p = this.tezbridge({method: 'get_contract_info', contract: contracts.share_reward.contract})
+          .then(x => {
+            const storage = x.script.storage
+            const balance_map = unpair(storage, 1, 1, 0).args
+
+            for (let i = 0; i < balance_map.length; i++) {
+              const key_hash = balance_map[i].args[0].string
+              const balance = balance_map[i].args[1].string
+
+              if (key_hash === this.account.pkh) {
+                this.account.tes_share = balance
+                break
+              }
+            }
+          })
+        }
+
+        p.then(() => {
+          this.load_orders()
+        })
+      },
       load_orders: function(){
         if (!this.selected_token) return
 
@@ -346,7 +396,7 @@
           method: 'transfer', 
           amount: 0, 
           destination: contracts.main.contract,
-          parameters: window.TEZEX.parameter.redeem_tez(this.selected_token)
+          parameters: window.TEZEX.parameter.redeem_tez()
         })
         .catch(err => {
           if (err) {
@@ -514,5 +564,6 @@
     }
   })
 
+  window.TEZEXApp = TEZEXApp
   
 })(window, document)
