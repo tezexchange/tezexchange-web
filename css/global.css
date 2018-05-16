@@ -16,9 +16,9 @@
 
 
 * { vertical-align: middle; font-family: metropolisregular, Helvetica, Arial, sans-serif; font-size: 12px; font-weight: 400; margin: 0; padding: 0; }
-h4 { color: #88fe8c;  padding: 4px 8px; border-bottom: 1px solid #666; }
+h4 { color: #ebb22e;  padding: 4px 8px; border-bottom: 1px solid #666; }
 h4 b { font-family: metropolisbold; }
-h5 { color: #88fe8c; font-size: 12px;}
+h5 { color: #ebb22e; font-size: 12px;}
 p { line-height: 1.6; }
 select { font-size: 11px; max-width: 200px;}
 body { background: #333; color: #ddd; display: none; }
@@ -39,9 +39,9 @@ button:disabled { background: rgba(255,255,255,0.7); color: #777; }
 .group { margin: 8px 4px; }
 
 #loading { position: fixed; top: 0; left: 0; text-align: center; width: 100%;   }
-#loading pre { display: inline-block; padding: 4px 8px; background: rgba(0,0,0,0.8); border-radius: 0 0 4px 4px; animation-duration: 2s; animation-iteration-count:infinite; animation-name: fadein-fadeout;}
-#loading pre.fail { background: rgba(225, 39, 39, 0.8); color: white; animation-name: none;}
-#loading pre.pass { background: rgba(39, 225, 88, 0.8); color: white; animation-name: none;}
+#loading p { display: inline-block; padding: 4px 8px; background: rgba(0,0,0,0.8); border-radius: 0 0 4px 4px; animation-duration: 2s; animation-iteration-count:infinite; animation-name: fadein-fadeout;}
+#loading p.fail { background: rgba(225, 39, 39, 0.8); color: white; animation-name: none;}
+#loading p.pass { background: rgba(39, 225, 88, 0.8); color: white; animation-name: none;}
 @keyframes fadein-fadeout {0% {opacity: 1 } 50% {opacity: 0.5 } 100% {opacity: 1 } }
 
 #account { margin-bottom: 4px; padding: 4px 8px; }

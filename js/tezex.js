@@ -1,37 +1,8 @@
-;((window) => {
-  const req_func = {}
-  const req_reject_func = {}
-
-  let id = 1
-  const tezbridgeCreator = (iframe_window) => {
-    return (param) => {
-      return new Promise(function(resolve, reject){
-        const tick = id++
-        param.tezbridge = tick
-        iframe_window.contentWindow.postMessage(param, '*')
-        req_func[tick] = resolve
-        req_reject_func[tick] = reject
-      })
-    }
-  }
-
-  window.addEventListener('message', function(e){
-    if (e.data.tezbridge) {
-      if (e.data.error) 
-        req_reject_func[e.data.tezbridge] && req_reject_func[e.data.tezbridge](e.data.error)
-      else
-        req_func[e.data.tezbridge] && req_func[e.data.tezbridge](e.data.result)
-    }
-  })
-
-  window.tezbridgeCreator = tezbridgeCreator
-})(window)
-
 ;((window, document) => {
   const util = {
     prim(name, args) {
       return {
-        prim: name, 
+        prim: name,
         args: args.map(x => x.prim ? util.prim(x.prim, x.args) : x)
       }
     },
@@ -51,12 +22,12 @@
         xhr.send(null)
         xhr.onreadystatechange = function(){
           if(xhr.readyState === 4) {
-            if (xhr.status === 200) { 
+            if (xhr.status === 200) {
               resolve(xhr.responseText)
             } else {
               reject(xhr.status)
             }
-          } 
+          }
         }
       })
     },
@@ -91,12 +62,11 @@
       return parseFloat(str.replace(/,/g, ''))
     },
     fix_tez(tez) {
-      return parseFloat(tez).toFixed(2)
+      return parseFloat(tez).toFixed(6)
     }
   }
 
   window.TEZEX = {
-    key: 'tz1drQAWiLRFk2ffvQJsH8PgZqt7br9du1qJ',
     util
   }
 })(window, document)

@@ -1,4 +1,10 @@
 ((window, document) => {
+  if (!Promise.prototype.finally) {
+    Promise.prototype.finally = function(f) {
+      return this.then(f, f).then(() => {})
+    }
+  }
+
   // init
   document.body.style.display = 'block'
 
@@ -11,12 +17,11 @@
 
   // helper functions
   const unpair = window.TEZEX.util.unpair
-  const tezbridge_iframe = document.querySelector('#tezbridge')
-  const tezbridge = window.tezbridgeCreator(tezbridge_iframe)
 
-  tezbridge_iframe.onload = () => {
+
+  tezbridge({method: 'public_key_hash', noalert: true}).finally(() => {
     TEZEXApp.state.splash = false
-  }  
+  })
 
   const TEZEXApp = new Vue({
     el: '#tezex-app',
@@ -77,7 +82,7 @@
       'execution.decimal'(x) {
         if (this.execution.focus !== 1) return
         const price = this.execution.order.price / 100000000 * this.tokens[this.selected_token].precision
-        this.execution.tez = (x * price).toFixed(2)
+        this.execution.tez = (x * price).toFixed(6)
       },
       'execution.tez'(x) {
         if (this.execution.focus !== 2) return
@@ -155,8 +160,8 @@
         const precision = this.tokens[this.selected_token].precision
 
         this.tezbridge({
-          method: 'transfer', 
-          amount: 0, 
+          method: 'transfer',
+          amount: 0,
           destination: token_contract,
           parameters: window.TEZEX.parameter.token_transfer({
             amount: Math.round(this.token_op.transfer_amount * precision),
@@ -164,7 +169,7 @@
           })
         })
         .catch(err => {
-          if (err) 
+          if (err)
             this.state.loading.tip += `\ntoken balance insufficient`
         })
       },
@@ -175,8 +180,8 @@
         const precision = this.tokens[this.selected_token].precision
 
         this.tezbridge({
-          method: 'transfer', 
-          amount: 0, 
+          method: 'transfer',
+          amount: 0,
           destination: token_contract,
           parameters: window.TEZEX.parameter.token_approve({
             amount: Math.round(this.token_op.approve_amount * precision),
@@ -191,8 +196,8 @@
         const precision = this.tokens[this.selected_token].precision
 
         this.tezbridge({
-          method: 'transfer', 
-          amount: 0, 
+          method: 'transfer',
+          amount: 0,
           destination: token_contract,
           parameters: window.TEZEX.parameter.token_withdraw({
             target: this.account.pkh,
@@ -201,14 +206,14 @@
           })
         })
         .catch(err => {
-          if (err) 
+          if (err)
             this.state.loading.tip += `\ninsufficient amount of approval`
         })
       },
       share_distribute: function(){
         this.tezbridge({
-          method: 'transfer', 
-          amount: 0, 
+          method: 'transfer',
+          amount: 0,
           destination: contracts.share_reward.contract,
           parameters: window.TEZEX.parameter.share_distribute()
         })
@@ -220,23 +225,23 @@
         if (!this.account.tes_share) return
 
         this.tezbridge({
-          method: 'transfer', 
-          amount: 0, 
+          method: 'transfer',
+          amount: 0,
           destination: contracts.share_reward.contract,
           parameters: window.TEZEX.parameter.share_withdraw()
         })
         .catch(err => {
-          if (err) 
+          if (err)
             this.state.loading.tip += `\nreward has been withdrawn`
         })
       },
       change_selected_token: function(){
         let p = Promise.resolve()
         if (this.selected_token === 'TES') {
-          p = this.tezbridge({method: 'get_contract_info', contract: contracts.share_reward.contract})
+          p = this.tezbridge({method: 'contract', contract: contracts.share_reward.contract})
           .then(x => {
             const storage = x.script.storage
-            const balance_map = unpair(storage, 1, 1, 0).args
+            const balance_map = unpair(storage, 1, 1, 0)
 
             for (let i = 0; i < balance_map.length; i++) {
               const key_hash = balance_map[i].args[0].string
@@ -257,14 +262,14 @@
       load_orders: function(){
         if (!this.selected_token) return
 
-        this.tezbridge({method: 'get_contract_info', contract: this.tokens[this.selected_token].contract})
+        this.tezbridge({method: 'contract', contract: this.tokens[this.selected_token].contract})
         .then(x => {
           const storage = x.script.storage
 
           this.tokens[this.selected_token].token_contract = unpair(storage, 1, 1, 1, 1, 0).string
 
           // get orders
-          const orders = unpair(storage, 1, 1, 1, 1, 1, 0).args
+          const orders = unpair(storage, 1, 1, 1, 1, 1, 0)
 
           const orders_parsed = orders.map(x => {
             const nat = parseInt(x.args[1].args[1].args[0].args[0].int)
@@ -292,25 +297,25 @@
           })
 
           this.orders.buy.sort((a, b) => {
-            if (a.price > b.price) 
+            if (a.price > b.price)
               return -1
-            else if (a.price === b.price) 
+            else if (a.price === b.price)
               return 0
-            else if (a.price < b.price) 
+            else if (a.price < b.price)
               return 1
           })
           this.orders.sell.sort((a, b) => {
-            if (a.price > b.price) 
+            if (a.price > b.price)
               return 1
-            else if (a.price === b.price) 
+            else if (a.price === b.price)
               return 0
-            else if (a.price < b.price) 
+            else if (a.price < b.price)
               return -1
           })
 
           // get redeem
           const redeem = {}
-          const redeem_lst = unpair(storage, 1, 1, 1, 1, 1, 1, 1).args
+          const redeem_lst = unpair(storage, 1, 1, 1, 1, 1, 1, 1)
           redeem_lst.forEach(x => {
             redeem[x.args[0].string] = x.args[1].int
           })
@@ -337,8 +342,8 @@
           }
 
           this.tezbridge({
-            method: 'transfer', 
-            amount: amount_tez, 
+            method: 'transfer',
+            amount: amount_tez,
             destination: contracts.main.contract,
             parameters: window.TEZEX.parameter.execute(
               Object.assign({symbol: this.selected_token, amount_nat: 0}, order))
@@ -361,22 +366,22 @@
           }
 
           this.tezbridge({
-            method: 'transfer', 
-            amount: 0, 
-            destination: contracts.token[this.selected_token].contract,
-            parameters: window.TEZEX.parameter.approve_token({
-              target: window.TEZEX.key, 
-              amount_nat: amount_nat
-            })
-          })
-          .then(x => {
-            return this.tezbridge({
-              method: 'transfer', 
-              amount: 0, 
+            method: 'operations',
+            operations: [{
+              method: 'transfer',
+              amount: 0,
+              destination: contracts.token[this.selected_token].contract,
+              parameters: window.TEZEX.parameter.approve_token({
+                target: contracts.selfpkh.contract,
+                amount_nat: amount_nat
+              })
+            }, {
+              method: 'transfer',
+              amount: 0,
               destination: contracts.main.contract,
               parameters: window.TEZEX.parameter.execute(
                 Object.assign({symbol: this.selected_token, amount_nat: amount_nat}, order))
-            })
+            }]
           })
           .then(x => {
             this.execution.order = null
@@ -393,8 +398,8 @@
       },
       redeem_tez: function(){
         this.tezbridge({
-          method: 'transfer', 
-          amount: 0, 
+          method: 'transfer',
+          amount: 0,
           destination: contracts.main.contract,
           parameters: window.TEZEX.parameter.redeem_tez()
         })
@@ -409,8 +414,8 @@
         if (!contract) return
 
         this.tezbridge({
-          method: 'transfer', 
-          amount: 0, 
+          method: 'transfer',
+          amount: 0,
           destination: contract,
           parameters: window.TEZEX.parameter.redeem_token()
         })
@@ -422,8 +427,8 @@
       },
       cancel_order: function(order){
         this.tezbridge({
-          method: 'transfer', 
-          amount: 0, 
+          method: 'transfer',
+          amount: 0,
           destination: contracts.main.contract,
           parameters: window.TEZEX.parameter.cancel_order({symbol: this.selected_token, order_id: order.id})
         })
@@ -436,37 +441,37 @@
 
         if (this.direction === '1') {
           this.tezbridge({
-            method: 'transfer', 
-            amount: this.amount.tez, 
+            method: 'transfer',
+            amount: this.amount.tez,
             destination: contracts.main.contract,
             parameters: window.TEZEX.parameter.add_order({
-              symbol: this.selected_token, 
-              direction: this.direction, 
+              symbol: this.selected_token,
+              direction: this.direction,
               amount: this.amount
             })
           })
 
         } else {
           this.tezbridge({
-            method: 'transfer', 
-            amount: 0, 
-            destination: contracts.token[this.selected_token].contract,
-            parameters: window.TEZEX.parameter.approve_token({
-              target: window.TEZEX.key, 
-              amount_nat: this.amount.nat, 
-            })
-          })
-          .then(x => {
-            return this.tezbridge({
-              method: 'transfer', 
-              amount: 0, 
+            method: 'operations',
+            operations: [{
+              method: 'transfer',
+              amount: 0,
+              destination: contracts.token[this.selected_token].contract,
+              parameters: window.TEZEX.parameter.approve_token({
+                target: contracts.selfpkh.contract,
+                amount_nat: this.amount.nat,
+              })
+            }, {
+              method: 'transfer',
+              amount: 0,
               destination: contracts.main.contract,
               parameters: window.TEZEX.parameter.add_order({
-                symbol: this.selected_token, 
-                direction: this.direction, 
+                symbol: this.selected_token,
+                direction: this.direction,
                 amount: this.amount
               })
-            })
+            }]
           })
           .catch(err => {
             if (err)
@@ -478,23 +483,23 @@
         const token_contract = this.tokens[this.selected_token].token_contract
         if (!token_contract) return
 
-        this.tezbridge({method: 'get_contract_info', contract: token_contract})
+        this.tezbridge({method: 'contract', contract: token_contract})
         .then(x => {
           const storage = x.script.storage
-          const balance_lst = unpair(storage, 1, 0).args
+          const balance_lst = unpair(storage, 1, 0)
 
           const balance_map = {}
           const precision = this.tokens[this.selected_token].precision
 
           balance_lst.forEach(x => {
-            balance_map[x.args[0].string] = parseInt(x.args[1].int) / precision 
+            balance_map[x.args[0].string] = parseInt(x.args[1].int) / precision
           })
 
           this.tokens[this.selected_token].balance = balance_map[this.account.pkh] || 0
-        })  
+        })
       },
       refresh_redeem_both: function(){
-        this.tezbridge({method: 'get_contract_info', contract: contracts.main.contract})
+        this.tezbridge({method: 'contract', contract: contracts.main.contract})
         .then(x => {
           const storage = x.script.storage
 
@@ -505,23 +510,23 @@
       },
       refresh_redeem_xtz: function(storage){
         const redeem = {}
-        const redeem_lst = unpair(storage, 1, 1).args
+        const redeem_lst = unpair(storage, 1, 1)
         redeem_lst.forEach(x => {
           redeem[x.args[0].string] = window.TEZEX.util.get_tez(x.args[1].string)
         })
         this.redeem_xtz = redeem[this.account.pkh] || 0
       },
       refresh_account: function(){
-        this.tezbridge({method: 'get_pkh'})
+        this.tezbridge({method: 'public_key_hash'})
         .then(x => {
           this.account.pkh = x
-          return this.tezbridge({method: 'get_balance'})
+          return this.tezbridge({method: 'balance'})
         })
         .then(x => {
-          this.account.balance = (x / 100).toFixed(2)
+          this.account.balance = x
 
           return Object.keys(this.tokens).length ? null :
-            this.tezbridge({method: 'get_contract_info', contract: contracts.main.contract})
+            this.tezbridge({method: 'contract', contract: contracts.main.contract})
         })
         .then(x => {
           if (!x) return
@@ -530,7 +535,7 @@
 
           this.refresh_redeem_xtz(storage)
 
-          const tokens = unpair(storage, 1, 0).args
+          const tokens = unpair(storage, 1, 0)
           this.tokens = {}
           tokens.reverse().forEach(x => {
             const name = x.args[0].string
@@ -544,20 +549,20 @@
             }
           })
 
-          setInterval(() => {
-            if (this.state.loading.type === 'call') return
+          // setInterval(() => {
+          //   if (this.state.loading.type === 'call') return
 
-            tezbridge({method: 'get_block_head'})
-            .then(x => {
-              if (!x) return
-                
-              const hashes = {}
-              x.operations[0].forEach(x => hashes[x.hash] = true)
+          //   tezbridge({method: 'block_head'})
+          //   .then(x => {
+          //     if (!x) return
 
-              const uncommitted_operations = this.operations.filter(x => !(x in hashes))
-              this.operations = uncommitted_operations
-            })
-          }, 60000)
+          //     const hashes = {}
+          //     x.operations[0].forEach(x => hashes[x.hash] = true)
+
+          //     const uncommitted_operations = this.operations.filter(x => !(x in hashes))
+          //     this.operations = uncommitted_operations
+          //   })
+          // }, 60000)
         })
         .catch(err => {})
       }
@@ -565,5 +570,5 @@
   })
 
   window.TEZEXApp = TEZEXApp
-  
+
 })(window, document)

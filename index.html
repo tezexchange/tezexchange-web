@@ -2,16 +2,15 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>TezExchange (Alpha)</title>
+    <title>tez.exchange</title>
     <link rel="stylesheet" href="css/global.css" />
 
     <script src="js/vue.js"></script>
     <script src="js/tezex.js"></script>
     <script src="js/parameter.js"></script>
+    <script src="https://www.tezbridge.com/plugin.js"></script>
   </head>
   <body>
-    <iframe src="https://tezbridge.github.io/plugin.html" id="tezbridge"></iframe>
-
     <div id="tezex-app">
       <div id="dialog" v-if="execution.order">
         <div class="content">
@@ -35,29 +34,29 @@
               </td>
               <td>@ PRICE <br>{{(execution.order.price / 100000000 * tokens[selected_token].precision).toPrecision(8)}}</td>
             </tr>
-            <tr> 
+            <tr>
               <td>
-                <button @click="execute">OK</button> 
-                <button @click="execution.order = null">CANCEL</button> 
+                <button @click="execute">OK</button>
+                <button @click="execution.order = null">CANCEL</button>
               </td>
               <td>
               </td>
             </tr>
           </table>
-        </div>  
+        </div>
       </div>
 
       <div id="loading" v-if="state.loading.type !== 'none'">
-        <pre :class="state.loading.type">{{state.loading.tip.replace(/\n+/g, '\n') || 'RPC CALLING...'}}</pre>
+        <p :class="state.loading.type">{{state.loading.tip.replace(/\n+/g, '\n') || 'RPC CALLING...'}}</p>
       </div>
 
       <h4>
-        <b id="logo">TezExchange</b>
+        <b id="logo">tez.exchange</b>
 
         <span id="progress">
           <span v-for="x in operations" :title="x"></span>
         </span>
-        
+
       </h4>
       <div class="splash" v-if="state.splash">
         Loading tezbridge...
@@ -83,7 +82,7 @@
               <span>MY TES SHARE REWARD: {{account.tes_share}}</span>
               <button @click="share_withdraw">WITHDRAW</button>
             </div>
-            <div>            
+            <div>
               <a id="token-utility-btn" @click="token_op.display_more_token_op = true" v-if="!token_op.display_more_token_op">token utility</a>
             </div>
             <div v-if="token_op.display_more_token_op">
@@ -151,12 +150,12 @@
                 <input v-model.number="amount.tez" type="number"/>
                 <span>XTZ</span>
                 <br>
-                <span>@ PRICE</span> 
+                <span>@ PRICE</span>
                 <b>{{amount.tez == 0 ? '0' : (amount.tez / amount.nat * tokens[selected_token].precision).toPrecision(8)}}</b>
                 <span>{{selected_token}}/XTZ</span>
               </p>
 
-              
+
 
               <table>
                 <tr>
@@ -166,8 +165,8 @@
                 </tr>
                 <tr v-for="order in orders.buy">
                   <td>
-                    <b>{{(order.price / 100000000 * tokens[selected_token].precision).toPrecision(8)}}</b>   
-                  </td>              
+                    <b>{{(order.price / 100000000 * tokens[selected_token].precision).toPrecision(8)}}</b>
+                  </td>
                   <td>
                     {{order.amount.nat / tokens[selected_token].precision}} {{selected_token}}
                   </td>
@@ -188,7 +187,7 @@
                 <input v-model.number="amount.tez" type="number"/>
                 <span>XTZ</span>
                 <br>
-                <span>@ PRICE</span> 
+                <span>@ PRICE</span>
                 <b>{{amount.tez == 0 ? '0' : (amount.tez / amount.nat * tokens[selected_token].precision).toPrecision(8)}}</b>
                 <span>{{selected_token}}/XTZ</span>
               </p>
@@ -205,8 +204,8 @@
                 </tr>
                 <tr v-for="order in orders.sell">
                   <td>
-                    <b>{{(order.price / 100000000 * tokens[selected_token].precision).toPrecision(8)}}</b>   
-                  </td>              
+                    <b>{{(order.price / 100000000 * tokens[selected_token].precision).toPrecision(8)}}</b>
+                  </td>
                   <td>
                     {{order.amount.nat / tokens[selected_token].precision}} {{selected_token}}
                   </td>
