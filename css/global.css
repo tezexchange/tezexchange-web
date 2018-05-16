@@ -16,9 +16,9 @@
 
 
 * { vertical-align: middle; font-family: metropolisregular, Helvetica, Arial, sans-serif; font-size: 12px; font-weight: 400; margin: 0; padding: 0; }
-h4 { color: #ebb22e;  padding: 4px 8px; border-bottom: 1px solid #666; }
+h4 { color: #ffbd23;  padding: 4px 8px; border-bottom: 1px solid #666; }
 h4 b { font-family: metropolisbold; }
-h5 { color: #ebb22e; font-size: 12px;}
+h5 { color: #ffbd23; font-size: 12px;}
 p { line-height: 1.6; }
 select { font-size: 11px; max-width: 200px;}
 body { background: #333; color: #ddd; display: none; }
