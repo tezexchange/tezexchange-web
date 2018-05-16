@@ -9,11 +9,18 @@
   document.body.style.display = 'block'
 
   let contracts = {}
+  let token_contracts = {}
   window.TEZEX.util.get('contracts.json')
   .then(x => {
     contracts = JSON.parse(x)
+    return window.TEZEX.util.get('tokens.json')
+  })
+  .then(x => {
+    token_contracts = JSON.parse(x)
+    token_contracts.TES = contracts.token.TES.contract
   })
   .catch(code => console.error(code))
+
 
   // helper functions
   const unpair = window.TEZEX.util.unpair
@@ -370,7 +377,7 @@
             operations: [{
               method: 'transfer',
               amount: 0,
-              destination: contracts.token[this.selected_token].contract,
+              destination: token_contracts[this.selected_token],
               parameters: window.TEZEX.parameter.approve_token({
                 target: contracts.selfpkh.contract,
                 amount_nat: amount_nat
@@ -457,7 +464,7 @@
             operations: [{
               method: 'transfer',
               amount: 0,
-              destination: contracts.token[this.selected_token].contract,
+              destination: token_contracts[this.selected_token],
               parameters: window.TEZEX.parameter.approve_token({
                 target: contracts.selfpkh.contract,
                 amount_nat: this.amount.nat,
