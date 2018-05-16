@@ -1,2 +1,2 @@
-# tezexchange.github.io
+# tez.exchange
 Decentralized token exchange on Tezos
