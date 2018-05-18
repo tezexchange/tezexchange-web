@@ -26,7 +26,7 @@
   const unpair = window.TEZEX.util.unpair
 
 
-  tezbridge({method: 'public_key_hash', noalert: true}).finally(() => {
+  tezbridge({method: 'public_key_hash', noalert: true}).catch(() => {}).finally(() => {
     TEZEXApp.state.splash = false
   })
 
@@ -42,6 +42,7 @@
       },
       state: {
         splash: true,
+        warning: true,
         loading: {
           type: 'none', // call | pass | fail | none
           tip: '',

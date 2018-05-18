@@ -61,7 +61,12 @@
       <div class="splash" v-if="state.splash">
         Loading tezbridge...
       </div>
-      <div v-if="!state.splash">
+      <div class="warning" v-if="!state.splash && state.warning">
+        This DApp is in beta version. <br>
+        You are at your own risk for using this DApp. <br>
+        <button @click="state.warning = false">I understand, I know and I agree</button>
+      </div>
+      <div v-if="!state.warning">
         <div id="account" class="content">
           <p class="title">ACCOUNT:</p>
           <p>{{account.pkh}}</p>
