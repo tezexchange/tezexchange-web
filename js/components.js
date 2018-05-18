@@ -70,7 +70,7 @@
       },
       tokens: {},
       token_description: {
-        TES: '(TezExchangeShare)',
+        TES: '(tez.exchange share)',
         BTW: '(BettingWin)'
       },
       orders: {

@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>tez.exchange</title>
     <link rel="stylesheet" href="css/global.css" />
-
+    <meta name="description" content="DEX for Tezos token">
     <script src="js/vue.js"></script>
     <script src="js/tezex.js"></script>
     <script src="js/parameter.js"></script>
@@ -73,7 +73,7 @@
           <select v-model="selected_token" @change="change_selected_token">
             <option value="" v-if="!Object.keys(tokens).length">PLEASE REFRESH ACCOUNT</option>
             <option value="" v-if="Object.keys(tokens).length">PLEASE SELECT TOKEN</option>
-            <option :value="token.name" v-for="token in tokens">{{token.name}}{{token_description[token.name]}}</option>
+            <option :value="token.name" v-for="token in tokens">{{token.name}} {{token_description[token.name]}}</option>
           </select>
           <div class="token-operations" v-if="selected_token && tokens[selected_token].token_contract">
             <span>MY {{selected_token}} BALANCE: {{tokens[selected_token].balance.toFixed(tokens[selected_token].decimal)}}</span>
@@ -217,6 +217,10 @@
               </table>
             </div>
           </div>
+        </div>
+
+        <div class="footer">
+          <span>© 2018 tez.exchange</span>
         </div>
       </div>
 
