@@ -249,7 +249,7 @@
           p = this.tezbridge({method: 'contract', contract: contracts.share_reward.contract})
           .then(x => {
             const storage = x.script.storage
-            const balance_map = unpair(storage, 1, 1, 0)
+            const balance_map = unpair(storage, 1)
 
             for (let i = 0; i < balance_map.length; i++) {
               const key_hash = balance_map[i].args[0].string
@@ -274,10 +274,10 @@
         .then(x => {
           const storage = x.script.storage
 
-          this.tokens[this.selected_token].token_contract = unpair(storage, 1, 1, 1, 1, 0).string
+          this.tokens[this.selected_token].token_contract = unpair(storage, 1, 1, 0).string
 
           // get orders
-          const orders = unpair(storage, 1, 1, 1, 1, 1, 0)
+          const orders = unpair(storage, 1, 1, 1, 0)
 
           const orders_parsed = orders.map(x => {
             const nat = parseInt(x.args[1].args[1].args[0].args[0].int)
@@ -323,7 +323,7 @@
 
           // get redeem
           const redeem = {}
-          const redeem_lst = unpair(storage, 1, 1, 1, 1, 1, 1, 1)
+          const redeem_lst = unpair(storage, 1, 1, 1, 1, 1)
           redeem_lst.forEach(x => {
             redeem[x.args[0].string] = x.args[1].int
           })
