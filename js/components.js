@@ -37,6 +37,7 @@
     data: {
       account: {
         pkh: '',
+        pkh_hash: '',
         balance: 0,
         tes_share: 0
       },
@@ -255,7 +256,7 @@
               const key_hash = balance_map[i].args[0].string
               const balance = balance_map[i].args[1].string
 
-              if (key_hash === this.account.pkh) {
+              if (key_hash === this.account.pkh_hash) {
                 this.account.tes_share = balance
                 break
               }
@@ -528,6 +529,10 @@
         this.tezbridge({method: 'public_key_hash'})
         .then(x => {
           this.account.pkh = x
+          return this.tezbridge({method: 'hash_data', data: x, type: 'string'})
+        })
+        .then(x => {
+          this.account.pkh_hash = x
           return this.tezbridge({method: 'balance'})
         })
         .then(x => {
