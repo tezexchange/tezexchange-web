@@ -328,7 +328,7 @@
           redeem_lst.forEach(x => {
             redeem[x.args[0].string] = x.args[1].int
           })
-          this.tokens[this.selected_token].redeem = redeem[this.account.pkh] || 0
+          this.tokens[this.selected_token].redeem = redeem[this.account.pkh_hash] || 0
 
         })
       },
@@ -504,7 +504,7 @@
             balance_map[x.args[0].string] = parseInt(x.args[1].int) / precision
           })
 
-          this.tokens[this.selected_token].balance = balance_map[this.account.pkh] || 0
+          this.tokens[this.selected_token].balance = balance_map[this.account.pkh_hash] || 0
         })
       },
       refresh_redeem_both: function(){
@@ -523,7 +523,7 @@
         redeem_lst.forEach(x => {
           redeem[x.args[0].string] = window.TEZEX.util.get_tez(x.args[1].string)
         })
-        this.redeem_xtz = redeem[this.account.pkh] || 0
+        this.redeem_xtz = redeem[this.account.pkh_hash] || 0
       },
       refresh_account: function(){
         this.tezbridge({method: 'public_key_hash'})
