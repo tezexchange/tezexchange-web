@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "tezexchange build system",
   "scripts": {
-    "liq": "cd contracts && liq --compact *.liq",
-    "build": "node build.js"
+    "dev": "nuxt",
+    "gen": "nuxt generate && rm -rf ./_nuxt && cp -r ./dist/* ./ && rm -rf ./dist"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/tezexchange/tezexchange.github.io/issues"
   },
-  "homepage": "https://github.com/tezexchange/tezexchange.github.io#readme"
+  "homepage": "https://github.com/tezexchange/tezexchange.github.io#readme",
+  "dependencies": {
+    "nuxt": "^1.4.1"
+  }
 }
