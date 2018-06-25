@@ -17,7 +17,7 @@
         name: Object.keys(test)
       }
     },
-    mounted () {
+    mounted() {
       this.$nextTick(() => {
         this.$nuxt.$loading.start()
 
