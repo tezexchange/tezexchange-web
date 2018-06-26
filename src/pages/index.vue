@@ -17,7 +17,7 @@
 
 <template>
   <div>
-    <token name="ABC" :order_info="entire_orders.ABC" :mini="true"></token>
+    <token :key="k" :name="k" :order_info="v" :mini="true" v-for="(v, k) in entire_orders"></token>
   </div>
 </template>
 
