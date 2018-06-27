@@ -17,6 +17,12 @@
       / {{name}}
     </div>
 
+    <div class="operation-wrapper">
+      <button>
+        <i class="fas fa-plus-square"></i> <span>NEW ORDER</span>
+      </button>
+    </div>
+
     <div class="orders-wrapper">
       <div class="buying">
         <table>
@@ -30,7 +36,7 @@
                 v-if="(mini && !i) || !mini" 
                 v-for="(order, i) in order_info.buying">
               <td>{{order.orders.reduce((acc, x) => acc + +x.amount_token, 0)}}</td>
-              <td>{{order.price}}</td>
+              <td class="bid">{{order.price}}</td>
             </tr>
           </tbody>
         </table>
@@ -46,7 +52,7 @@
                 @click="active_orders = Object.assign({direction: false}, order)" 
                 v-if="(mini && !i) || !mini" 
                 v-for="(order, i) in order_info.selling">
-              <td>{{order.price}}</td>
+              <td class="ask">{{order.price}}</td>
               <td>{{order.orders.reduce((acc, x) => acc + +x.amount_token, 0)}}</td>
             </tr>
           </tbody>
@@ -65,6 +71,8 @@
 <style scoped>
 .title {font-size: 13px; padding: 4px 0 4px 8px; font-weight: 900; background: rgb(248,248,248); background: linear-gradient(45deg, rgba(248,248,248,1) 0%, rgba(255,255,255,1) 100%);}
 
+.operation-wrapper {text-align: center; margin: 8px 0;}
+
 .orders-wrapper {display: flex; margin: 0 8px;}
 .orders-wrapper > div {flex-grow: 1; width: 100%; overflow:hidden; opacity: 1; transition: width .5s, opacity .5s}
 
@@ -74,6 +82,8 @@ th {font-size: 12px; color: #999; font-weight: 400}
 .buying th, .buying td {text-align: right}
 .selling th, .selling td {text-align: left}
 .price-header {max-width: 40px}
+.bid {color: #259e25;}
+.ask {color: #9e2525;}
 
 .active-orders {font-weight: 900}
 

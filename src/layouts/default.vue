@@ -15,6 +15,11 @@
 * {margin: 0; padding: 0; font-family: 'Lato'; color: #666; font-size: 16px;}
 a {text-decoration: none; color: #000;}
 i.fas {color: #666;}
+i.far {color: #666;}
+button {display: inline-flex; justify-content: center; align-items: center;}
+button > i {margin-right: 4px;}
+button {background: transparent; border: 0; outline: none}
+button span {font-family: 'Roboto Condensed'; font-size: 14px; }
 
 header {margin: 8px 0;}
 .logo {text-align: center; transition: all 0.5s}
