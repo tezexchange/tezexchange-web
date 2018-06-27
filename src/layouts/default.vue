@@ -12,13 +12,13 @@
 </template>
 
 <style>
-* {margin: 0; padding: 0; font-family: 'Lato'; color: #666;}
+* {margin: 0; padding: 0; font-family: 'Lato'; color: #666; font-size: 16px;}
 a {text-decoration: none; color: #000;}
 i.fas {color: #666;}
 
 header {margin: 8px 0;}
 .logo {text-align: center; transition: all 0.5s}
-.logo * {font-family: 'Roboto Condensed'; font-weight: 700; font-size: 18px;}
+.logo * {font-family: 'Roboto Condensed'; font-weight: 700; font-size: 21px;}
 </style>
 <style scoped>
 .wrapper {max-width: 480px; margin: 0 auto;}	
