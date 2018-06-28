@@ -74,6 +74,9 @@
     <label>
       <span :class="amount_tez !== ''  ? 'focus' : ''">MUTEZ</span>
       <input type="number" v-model="amount_tez" />
+      <p v-if="amount_tez" class="tip">
+        {{(amount_tez * 1e-6).toFixed(6)}} XTZ
+      </p>
     </label>
 
     <button class="buy-btn">
@@ -95,6 +98,11 @@ label {
   width: 180px; 
   margin: 16px auto;
 }
+label p.tip {
+  text-align: left;
+  margin-left: 8px;
+  font-size: 12px;
+}
 label span {
   font-size: 13px;
   position: absolute; 
@@ -109,8 +117,22 @@ label span.focus {
   font-size: 9px;
   top: -10px;
   left: 0;
+  animation-name: fadeIn;
+  animation-duration: 0.35s;
 }
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 input {
+  color: #000;
+  font-weight: 900;
   font-size: 14px; 
   width: 180px; 
   border: 0;
