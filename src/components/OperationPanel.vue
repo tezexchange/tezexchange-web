@@ -1,9 +1,11 @@
 <script>
   export default {
+    props: ['order_info'],
     data() {
       return {
         can_convert: true,
         direction: false,
+        can_execute: false,
         price: '',
         amount_token: '',
         amount_tez: ''
@@ -41,10 +43,15 @@
         this.price = price
         this.direction = direction
         this.amount_token = amount_token
+
+        this.$nextTick(() => {
+          this.can_execute = true
+        })
       }
     },
     watch: {
       price() {
+        this.can_execute = false
         if (this.amount_token)
           this.convert(this.price, null, this.amount_token)
 
@@ -85,7 +92,7 @@
     <button class="sell-btn">
       <i class="fas fa-plus-square"></i> <span>SELL</span>
     </button>
-    <button>
+    <button :disabled="!can_execute" @click="alert(3)">
       <i class="fas fa-handshake"></i> <span>EXECUTE</span>
     </button>
   </div>

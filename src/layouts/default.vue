@@ -38,6 +38,9 @@ button:active {
   border-bottom: 1px solid #fff;
   background: rgba(250,250,250,1); 
 }
+button:disabled {
+  opacity: 0.25
+}
 button > i {margin-right: 4px;}
 button span {font-family: 'Roboto Condensed'; font-size: 14px; }
 
