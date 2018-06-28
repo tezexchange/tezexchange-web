@@ -16,10 +16,31 @@
 a {text-decoration: none; color: #000;}
 i.fas {color: #666;}
 i.far {color: #666;}
-button {display: inline-flex; justify-content: center; align-items: center;}
+button {
+  cursor: pointer;
+  background: rgb(252,252,252); 
+  background: linear-gradient(275deg, rgba(252,252,252,1) 0%, rgba(255,255,255,1) 100%); 
+  padding: 4px 8px; 
+  outline: none; 
+  display: inline-flex;
+  transition: border 0.5s;
+  border: 1px solid #fff;
+  border-right: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  transition: border 0.5s, background 0.5s;
+}
+button:hover {
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+button:active {
+  border-right: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  background: rgba(250,250,250,1); 
+}
 button > i {margin-right: 4px;}
-button {background: transparent; border: 0; outline: none}
 button span {font-family: 'Roboto Condensed'; font-size: 14px; }
+
 
 header {margin: 8px 0;}
 .logo {text-align: center; transition: all 0.5s}

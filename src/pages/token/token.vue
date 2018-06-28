@@ -1,12 +1,24 @@
 <script>
+  import OperationPanel from '~/components/OperationPanel'
+
   export default {
+    components: {
+      OperationPanel
+    },
     props: ['name', 'order_info', 'mini'],
     data() {
       return {
         active_orders: {}
       }
     },
-    methods: {
+    watch: {
+      active_orders() {
+        this.$refs.op_panel.update(
+          this.active_orders.price, 
+          this.active_orders.direction, 
+          this.active_orders.orders.reduce((acc, x) => acc + +x.amount_token, 0)
+        )
+      }
     }
   }
 </script>
@@ -18,9 +30,7 @@
     </div>
 
     <div class="operation-wrapper">
-      <button>
-        <i class="fas fa-plus-square"></i> <span>NEW ORDER</span>
-      </button>
+      <operation-panel ref="op_panel" />
     </div>
 
     <div class="orders-wrapper">
@@ -71,9 +81,9 @@
 <style scoped>
 .title {font-size: 13px; padding: 4px 0 4px 8px; font-weight: 900; background: rgb(248,248,248); background: linear-gradient(45deg, rgba(248,248,248,1) 0%, rgba(255,255,255,1) 100%);}
 
-.operation-wrapper {text-align: center; margin: 8px 0;}
+.operation-wrapper {text-align: center; margin: 16px 0;}
 
-.orders-wrapper {display: flex; margin: 0 8px;}
+.orders-wrapper { display: flex; margin: 0 8px;}
 .orders-wrapper > div {flex-grow: 1; width: 100%; overflow:hidden; opacity: 1; transition: width .5s, opacity .5s}
 
 .buying {border-right: 1px solid #eee; margin-right: 4px; padding-right: 4px}
