@@ -48,7 +48,20 @@ button span {font-family: 'Roboto Condensed'; font-size: 14px; }
 header {margin: 8px 0;}
 .logo {text-align: center; transition: all 0.5s}
 .logo * {font-family: 'Roboto Condensed'; font-weight: 700; font-size: 21px;}
+
+.expand-enter-active {
+  transition: all .5s;
+}
+.expand-leave-active {
+  transition: all .5s;
+}
+.expand-enter, .expand-leave-to {
+  transform: translateY(16px);
+  opacity: 0;
+}
+
 </style>
+
 <style scoped>
 .wrapper {max-width: 480px; margin: 0 auto;}	
 </style>

@@ -92,7 +92,7 @@
     <button class="sell-btn">
       <i class="fas fa-plus-square"></i> <span>SELL</span>
     </button>
-    <button :disabled="!can_execute" @click="alert(3)">
+    <button :disabled="!can_execute">
       <i class="fas fa-handshake"></i> <span>EXECUTE</span>
     </button>
   </div>
