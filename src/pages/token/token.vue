@@ -12,13 +12,6 @@
       }
     },
     watch: {
-      active_orders() {
-        this.$refs.op_panel.update(
-          this.active_orders.price, 
-          this.active_orders.direction, 
-          this.active_orders.orders.reduce((acc, x) => acc + +x.amount_token, 0)
-        )
-      }
     }
   }
 </script>
@@ -31,10 +24,10 @@
 
     <transition name="expand">
       <div class="operation-wrapper" v-show="!mini || active_orders.price">
-        <operation-panel ref="op_panel" />
+        <operation-panel :active_orders.sync="active_orders" />
       </div>
     </transition>
-    
+
     <div class="orders-wrapper">
       <div class="buying">
         <table>
@@ -61,7 +54,7 @@
               <th>SIZE</th>
             </tr>
             <tr :class="!active_orders.direction && active_orders.price === order.price ? 'active-orders' : ''"
-                @click="active_orders = Object.assign({direction: false}, order)" 
+                @click="active_orders = !active_orders.direction && active_orders.price === order.price ? {} : Object.assign({direction: false}, order)" 
                 v-if="(mini && !i) || !mini" 
                 v-for="(order, i) in order_info.selling">
               <td class="ask">{{order.price}}</td>
@@ -91,6 +84,7 @@
 .buying {border-right: 1px solid #eee; margin-right: 4px; padding-right: 4px}
 table {width: 100%;}
 th {font-size: 12px; color: #999; font-weight: 400}
+td {cursor: default;}
 .buying th, .buying td {text-align: right}
 .selling th, .selling td {text-align: left}
 .price-header {max-width: 40px}

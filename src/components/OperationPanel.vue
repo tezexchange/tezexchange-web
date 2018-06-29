@@ -1,20 +1,52 @@
 <script>
   export default {
-    props: ['order_info'],
+    props: ['active_orders'],
     data() {
       return {
         can_convert: true,
+        is_update_from_parent: false,
+
         direction: false,
-        can_execute: false,
         price: '',
         amount_token: '',
         amount_tez: ''
       }
     },
+    watch: {
+      active_orders(v) {
+        if (v.price) {
+          this.is_update_from_parent = true
+          this.price = v.price
+          this.direction = v.direction
+          this.amount_token = v.orders.reduce((acc, x) => acc + +x.amount_token, 0)
+
+          this.$nextTick(() => {
+            this.is_update_from_parent = false
+          })
+        }
+      },
+      price() {
+        if (!this.is_update_from_parent)
+          this.$emit('update:active_orders', {})
+
+        this.price = this.floor(this.price)
+
+        if (this.amount_token)
+          this.convert(this.price, null, this.amount_token)
+        else if (this.amount_tez)
+          this.convert(this.price, this.amount_tez, null)
+      },
+      amount_token() {
+        this.convert(this.price, null, this.amount_token)
+      },
+      amount_tez() {
+        this.convert(this.price, this.amount_tez, null)
+      }
+    },
     methods: {
       floor(x) {
-        const result = Math.floor(x)
-        return result === 0 ? '' : result
+        const result = parseInt(x)
+        return result === 0 || isNaN(result) ? '' : result
       },
       convert(price, amount_tez, amount_token) {
         if (!this.can_convert) 
@@ -33,36 +65,9 @@
           }
         }
 
-        this.price = this.floor(this.price)
-
         this.$nextTick(() => {
           this.can_convert = true
         })
-      },
-      update(price, direction, amount_token) {
-        this.price = price
-        this.direction = direction
-        this.amount_token = amount_token
-
-        this.$nextTick(() => {
-          this.can_execute = true
-        })
-      }
-    },
-    watch: {
-      price() {
-        this.can_execute = false
-        if (this.amount_token)
-          this.convert(this.price, null, this.amount_token)
-
-        if (this.amount_tez)
-          this.convert(this.price, this.amount_tez, null)
-      },
-      amount_token() {
-        this.convert(this.price, null, this.amount_token)
-      },
-      amount_tez() {
-        this.convert(this.price, this.amount_tez, null)
       }
     }
   }
@@ -72,16 +77,16 @@
   <div class="form">
     <label>
       <span :class="price !== '' ? 'focus' : ''">PRICE</span>
-      <input type="number" v-model="price" /> 
+      <input v-model="price" /> 
     </label>
     <label>
       <span :class="amount_token !== ''  ? 'focus' : ''">TOKEN AMOUNT</span>
-      <input type="number" v-model="amount_token" />
+      <input v-model="amount_token" />
     </label>
     <label>
       <span :class="amount_tez !== ''  ? 'focus' : ''">MUTEZ</span>
-      <input type="number" v-model="amount_tez" />
-      <p v-if="amount_tez" class="tip">
+      <input v-model="amount_tez" />
+      <p class="tip" :style="{opacity: amount_tez ? 1 : 0}">
         {{(amount_tez * 1e-6).toFixed(6)}} XTZ
       </p>
     </label>
@@ -92,7 +97,7 @@
     <button class="sell-btn">
       <i class="fas fa-plus-square"></i> <span>SELL</span>
     </button>
-    <button :disabled="!can_execute">
+    <button :disabled="!active_orders.price">
       <i class="fas fa-handshake"></i> <span>EXECUTE</span>
     </button>
   </div>
@@ -109,6 +114,8 @@ label p.tip {
   text-align: left;
   margin-left: 8px;
   font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.25s;
 }
 label span {
   font-size: 13px;
