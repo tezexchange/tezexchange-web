@@ -8,10 +8,15 @@
     props: ['name', 'order_info', 'mini'],
     data() {
       return {
+        show_operation_in_mini: false,
         active_orders: {}
       }
     },
     watch: {
+      active_orders(v) {
+        if (v.price)
+          this.show_operation_in_mini = true
+      }
     }
   }
 </script>
@@ -22,11 +27,11 @@
       / {{name}}
     </div>
 
-    <transition name="expand">
-      <div class="operation-wrapper" v-show="!mini || active_orders.price">
+    <div class="slider" v-show="!mini ||  show_operation_in_mini">
+      <div class="operation-wrapper">
         <operation-panel :active_orders.sync="active_orders" />
       </div>
-    </transition>
+    </div>
 
     <div class="orders-wrapper">
       <div class="buying">
@@ -54,7 +59,7 @@
               <th>SIZE</th>
             </tr>
             <tr :class="!active_orders.direction && active_orders.price === order.price ? 'active-orders' : ''"
-                @click="active_orders = !active_orders.direction && active_orders.price === order.price ? {} : Object.assign({direction: false}, order)" 
+                @click="active_orders = Object.assign({direction: false}, order)" 
                 v-if="(mini && !i) || !mini" 
                 v-for="(order, i) in order_info.selling">
               <td class="ask">{{order.price}}</td>

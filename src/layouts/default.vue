@@ -50,14 +50,31 @@ header {margin: 8px 0;}
 .logo * {font-family: 'Roboto Condensed'; font-weight: 700; font-size: 21px;}
 
 .expand-enter-active {
-  transition: all .5s;
+  transition: all 5s;
 }
 .expand-leave-active {
-  transition: all .5s;
+  transition: all 5s;
 }
 .expand-enter, .expand-leave-to {
-  transform: translateY(16px);
   opacity: 0;
+  max-height: 0;
+}
+
+.slider {
+  overflow: hidden;
+  animation-name: slideDown;
+  animation-timing-function: ease-in-out;
+  animation-duration: 0.5s;
+}
+
+@keyframes slideDown {
+  from {
+    max-height: 0;
+  }
+
+  to {
+    max-height: 256px;
+  }
 }
 
 </style>
