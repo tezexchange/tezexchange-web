@@ -4,6 +4,11 @@
 	  	<div class="logo">
 	  		<nuxt-link to="/">tez.exchange</nuxt-link>
 	  	</div>
+      <div class="menu">
+        <nuxt-link to="/my-orders">
+          <i class="fas fa-list-alt my-orders-btn"></i>
+        </nuxt-link>
+      </div>
     </header>
     <div class="wrapper">
 	    <nuxt />
@@ -43,10 +48,6 @@ button > i {margin-right: 4px;}
 button span {font-family: 'Roboto Condensed'; font-size: 14px; }
 
 
-header {margin: 8px 0;}
-.logo {text-align: center; transition: all 0.5s}
-.logo * {font-family: 'Roboto Condensed'; font-weight: 700; font-size: 21px;}
-
 .expand-enter-active {
   transition: all 5s;
 }
@@ -78,7 +79,11 @@ header {margin: 8px 0;}
 </style>
 
 <style scoped>
-.wrapper {max-width: 480px; margin: 0 auto;}	
+.wrapper {max-width: 480px; margin: 0 auto;}  
+header {display: flex; justify-content: center; align-items: center; max-width: 480px; margin: 8px auto;}
+.logo {}
+.logo * {font-family: 'Roboto Condensed'; font-weight: 700; font-size: 21px;}
+.menu {margin-left: 16px}
 </style>
 
 <style>
