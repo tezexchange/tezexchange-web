@@ -27,15 +27,13 @@ button {
   border: 1px solid #fff;
   border-right: 1px solid #eee;
   border-bottom: 1px solid #eee;
-  transition: border 0.5s, background 0.5s;
+  transition: border 0.25s, background 0.25s;
 }
 button:hover {
-  border-right: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
+  border: 1px solid #999;
 }
 button:active {
-  border-right: 1px solid #fff;
-  border-bottom: 1px solid #fff;
+  border: 1px solid #fff;
   background: rgba(250,250,250,1); 
 }
 button:disabled {

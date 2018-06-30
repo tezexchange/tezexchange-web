@@ -97,7 +97,7 @@
     <button class="sell-btn">
       <i class="fas fa-plus-square"></i> <span>SELL</span>
     </button>
-    <button :disabled="!active_orders.price">
+    <button :disabled="!active_orders.price" :class="!active_orders.price ? '' : active_orders.direction ? 'buy-btn' : 'sell-btn'">
       <i class="fas fa-handshake"></i> <span>EXECUTE</span>
     </button>
   </div>
