@@ -32,15 +32,15 @@
         this.price = this.floor(this.price)
 
         if (this.amount_token)
-          this.convert(this.price, null, this.amount_token)
+          this.convert(null, this.amount_token)
         else if (this.amount_tez)
-          this.convert(this.price, this.amount_tez, null)
+          this.convert(this.amount_tez, null)
       },
       amount_token() {
-        this.convert(this.price, null, this.amount_token)
+        this.convert(null, this.amount_token)
       },
       amount_tez() {
-        this.convert(this.price, this.amount_tez, null)
+        this.convert(this.amount_tez, null)
       }
     },
     methods: {
@@ -48,7 +48,7 @@
         const result = parseInt(x)
         return result === 0 || isNaN(result) ? '' : result
       },
-      convert(price, amount_tez, amount_token) {
+      convert(amount_tez, amount_token) {
         if (!this.can_convert) 
           return false
 
@@ -56,12 +56,12 @@
 
         if (this.price) {
           if (amount_tez) {
-            this.amount_token = this.floor(amount_tez / price)
             this.amount_tez = this.floor(this.amount_tez)
+            this.amount_token = this.floor(this.amount_tez / this.price)
           }
           else {
-            this.amount_tez = this.floor(price * amount_token)
             this.amount_token = this.floor(this.amount_token)
+            this.amount_tez = this.floor(this.price * this.amount_token)
           }
         }
 
