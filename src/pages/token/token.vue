@@ -27,7 +27,7 @@
       / {{name}}
     </div>
 
-    <div class="slider" v-show="!mini ||  show_operation_in_mini">
+    <div :class="mini ? 'slider' : ''" v-show="!mini || show_operation_in_mini">
       <div class="operation-wrapper">
         <operation-panel :active_orders.sync="active_orders" />
       </div>

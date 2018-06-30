@@ -64,7 +64,7 @@ header {margin: 8px 0;}
   overflow: hidden;
   animation-name: slideDown;
   animation-timing-function: ease-in-out;
-  animation-duration: 0.5s;
+  animation-duration: 0.25s;
 }
 
 @keyframes slideDown {
