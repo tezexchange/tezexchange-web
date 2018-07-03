@@ -1,3 +1,7 @@
+export const storage = {
+  x: 1
+}
+
 export const sample_my_orders = {
   WEQ: [
     {direction: true, price: 2114, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '323'},

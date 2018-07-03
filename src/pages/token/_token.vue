@@ -20,5 +20,7 @@
 </script>
 
 <template>
-	<token :mini="false" :name="name" :order_info="order_info"></token>
+  <div>
+    <token :mini="false" :name="name" :order_info="order_info"></token>
+  </div>
 </template>

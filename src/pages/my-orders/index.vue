@@ -23,7 +23,7 @@
           this.selected.index = i
           this.selected.top_px = 0
           this.$nextTick(() => {
-            this.selected.top_px = event.target.getBoundingClientRect().top + document.documentElement.scrollTop - 41
+            this.selected.top_px = event.target.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop) - 43
           })
         }
       }
@@ -72,12 +72,12 @@
 </template>
 
 <style scoped>
-.table-wrapper {padding: 0 4px;}
+.table-wrapper {padding: 0 8px;}
 table {width: 100%;}
 th {font-weight: 400; color: #aaa; font-size: 12px;}
-td, th {text-align: right; padding: 3px 6px;}
+td, th {text-align: right; padding: 2px 4px;}
 b {font-size: 13px;}
-td {font-weight: 900;font-size: 13px; }
+td {font-weight: 900;font-size: 13px; cursor: pointer; }
 
 tr {transition: transform 0.5s;}
 tr.selected {transform: translateX(-74px);}
