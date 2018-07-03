@@ -6,7 +6,7 @@
 	  	</div>
       <div class="menu">
         <nuxt-link to="/my-orders">
-          <i class="fas fa-list-alt my-orders-btn"></i>
+          <i class="fas fa-list-alt my-orders-btn" title="my orders"></i>
         </nuxt-link>
       </div>
     </header>
@@ -18,6 +18,7 @@
 
 <style>
 * {margin: 0; padding: 0; font-family: 'Lato'; color: #666; font-size: 16px;}
+b {font-weight: 900}
 a {text-decoration: none; color: #000;}
 i.fas {color: #666;}
 i.far {color: #666;}
@@ -79,7 +80,7 @@ button span {font-family: 'Roboto Condensed'; font-size: 14px; }
 </style>
 
 <style scoped>
-.wrapper {max-width: 480px; margin: 0 auto;}  
+.wrapper {max-width: 480px; margin: 0 auto; position: relative;}  
 header {display: flex; justify-content: center; align-items: center; max-width: 480px; margin: 8px auto;}
 .logo {}
 .logo * {font-family: 'Roboto Condensed'; font-weight: 700; font-size: 21px;}
