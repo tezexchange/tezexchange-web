@@ -1,5 +1,5 @@
 <script>
-  import OperationPanel from '~/components/OperationPanel'
+  import OperationPanel from './OperationPanel'
 
   export default {
     components: {

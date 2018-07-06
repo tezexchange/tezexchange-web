@@ -1,5 +1,5 @@
 <script>
-  import Token from './token/token'
+  import Token from '~/components/Token'
   import { sample_orders } from '~/js/data'
 
   export default {

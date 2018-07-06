@@ -6,7 +6,7 @@
 	  	</div>
       <div class="menu">
         <nuxt-link to="/my-orders">
-          <i class="fas fa-list-alt my-orders-btn" title="my orders"></i>
+          <i class="fas fa-list-alt my-orders-btn" title="mine"></i>
         </nuxt-link>
       </div>
     </header>
@@ -47,7 +47,7 @@ button:disabled {
 }
 button > i {margin-right: 4px;}
 button span {font-family: 'Roboto Condensed'; font-size: 14px; }
-
+h2 { font-weight: 900; font-size: 14px; }
 
 .expand-enter-active {
   transition: all 5s;

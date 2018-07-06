@@ -1,7 +1,11 @@
 <script>
   import { sample_my_orders } from '~/js/data'
+  import MyAssets from '~/components/MyAssets'
 
   export default {
+    components: {
+      MyAssets
+    },
     data() {
       return {
         my_orders: sample_my_orders,
@@ -33,6 +37,8 @@
 
 <template>
   <div>
+    <my-assets></my-assets>
+    <h2>My Orders</h2>
     <div class="cancel-btn-wrapper" v-if="selected.top_px" :style="{top: selected.top_px + 'px'}">
       <button>
         <i class="fas fa-ban"></i>
@@ -72,6 +78,7 @@
 </template>
 
 <style scoped>
+h2 {margin: 4px 8px;}
 .table-wrapper {padding: 0 8px;}
 table {width: 100%;}
 th {font-weight: 400; color: #aaa; font-size: 12px;}

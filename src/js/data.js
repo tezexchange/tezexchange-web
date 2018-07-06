@@ -1,6 +1,8 @@
-export const storage = {
-  x: 1
+export const sample_my_assets = {
+  XTZ: '2312141',
+  WEQ: '3234235353'
 }
+
 
 export const sample_my_orders = {
   WEQ: [
