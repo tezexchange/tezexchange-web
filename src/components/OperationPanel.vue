@@ -87,7 +87,7 @@
       <span :class="amount_tez !== ''  ? 'focus' : ''">MUTEZ</span>
       <input v-model="amount_tez" />
       <p class="tip" :style="{opacity: amount_tez ? 1 : 0}">
-        {{(amount_tez * 1e-6).toFixed(6)}} XTZ
+        {{(amount_tez * 1e-6).toFixed(6).replace('.', ' . ')}} XTZ
       </p>
     </label>
 
