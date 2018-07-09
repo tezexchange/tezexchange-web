@@ -1,6 +1,7 @@
 export const sample_my_assets = {
   XTZ: '2312141',
-  WEQ: '3234235353'
+  WEQ: '3234235353',
+  ABC: '324'
 }
 
 

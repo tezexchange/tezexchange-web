@@ -83,11 +83,18 @@ h2 { font-weight: 900; font-size: 14px; }
 .wrapper {max-width: 480px; margin: 0 auto; position: relative;}  
 header {display: flex; justify-content: center; align-items: center; max-width: 480px; margin: 8px auto;}
 .logo {}
-.logo * {font-family: 'Roboto Condensed'; font-weight: 700; font-size: 21px;}
+.logo * {font-family: 'Sacramento'; font-size: 36px;}
 .menu {margin-left: 16px}
 </style>
 
 <style>
+@font-face {
+    font-family: 'Sacramento';
+    src: url('../webfonts/Sacramento-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
 @font-face {
     font-family: 'Lato';
     src: url('../webfonts/Lato-Regular.woff2') format('woff2');
@@ -106,13 +113,6 @@ header {display: flex; justify-content: center; align-items: center; max-width: 
     font-family: 'Roboto Condensed';
     src: url('../webfonts/RobotoCondensed-Regular.woff2') format('woff2');
     font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Roboto Condensed';
-    src: url('../webfonts/RobotoCondensed-Bold.woff2') format('woff2');
-    font-weight: bold;
     font-style: normal;
 }
 

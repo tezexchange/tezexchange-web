@@ -27,7 +27,7 @@
           this.selected.index = i
           this.selected.top_px = 0
           this.$nextTick(() => {
-            this.selected.top_px = event.target.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop) - 43
+            this.selected.top_px = event.target.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop) - 71
           })
         }
       }
