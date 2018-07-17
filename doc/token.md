@@ -1,4 +1,4 @@
-# Token Standard
+# Tezos Token Standard
 
 ## Sample
 As Michelson
