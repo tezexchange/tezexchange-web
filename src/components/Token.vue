@@ -41,7 +41,7 @@
               <th>SIZE</th>
               <th class="price-header">PRICE(BID)</th>
             </tr>
-            <tr :class="active_orders.direction && active_orders.price === order.price ? 'active-orders' : ''" 
+            <tr :class="active_orders.direction && active_orders.price <= order.price ? 'active-orders' : ''" 
                 @click="active_orders = Object.assign({direction: true}, order)" 
                 v-if="(mini && !i) || !mini" 
                 v-for="(order, i) in order_info.buying">
@@ -58,7 +58,7 @@
               <th class="price-header">PRICE(ASK)</th>
               <th>SIZE</th>
             </tr>
-            <tr :class="!active_orders.direction && active_orders.price === order.price ? 'active-orders' : ''"
+            <tr :class="!active_orders.direction && active_orders.price >= order.price ? 'active-orders' : ''"
                 @click="active_orders = Object.assign({direction: false}, order)" 
                 v-if="(mini && !i) || !mini" 
                 v-for="(order, i) in order_info.selling">
