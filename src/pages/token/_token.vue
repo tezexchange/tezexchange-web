@@ -8,19 +8,19 @@
   	},
 		data() {
 			return {
-				name: '',
+				symbol: '',
 				order_info: {},
 			}
 		},
 		mounted() {
-			this.name = this.$route.params.token
-			this.order_info = sample_orders[this.name]
+			this.symbol = this.$route.params.token
+			this.order_info = sample_orders[this.symbol]
 		}
 	}
 </script>
 
 <template>
   <div>
-    <token :mini="false" :name="name" :order_info="order_info"></token>
+    <token :mini="false" :symbol="symbol" :order_info="order_info"></token>
   </div>
 </template>

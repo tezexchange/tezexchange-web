@@ -5,7 +5,7 @@
     components: {
       OperationPanel
     },
-    props: ['name', 'order_info', 'mini'],
+    props: ['symbol', 'order_info', 'mini'],
     data() {
       return {
         show_operation_in_mini: false,
@@ -24,12 +24,12 @@
 <template>
   <div>
     <div class="title">
-      / {{name}}
+      / {{symbol}}
     </div>
 
     <div :class="mini ? 'slider' : ''" v-show="!mini || show_operation_in_mini">
       <div class="operation-wrapper">
-        <operation-panel :active_orders.sync="active_orders" />
+        <operation-panel :active_orders="active_orders" :symbol="symbol" />
       </div>
     </div>
 
@@ -41,8 +41,7 @@
               <th>SIZE</th>
               <th class="price-header">PRICE(BID)</th>
             </tr>
-            <tr :class="active_orders.direction && active_orders.price <= order.price ? 'active-orders' : ''" 
-                @click="active_orders = Object.assign({direction: true}, order)" 
+            <tr @click="active_orders = Object.assign({direction: true}, order)" 
                 v-if="(mini && !i) || !mini" 
                 v-for="(order, i) in order_info.buying">
               <td>{{order.orders.reduce((acc, x) => acc + +x.amount_token, 0)}}</td>
@@ -58,8 +57,7 @@
               <th class="price-header">PRICE(ASK)</th>
               <th>SIZE</th>
             </tr>
-            <tr :class="!active_orders.direction && active_orders.price >= order.price ? 'active-orders' : ''"
-                @click="active_orders = Object.assign({direction: false}, order)" 
+            <tr @click="active_orders = Object.assign({direction: false}, order)" 
                 v-if="(mini && !i) || !mini" 
                 v-for="(order, i) in order_info.selling">
               <td class="ask">{{order.price}}</td>
@@ -71,7 +69,7 @@
     </div>
 
     <div class="footer">
-      <nuxt-link class="more-btn" :to="`/token/${name}`" v-if="mini">
+      <nuxt-link class="more-btn" :to="`/token/${symbol}`" v-if="mini">
         <i class="fas fa-ellipsis-h"></i>
       </nuxt-link>
     </div>
@@ -95,8 +93,6 @@ td {cursor: default;}
 .price-header {max-width: 40px}
 .bid {color: #259e25;}
 .ask {color: #9e2525;}
-
-.active-orders {font-weight: 900}
 
 .footer {margin: 8px 0; text-align: center}
 

@@ -1,11 +1,12 @@
 <script>
   export default {
-    props: ['symbol', 'active_orders'],
+    props: ['active_orders'],
     data() {
       return {
         can_convert: true,
+        is_update_from_parent: false,
 
-        mode: 'pending',
+        direction: false,
         price: '',
         amount_token: '',
         amount_tez: ''
@@ -14,12 +15,20 @@
     watch: {
       active_orders(v) {
         if (v.price) {
-          this.mode = 'pending'
+          this.is_update_from_parent = true
           this.price = v.price
+          this.direction = v.direction
           this.amount_token = v.orders.reduce((acc, x) => acc + +x.amount_token, 0)
+
+          this.$nextTick(() => {
+            this.is_update_from_parent = false
+          })
         }
       },
       price() {
+        if (!this.is_update_from_parent)
+          this.$emit('update:active_orders', {})
+
         this.price = this.floor(this.price)
 
         if (this.amount_token)
@@ -35,9 +44,6 @@
       }
     },
     methods: {
-      switchMode() {
-        this.mode = this.mode === 'pending' ? 'market' : 'pending'
-      },
       floor(x) {
         const result = parseInt(x)
         return result === 0 || isNaN(result) ? '' : result
@@ -71,7 +77,7 @@
   <div class="form">
     <label>
       <span :class="price !== '' ? 'focus' : ''">PRICE</span>
-      <input v-model="price" :disabled="mode === 'market'"/> 
+      <input v-model="price" /> 
     </label>
     <label>
       <span :class="amount_token !== ''  ? 'focus' : ''">TOKEN AMOUNT</span>
@@ -85,18 +91,14 @@
       </p>
     </label>
 
-    <div class="order-type-switcher">
-      <span :class="mode === 'pending' ? 'active' : ''" @click="mode = 'pending'">Pending</span>
-      <span class="switcher" @click="switchMode">
-        <span class="pointer" :style="{left: (mode === 'pending' ? 0 : 16) + 'px'}"></span>
-      </span>
-      <span :class="mode === 'market' ? 'active' : ''" @click="mode = 'market'">Market</span>
-    </div>
     <button class="buy-btn">
-      <i class="fas fa-plus-square"></i> <span>BUY {{symbol}}</span>
+      <i class="fas fa-plus-square"></i> <span>BUY</span>
     </button>
     <button class="sell-btn">
-      <i class="fas fa-plus-square"></i> <span>SELL {{symbol}}</span>
+      <i class="fas fa-plus-square"></i> <span>SELL</span>
+    </button>
+    <button :disabled="!active_orders.price" :class="!active_orders.price ? '' : active_orders.direction ? 'buy-btn' : 'sell-btn'">
+      <i class="fas fa-handshake"></i> <span>EXECUTE</span>
     </button>
   </div>
 </template>
@@ -157,10 +159,6 @@ input:focus {
   border: 0;
   border-bottom: 1px solid #ccc;
 }
-input:disabled {
-  background: transparent;
-  color: #eee;
-}
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -171,10 +169,4 @@ button {margin: 0 4px;}
 
 .buy-btn * {color: #259e25;}
 .sell-btn * {color: #9e2525;}
-
-.order-type-switcher {margin-bottom: 16px;}
-.order-type-switcher * {font-size: 13px; transition: all 0.25s; display: inline-block;vertical-align: middle;border-bottom: 1px solid transparent; color: #666;}
-.order-type-switcher .active {border-bottom: 1px solid black; color: black;}
-.order-type-switcher .switcher {position: relative; margin: 0 4px; width: 32px; border: 2px solid #ddd; border-radius: 16px; height: 16px;}
-.order-type-switcher .pointer { position: absolute; background: #ddd; top: 0; left: 0; width: 16px; height: 16px; border-radius: 16px;}
 </style>
