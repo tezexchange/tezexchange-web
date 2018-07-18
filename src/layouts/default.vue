@@ -1,20 +1,71 @@
+<script>
+  export default {
+    data() {
+      return {
+        versions: [
+          'main-0.1',
+          'test-0.1',
+        ],
+        version: 'test-0.1'
+      }
+    }
+  }  
+</script>
+
 <template>
   <div>
 	  <header>
-	  	<div class="logo">
-	  		<nuxt-link to="/">tez.exchange</nuxt-link>
-	  	</div>
-      <div class="menu">
-        <nuxt-link to="/my-orders">
-          <i class="fas fa-list-alt my-orders-btn" title="mine"></i>
-        </nuxt-link>
+      <div class="top-wrapper">
+        <div class="logo">
+          <nuxt-link to="/">tez.exchange</nuxt-link>
+        </div>
+        <div class="menu">
+          <nuxt-link to="/my-orders">
+            <i class="fas fa-list-alt my-orders-btn" title="mine"></i>
+          </nuxt-link>
+        </div>
+      </div>
+      <div class="version-wrapper">
+        <label>
+          @
+          <select v-model="version">
+            <option :value="v" v-for='v in versions'>{{v}}</option>
+          </select>
+        </label>
       </div>
     </header>
-    <div class="wrapper">
+    <div class="wrapper" id="body-wrapper">
 	    <nuxt />
+    </div>
+    <div class="footer">
+      <div>
+      </div>
+      <div class="copyright">
+        © 2018 <span class="logo">tez.exchange</span>
+      </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.wrapper {max-width: 480px; margin: 0 auto; position: relative;}  
+header { max-width: 480px; margin: 8px auto;}
+header .top-wrapper {display: flex; justify-content: center; align-items: center;}
+.logo * {font-family: 'Sacramento'; font-size: 36px;}
+.menu {margin-left: 16px}
+.footer {max-width: 480px; margin: 0 auto; text-align: center}
+.footer .logo {margin-left: 8px; font-family: 'Sacramento'; color: #000; font-size: 17px;}
+.copyright {font-size: 10px;color: #666;}
+select {
+  font-size: 13px;
+  border: 1px solid transparent;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+.version-wrapper {transform: translate(-10px, -10px); text-align: center}
+</style>
 
 <style>
 * {margin: 0; padding: 0; font-family: 'Lato'; color: #666; font-size: 16px;}
@@ -79,13 +130,6 @@ h2 { font-weight: 900; font-size: 14px; }
 
 </style>
 
-<style scoped>
-.wrapper {max-width: 480px; margin: 0 auto; position: relative;}  
-header {display: flex; justify-content: center; align-items: center; max-width: 480px; margin: 8px auto;}
-.logo {}
-.logo * {font-family: 'Sacramento'; font-size: 36px;}
-.menu {margin-left: 16px}
-</style>
 
 <style>
 @font-face {
