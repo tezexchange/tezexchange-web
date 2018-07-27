@@ -1,4 +1,3 @@
-
 type token_storage = {
   balance_map : (address, nat) big_map;
   symbol : string;
