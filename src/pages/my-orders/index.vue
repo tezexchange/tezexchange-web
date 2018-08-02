@@ -1,0 +1,116 @@
+<script>
+  import { sample_my_orders } from '~/js/data'
+  import MyAssets from '~/components/MyAssets'
+
+  export default {
+    components: {
+      MyAssets
+    },
+    data() {
+      return {
+        my_orders: sample_my_orders,
+        selected: {
+          name: '',
+          index: -1,
+          top_px: 0
+        }
+      }
+    },
+    methods: {
+      selectOrder(name, i, event) {
+        if (this.selected.name === name && this.selected.index === i) {
+          this.selected.name = ''
+          this.selected.index = -1
+          this.selected.top_px = 0
+        } else {
+          this.selected.name = name
+          this.selected.index = i
+          this.selected.top_px = 0
+          this.$nextTick(() => {
+            this.selected.top_px = 
+              event.target.getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop) - document.getElementById('body-wrapper').offsetTop - 3
+          })
+        }
+      }
+    }
+  }
+</script>
+
+<template>
+  <div>
+    <my-assets></my-assets>
+    <h2>My Orders</h2>
+    <div class="cancel-btn-wrapper" v-if="selected.top_px" :style="{top: selected.top_px + 'px'}">
+      <button>
+        <i class="fas fa-ban"></i>
+        <span>CANCEL</span>
+      </button>
+    </div>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>PRICE</th>
+            <th>MUTEZ</th>
+            <th>TOKEN AMOUNT</th>
+          </tr>
+        </thead>
+        <tbody v-for="(orders, name) in my_orders">
+          <tr>
+            <th><b>{{name}}</b></th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+          <tr 
+            @click="selectOrder(name, i, $event)"
+            v-for="(order, i) in orders" 
+            :class="[order.direction ? 'bid' : 'ask', selected.name === name && selected.index === i ? 'selected' : '']">
+            <td>{{order.direction ? 'Buy' : 'Sell'}}</td>
+            <td>{{order.price}}</td>
+            <td>{{order.amount_tez}}tz</td>
+            <td>{{order.amount_token}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+h2 {margin: 4px 8px;}
+.table-wrapper {padding: 0 8px;}
+table {width: 100%;}
+th {font-weight: 400; color: #aaa; font-size: 12px;}
+td, th {text-align: right; padding: 2px 4px;}
+b {font-size: 13px;}
+td {font-weight: 900;font-size: 13px; cursor: pointer; }
+
+tr {transition: transform 0.5s;}
+tr.selected {transform: translateX(-74px);}
+tr:nth-child(even) td {background: #fafafa}
+td:first-child {text-align: left}
+th:first-child {text-align: left}
+tr:first-child th {border-top: 1px solid #ddd;}
+
+.bid td {color: #259e25;}
+.ask td {color: #9e2525;}
+
+.cancel-btn-wrapper {position: absolute; z-index: 1; right: 4px; transition: top 0.25s; animation-name: slideIn; animation-duration: 0.5s}
+@keyframes slideIn {
+  from {
+    transform: translateX(74px);
+    opacity: 0
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1
+  }
+}
+
+button {align-items: center; padding: 3px 6px;}
+button i {font-size: 12px; color: red;}
+button span {font-size: 12px;}
+</style>
