@@ -10,7 +10,8 @@ RECURSIVE SetReduce(_, _, _)
 SetReduce(Op(_, _), S, value) == 
   IF S = {} THEN value
   ELSE LET s == Pick(S)
-       IN IF Op(s[1], value) = Op(value, s[1])
+       IN 
+       IF Op(s[1], value) = Op(value, s[1])
        THEN SetReduce(Op, S \ {s}, Op(s[1], value)) 
        ELSE Assert(FALSE, "error")
        

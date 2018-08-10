@@ -6,7 +6,6 @@ CONSTANTS CONTRACTS, \* set of contracts in Tezos
           INIT_TOKEN \* initial token amount
           
 VARIABLES tokenMap \* token amount state of contracts
-          \* var pick is from Helper
           
 ----------------------------------------------------------------------------
 
@@ -30,6 +29,7 @@ tokenMapChecker ==
 
 TokenInit == 
   /\ tokenMap = [t \in TOKENS |-> [x \in CONTRACTS |-> INIT_TOKEN]]
+  \* pick is the variable from Helper
   /\ pick = [
        token |-> RandomElement(TOKENS),
        owner |-> RandomElement(CONTRACTS), 
