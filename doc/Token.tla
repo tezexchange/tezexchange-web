@@ -1,60 +1,54 @@
 ------------------------------- MODULE Token -------------------------------
-EXTENDS Naturals, TLC, FiniteSets
+EXTENDS Naturals, TLC, FiniteSets, Helper
 
 CONSTANTS CONTRACTS, \* set of contracts in Tezos
+          TOKENS, \* set of token contracts
           INIT_TOKEN \* initial token amount
           
-VARIABLES tokenMap, \* token amount state of contracts
-          pick \* current pick for model checking
-          
-----------------------------------------------------------------------------
-\* some common helper operators
-
-Range(T) == {<<T[x], x>> : x \in DOMAIN T}
-Pick(S) == CHOOSE s \in S : TRUE
-
-RECURSIVE SetReduce(_, _, _)
-SetReduce(Op(_, _), S, value) == 
-  IF S = {} THEN value
-  ELSE LET s == Pick(S)
-       IN IF Op(s[1], value) = Op(value, s[1])
-       THEN SetReduce(Op, S \ {s}, Op(s[1], value)) 
-       ELSE Assert(FALSE, "error")
-       
-Sum(S) == LET _op(a, b) == a + b
-          IN SetReduce(_op, S, 0)
+VARIABLES tokenMap \* token amount state of contracts
+          \* var pick is from Helper
           
 ----------------------------------------------------------------------------
 
-TOKENTransfer(owner, receiver, amount) ==
+TOKENTransfer(token, owner, receiver, amount) ==
   IF owner = receiver
   THEN UNCHANGED tokenMap
   ELSE 
-  tokenMap' = [x \in CONTRACTS |-> 
-                CASE x = owner -> tokenMap[x] - amount
-                  [] x = receiver -> tokenMap[x] + amount
-                  [] OTHER -> tokenMap[x]]
-
+  tokenMap' = 
+    [t \in TOKENS |-> 
+      [x \in CONTRACTS |-> 
+        IF t = token
+        THEN CASE x = owner -> tokenMap[t][x] - amount
+               [] x = receiver -> tokenMap[t][x] + amount
+               [] OTHER -> tokenMap[t][x]
+        ELSE tokenMap[t][x]]]
+           
+           
 tokenMapChecker ==
-  Sum(Range(tokenMap)) = Cardinality(CONTRACTS) * INIT_TOKEN
-  
+  [t \in TOKENS |-> Sum(Range(tokenMap[t]))] = 
+    [t \in TOKENS |-> Cardinality(CONTRACTS) * INIT_TOKEN]
 
-Init == 
-  /\ tokenMap = [x \in CONTRACTS |-> INIT_TOKEN]
+TokenInit == 
+  /\ tokenMap = [t \in TOKENS |-> [x \in CONTRACTS |-> INIT_TOKEN]]
   /\ pick = [
+       token |-> RandomElement(TOKENS),
        owner |-> RandomElement(CONTRACTS), 
        receiver |-> RandomElement(CONTRACTS), 
        amount |-> RandomElement(0..INIT_TOKEN * 2)
      ]
   
-Next ==
+TokenNext ==
   /\ pick' = [
+       token |-> RandomElement(TOKENS),
        owner |-> RandomElement(CONTRACTS), 
        receiver |-> RandomElement(CONTRACTS), 
        amount |-> RandomElement(0..INIT_TOKEN * 2)
      ]
-  /\ IF tokenMap[pick.owner] >= pick.amount
-     THEN TOKENTransfer(pick.owner, pick.receiver, pick.amount)
+  /\ IF tokenMap[pick.token][pick.owner] >= pick.amount
+     THEN TOKENTransfer(pick.token, 
+                        pick.owner, 
+                        pick.receiver, 
+                        pick.amount)
      ELSE UNCHANGED tokenMap
                               
 =============================================================================
