@@ -1,4 +1,7 @@
 module.exports = {
+  generate: {
+    dir: 'docs'
+  },
   srcDir: 'src/',
   head: {
     title: 'tez.exchange',

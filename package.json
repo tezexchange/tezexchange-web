@@ -4,7 +4,7 @@
   "description": "tezexchange build system",
   "scripts": {
     "dev": "HOST=0.0.0.0 PORT=8080 nuxt",
-    "gen": "nuxt generate && rm -rf ./_nuxt && cp -r ./dist/* ./ && rm -rf ./dist"
+    "gen": "nuxt generate"
   },
   "repository": {
     "type": "git",
