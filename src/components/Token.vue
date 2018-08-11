@@ -9,11 +9,11 @@
     data() {
       return {
         show_operation_in_mini: false,
-        active_orders: {}
+        active_order: {}
       }
     },
     watch: {
-      active_orders(v) {
+      active_order(v) {
         if (v.price)
           this.show_operation_in_mini = true
       }
@@ -29,7 +29,7 @@
 
     <div :class="mini ? 'slider' : ''" v-show="!mini || show_operation_in_mini">
       <div class="operation-wrapper">
-        <operation-panel :active_orders="active_orders" :symbol="symbol" />
+        <operation-panel :active_order.sync="active_order" :symbol="symbol" />
       </div>
     </div>
 
@@ -41,10 +41,11 @@
               <th>SIZE</th>
               <th class="price-header">PRICE(BID)</th>
             </tr>
-            <tr @click="active_orders = Object.assign({direction: true}, order)" 
+            <tr :class="active_order.is_buy === true && active_order.owner === order.owner && active_order.price === order.price && 'active-order'" 
+                @click="active_order = Object.assign({is_buy: true}, order)" 
                 v-if="(mini && !i) || !mini" 
                 v-for="(order, i) in order_info.buying">
-              <td>{{order.orders.reduce((acc, x) => acc + +x.amount_token, 0)}}</td>
+              <td>{{parseInt(order.tez_amount / order.price)}}</td>
               <td class="bid">{{order.price}}</td>
             </tr>
           </tbody>
@@ -57,11 +58,12 @@
               <th class="price-header">PRICE(ASK)</th>
               <th>SIZE</th>
             </tr>
-            <tr @click="active_orders = Object.assign({direction: false}, order)" 
+            <tr :class="active_order.is_buy === false && active_order.owner === order.owner && active_order.price === order.price && 'active-order'" 
+                @click="active_order = Object.assign({is_buy: false}, order)" 
                 v-if="(mini && !i) || !mini" 
                 v-for="(order, i) in order_info.selling">
               <td class="ask">{{order.price}}</td>
-              <td>{{order.orders.reduce((acc, x) => acc + +x.amount_token, 0)}}</td>
+              <td>{{order.token_amount}}</td>
             </tr>
           </tbody>
         </table>
@@ -93,7 +95,7 @@ td {cursor: default;}
 .price-header {max-width: 40px}
 .bid {color: #259e25;}
 .ask {color: #9e2525;}
-
+.active-order {font-weight: 900}
 .footer {margin: 8px 0; text-align: center}
 
 </style>

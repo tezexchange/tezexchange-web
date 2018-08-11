@@ -1,61 +1,75 @@
 <script>
   export default {
-    props: ['symbol', 'active_orders'],
+    props: ['symbol', 'active_order'],
     data() {
       return {
         can_convert: true,
 
-        mode: 'pending',
+        mode: 'create',
         price: '',
-        amount_token: '',
-        amount_tez: ''
+        token_amount: '',
+        tez_amount: ''
       }
     },
     watch: {
-      active_orders(v) {
+      mode(m) {
+        if (m === 'create')
+          this.$emit('update:active_order', {})
+      },
+      active_order(v) {
         if (v.price) {
-          this.mode = 'pending'
+          this.can_convert = false
+          this.mode = 'execute'
           this.price = v.price
-          this.amount_token = v.orders.reduce((acc, x) => acc + +x.amount_token, 0)
+          
+          if (v.is_buy) {
+            this.tez_amount = v.tez_amount
+            this.token_amount = this.floor(v.tez_amount / v.price)
+          }
+          else {
+            this.token_amount = v.token_amount
+            this.tez_amount = v.token_amount * v.price
+          }
+
+          this.$nextTick(() => {
+            this.can_convert = true
+          })
         }
       },
       price() {
         this.price = this.floor(this.price)
 
-        if (this.amount_token)
-          this.convert(null, this.amount_token)
-        else if (this.amount_tez)
-          this.convert(this.amount_tez, null)
+        if (this.token_amount)
+          this.convert(null, this.token_amount)
+        else if (this.tez_amount)
+          this.convert(this.tez_amount, null)
       },
-      amount_token() {
-        this.convert(null, this.amount_token)
+      token_amount() {
+        this.convert(null, this.token_amount)
       },
-      amount_tez() {
-        this.convert(this.amount_tez, null)
+      tez_amount() {
+        this.convert(this.tez_amount, null)
       }
     },
     methods: {
-      switchMode() {
-        this.mode = this.mode === 'pending' ? 'market' : 'pending'
-      },
       floor(x) {
         const result = parseInt(x)
         return result === 0 || isNaN(result) ? '' : result
       },
-      convert(amount_tez, amount_token) {
+      convert(tez_amount, token_amount) {
         if (!this.can_convert) 
           return false
 
         this.can_convert = false
 
         if (this.price) {
-          if (amount_tez) {
-            this.amount_tez = this.floor(this.amount_tez)
-            this.amount_token = this.floor(this.amount_tez / this.price)
+          if (tez_amount) {
+            this.tez_amount = this.floor(this.tez_amount)
+            this.token_amount = this.floor(this.tez_amount / this.price)
           }
           else {
-            this.amount_token = this.floor(this.amount_token)
-            this.amount_tez = this.floor(this.price * this.amount_token)
+            this.token_amount = this.floor(this.token_amount)
+            this.tez_amount = this.floor(this.price * this.token_amount)
           }
         }
 
@@ -71,32 +85,35 @@
   <div class="form">
     <label>
       <span :class="price !== '' ? 'focus' : ''">PRICE</span>
-      <input v-model="price" :disabled="mode === 'market'"/> 
+      <input v-model="price" :disabled="mode === 'execute'"/> 
     </label>
     <label>
-      <span :class="amount_token !== ''  ? 'focus' : ''">TOKEN AMOUNT</span>
-      <input v-model="amount_token" />
+      <span :class="token_amount !== ''  ? 'focus' : ''">TOKEN AMOUNT</span>
+      <input v-model="token_amount" />
     </label>
     <label>
-      <span :class="amount_tez !== ''  ? 'focus' : ''">MUTEZ</span>
-      <input v-model="amount_tez" />
-      <p class="tip" :style="{opacity: amount_tez ? 1 : 0}">
-        {{(amount_tez * 1e-6).toFixed(6).replace('.', ' . ')}} XTZ
+      <span :class="tez_amount !== ''  ? 'focus' : ''">MUTEZ</span>
+      <input v-model="tez_amount" />
+      <p class="tip" :style="{opacity: tez_amount ? 1 : 0}">
+        {{(tez_amount * 1e-6).toFixed(6).replace('.', ' . ')}} XTZ
       </p>
     </label>
 
     <div class="order-type-switcher">
-      <span :class="mode === 'pending' ? 'active' : ''" @click="mode = 'pending'">Pending</span>
-      <span class="switcher" @click="switchMode">
-        <span class="pointer" :style="{left: (mode === 'pending' ? 0 : 16) + 'px'}"></span>
+      <span :class="mode === 'create' ? 'active' : ''" @click="mode = 'create'">Create</span>
+      <span class="switcher" @click="mode = 'create'">
+        <span class="pointer" :style="{left: (mode === 'create' ? 0 : 16) + 'px'}"></span>
       </span>
-      <span :class="mode === 'market' ? 'active' : ''" @click="mode = 'market'">Market</span>
+      <span :class="mode === 'execute' ? 'active' : ''">Execute</span>
     </div>
-    <button class="buy-btn">
+    <button class="buy-btn" v-if="mode === 'create'">
       <i class="fas fa-plus-square"></i> <span>BUY {{symbol}}</span>
     </button>
-    <button class="sell-btn">
+    <button class="sell-btn" v-if="mode === 'create'">
       <i class="fas fa-plus-square"></i> <span>SELL {{symbol}}</span>
+    </button>
+    <button v-if="mode === 'execute'" :class="active_order.is_buy ? 'buy-btn' : 'sell-btn'">
+      <i class="fas fa-handshake"></i> <span>{{active_order.is_buy ? 'SELL' : 'BUY'}} {{symbol}} @ {{active_order.price}}</span>
     </button>
   </div>
 </template>
