@@ -1,11 +1,34 @@
+export const DATA = {
+  ready: false,
+  orders: {},
+  my_orders: {}
+}
+
+export function dataReady() {
+  if (Object.keys(DATA.orders).length)
+    return Promise.resolve(DATA)
+  else 
+    return updateOrders()
+}
+
+export function updateOrders() {
+  return Promise.resolve(sample_my_orders)
+  .then(x => {
+    DATA.orders = sample_orders
+    DATA.my_orders = sample_my_orders
+    DATA.ready = true
+    return DATA
+  })
+}
+
+
 export const sample_my_assets = {
   XTZ: '2312141',
   WEQ: '3234235353',
   ABC: '324'
 }
 
-
-export const sample_my_orders = {
+const sample_my_orders = {
   WEQ: [
     {direction: true, price: 2114, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '323'},
     {direction: true, price: 2114, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '323'},
@@ -68,7 +91,7 @@ export const sample_my_orders = {
   ]
 }
 
-export const sample_orders = {
+const sample_orders = {
 	WEQ: {
     selling: [
       {

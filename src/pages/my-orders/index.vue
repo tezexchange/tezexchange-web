@@ -1,14 +1,12 @@
 <script>
-  import { sample_my_orders } from '~/js/data'
-  import MyAssets from '~/components/MyAssets'
+  import { DATA, dataReady } from '~/js/data'
 
   export default {
     components: {
-      MyAssets
     },
     data() {
       return {
-        my_orders: sample_my_orders,
+        data: DATA,
         selected: {
           name: '',
           index: -1,
@@ -32,13 +30,15 @@
           })
         }
       }
+    },
+    mounted() {
+      dataReady()
     }
   }
 </script>
 
 <template>
   <div>
-    <my-assets></my-assets>
     <h2>My Orders</h2>
     <div class="cancel-btn-wrapper" v-if="selected.top_px" :style="{top: selected.top_px + 'px'}">
       <button>
@@ -56,7 +56,7 @@
             <th>TOKEN AMOUNT</th>
           </tr>
         </thead>
-        <tbody v-for="(orders, name) in my_orders">
+        <tbody v-for="(orders, name) in data.my_orders" v-if="data.ready">
           <tr>
             <th><b>{{name}}</b></th>
             <th></th>

@@ -1,10 +1,10 @@
 <script>
-  import { sample_my_assets } from '~/js/data'
+  import { DATA } from '~/js/data'
 
   export default {
     data() {
       return {
-        my_assets: sample_my_assets
+        data: DATA
       }
     }
   }
@@ -16,7 +16,7 @@
       <h2>My Assets</h2>
       <table>
         <tbody>
-          <tr v-for="(amount, name) in my_assets">
+          <tr v-for="(amount, name) in data.my_assets">
             <th>{{name}}</th>
             <td>
               <b>{{amount}}</b>
