@@ -1,12 +1,11 @@
 <script>
+  import { CONTRACTS } from '~/js/contracts.js'
+
   export default {
     data() {
       return {
-        versions: [
-          'main-0.1',
-          'test-0.1',
-        ],
-        version: 'test-0.1'
+        contracts: CONTRACTS,
+        versions: Object.keys(CONTRACTS.versions)
       }
     }
   }  
@@ -28,7 +27,7 @@
       <div class="version-wrapper">
         <label>
           @
-          <select v-model="version">
+          <select v-model="contracts.selected">
             <option :value="v" v-for='v in versions'>{{v}}</option>
           </select>
         </label>

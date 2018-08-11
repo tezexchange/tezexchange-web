@@ -10,6 +10,9 @@ module.exports = {
       {name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'},
       {name: 'description', content: 'Advanced DEX for Tezos token'}
     ],
+    script: [
+      { src: 'https://www.tezbridge.com/plugin.js' }
+    ],
     link: [
       { rel: 'icon', type: 'image/icon', href: '/favicon.png' }
     ]

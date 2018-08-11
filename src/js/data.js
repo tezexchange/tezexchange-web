@@ -1,3 +1,6 @@
+import { CONTRACTS } from './contracts.js'
+import { enc58, makePlain } from './helper.js'
+
 export const DATA = {
   ready: false,
   orders: {},
@@ -12,8 +15,23 @@ export function dataReady() {
 }
 
 export function updateOrders() {
-  return Promise.resolve(sample_my_orders)
+  const contracts = CONTRACTS.versions[CONTRACTS.selected]
+
+  return tezbridge({method: 'raw_storage', contract: contracts['CONTRACT.main']})
   .then(x => {
+    const orders = x.big_map.map(x => {
+      const result = makePlain(x)
+      return {
+        token: enc58('contract', result[0]),
+        owner: enc58('identity', result[1]),
+        is_buy: result[2].toLowerCase() === 'true' ? true : false,
+        price: result[3],
+        tez_amount: result[4],
+        token_amount: result[5]
+      }
+    })
+    console.log(orders)
+
     DATA.orders = sample_orders
     DATA.my_orders = sample_my_orders
     DATA.ready = true

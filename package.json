@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/tezexchange/tezexchange.github.io#readme",
   "dependencies": {
+    "bs58check": "^2.1.2",
     "nuxt": "^1.4.1"
   }
 }
