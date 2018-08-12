@@ -1,12 +1,25 @@
 <script>
   import { CONTRACTS } from '~/js/contracts.js'
+  import { DATA, updateMyOrders } from '~/js/data.js'
 
   export default {
     data() {
       return {
+        data: DATA,
         contracts: CONTRACTS,
         versions: Object.keys(CONTRACTS.versions)
       }
+    },
+    methods: {
+      login() {
+        window.open('https://www.tezbridge.com')
+      },
+      focus() {
+        updateMyOrders()
+      }
+    },
+    mounted() {
+      window.onfocus = this.focus
     }
   }  
 </script>
@@ -31,6 +44,13 @@
             <option :value="v" v-for='v in versions'>{{v}}</option>
           </select>
         </label>
+      </div>
+
+      <div class="login-wrapper" v-if="!data.pkh">
+        <button @click="login">
+          <i class="fas fa-sign-in-alt"></i>
+          <span>LOGIN WITH TEZBRIDGE</span>
+        </button>
       </div>
     </header>
     <div class="wrapper" id="body-wrapper">
@@ -64,6 +84,7 @@ select {
   appearance: none;
 }
 .version-wrapper {transform: translate(-10px, -10px); text-align: center}
+.login-wrapper {text-align: center}
 </style>
 
 <style>

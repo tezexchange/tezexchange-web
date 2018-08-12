@@ -1,5 +1,5 @@
 <script>
-  import { DATA, dataReady } from '~/js/data'
+  import { DATA, dataReady, updateMyOrders } from '~/js/data'
 
   export default {
     components: {
@@ -32,7 +32,6 @@
       }
     },
     mounted() {
-      dataReady()
     }
   }
 </script>

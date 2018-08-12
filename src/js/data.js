@@ -2,16 +2,43 @@ import { CONTRACTS, TOKENS } from './contracts.js'
 import { enc58, makePlain } from './helper.js'
 
 export const DATA = {
+  pkh: '',
   ready: false,
   orders: {},
   my_orders: {}
 }
 
 export function dataReady() {
-  if (Object.keys(DATA.orders).length)
+  if (DATA.ready)
     return Promise.resolve(DATA)
   else 
     return updateOrders()
+}
+
+export function updateMyOrders() {
+  return Promise.all([dataReady(), tezbridge({method: 'public_key_hash', noalert: true})])
+  .then(([_, pkh]) => {
+    if (!pkh) return Promise.reject()
+
+    DATA.pkh = pkh
+
+    const my_orders = {}
+    for (const name in DATA.orders) {
+      my_orders[name] = []
+
+      DATA.orders[name].buying.forEach(x => {
+        if (x.owner === pkh)
+          my_orders[name].push(x)
+      })
+      DATA.orders[name].selling.forEach(x => {
+        if (x.owner === pkh)
+          my_orders[name].push(x)
+      })
+    }
+
+    DATA.my_orders = my_orders
+    return DATA.my_orders
+  })
 }
 
 export function updateOrders() {
@@ -21,6 +48,7 @@ export function updateOrders() {
   .then(x => {
     const order_lst = x.big_map.map(x => {
       const result = makePlain(x)
+      console.log(result)
       return {
         token: enc58('contract', result[0]),
         owner: enc58('identity', result[1]),
@@ -41,9 +69,8 @@ export function updateOrders() {
         orders[key][x.is_buy ? 'buying' : 'selling'].push(x)
       }
     })
-    console.log(orders)
+
     DATA.orders = orders
-    DATA.my_orders = sample_my_orders
     DATA.ready = true
     return DATA
   })

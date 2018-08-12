@@ -84,7 +84,7 @@
 <template>
   <div class="form">
     <label>
-      <span :class="price !== '' ? 'focus' : ''">PRICE</span>
+      <span :class="price !== '' ? 'focus' : ''">PRICE (MUTEZ / TOKEN)</span>
       <input v-model="price" :disabled="mode === 'execute'"/> 
     </label>
     <label>
