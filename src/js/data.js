@@ -1,4 +1,4 @@
-import { CONTRACTS } from './contracts.js'
+import { CONTRACTS, TOKENS } from './contracts.js'
 import { enc58, makePlain } from './helper.js'
 
 export const DATA = {
@@ -19,7 +19,7 @@ export function updateOrders() {
 
   return tezbridge({method: 'raw_storage', contract: contracts['CONTRACT.main']})
   .then(x => {
-    const orders = x.big_map.map(x => {
+    const order_lst = x.big_map.map(x => {
       const result = makePlain(x)
       return {
         token: enc58('contract', result[0]),
@@ -30,9 +30,19 @@ export function updateOrders() {
         token_amount: result[5]
       }
     })
-    console.log(orders)
 
-    DATA.orders = sample_orders
+    const orders = {}
+    order_lst.forEach(x => {
+      if (x.token in TOKENS) {
+        const key = TOKENS[x.token]
+        if (!orders[key])
+          orders[key] = {buying: [], selling: []}
+
+        orders[key][x.is_buy ? 'buying' : 'selling'].push(x)
+      }
+    })
+    console.log(orders)
+    DATA.orders = orders
     DATA.my_orders = sample_my_orders
     DATA.ready = true
     return DATA

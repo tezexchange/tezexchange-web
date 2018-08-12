@@ -12,5 +12,5 @@ export const CONTRACTS = {
 }
 
 export const TOKENS = {
-  TES: "KT1UHQoA3tt6wH3aEjYkgM2LSFoqBEBMjcAR"
+  KT1UHQoA3tt6wH3aEjYkgM2LSFoqBEBMjcAR: 'TES'
 }
