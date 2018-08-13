@@ -27,7 +27,7 @@
       / {{symbol}}
     </div>
 
-    <div :class="mini ? 'slider' : ''" v-show="!mini || show_operation_in_mini">
+    <div :class="mini ? 'slider' : ''" v-show="!mini || show_operation_in_mini || !order_info">
       <div class="operation-wrapper">
         <operation-panel :active_order.sync="active_order" :symbol="symbol" />
       </div>
@@ -44,7 +44,7 @@
             <tr :class="active_order.is_buy === true && active_order.owner === order.owner && active_order.price === order.price && 'active-order'" 
                 @click="active_order = Object.assign({is_buy: true}, order)" 
                 v-if="(mini && !i) || !mini" 
-                v-for="(order, i) in order_info.buying">
+                v-for="(order, i) in order_info ? order_info.buying : []">
               <td>{{parseInt(order.tez_amount / order.price)}}</td>
               <td class="bid">{{order.price}}</td>
             </tr>
@@ -61,7 +61,7 @@
             <tr :class="active_order.is_buy === false && active_order.owner === order.owner && active_order.price === order.price && 'active-order'" 
                 @click="active_order = Object.assign({is_buy: false}, order)" 
                 v-if="(mini && !i) || !mini" 
-                v-for="(order, i) in order_info.selling">
+                v-for="(order, i) in order_info ? order_info.selling : []">
               <td class="ask">{{order.price}}</td>
               <td>{{order.token_amount}}</td>
             </tr>

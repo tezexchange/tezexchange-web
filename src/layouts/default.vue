@@ -1,16 +1,26 @@
 <script>
   import { CONTRACTS } from '~/js/contracts.js'
-  import { DATA, updateMyOrders } from '~/js/data.js'
+  import { DATA, dataReady, updateMyOrders, TIPS, showTip } from '~/js/data.js'
 
   export default {
     data() {
       return {
+        tips: TIPS,
         data: DATA,
         contracts: CONTRACTS,
         versions: Object.keys(CONTRACTS.versions)
       }
     },
     methods: {
+      copy(selector) {
+        const range = document.createRange()
+        const selection = window.getSelection()
+        range.selectNodeContents(document.querySelector(selector))
+        selection.removeAllRanges()
+        selection.addRange(range)
+        document.execCommand("copy")
+        showTip(true, 'Copied')
+      },
       login() {
         window.open('https://www.tezbridge.com')
       },
@@ -20,12 +30,19 @@
     },
     mounted() {
       window.onfocus = this.focus
+      dataReady()
     }
   }  
 </script>
 
 <template>
   <div>
+    <div class="tips">
+      <div :class="tip.mode" v-for="(tip, i) in tips">
+        <button @click="copy('.et-' + i)"><span>COPY</span></button>
+        <span :class="'et-' + i">{{tip.content}}</span>
+      </div>
+    </div>
 	  <header>
       <div class="top-wrapper">
         <div class="logo">
@@ -85,6 +102,21 @@ select {
 }
 .version-wrapper {transform: translate(-10px, -10px); text-align: center}
 .login-wrapper {text-align: center}
+.tips { position: fixed; z-index: 10; top: 0; left: 0; width: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+.tips > div { max-height: 64px; overflow: hidden; font-size: 12px; max-width: 480px; margin-bottom: 4px; color: white; padding: 2px 4px; animation-name: fadeIn; animation-duration: 0.5s}
+.tips .success { border: 1px solid green; background: green; }
+.tips .error { border: 1px solid red; background: red; }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0
+  }
+
+  to {
+    opacity: 1
+  }
+}
+
 </style>
 
 <style>

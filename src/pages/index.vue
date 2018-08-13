@@ -1,6 +1,7 @@
 <script>
   import Token from '~/components/Token'
-  import { DATA, dataReady } from '~/js/data'
+  import { DATA } from '~/js/data.js'
+  import { TOKENS } from '~/js/contracts.js'
 
   export default {
     components: {
@@ -8,11 +9,11 @@
     },
     data() {
       return {
-        data: DATA
+        data: DATA,
+        tokens: TOKENS
       }
     },
     mounted() {
-      dataReady()
     }
   }
 </script>
@@ -20,7 +21,7 @@
 
 <template>
   <div>
-    <token :key="k" :symbol="k" :order_info="v" :mini="true" v-for="(v, k) in data.orders" v-if="data.ready"></token>
+    <token :key="contract" :symbol="name" :order_info="data.orders[name]" :mini="true" v-for="(name, contract) in tokens" v-if="data.ready"></token>
   </div>
 </template>
 

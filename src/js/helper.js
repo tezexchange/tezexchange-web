@@ -13,8 +13,16 @@ const prefix = {
 
 export function enc58(name, input) {
   const input_arr = input.match(/\w{2}/g).map(x => parseInt(x, 16))
-  input_arr.pop()
-  input_arr.shift()
+  ;({
+    identity: () => {
+      input_arr.shift()
+      input_arr.shift()
+    },
+    contract: () => {
+      input_arr.pop()
+      input_arr.shift()
+    }
+  })[name]()
   return bs58check.encode(new Buffer(prefix[name].concat(input_arr)))
 }
 

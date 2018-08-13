@@ -1,5 +1,7 @@
 <script>
-  import { DATA, dataReady, updateMyOrders } from '~/js/data'
+  import { getContract } from '~/js/contracts.js'
+  import { DATA, updateMyOrders, showTip } from '~/js/data.js'
+  import { Cancel } from '~/js/parameters.js'
 
   export default {
     components: {
@@ -15,6 +17,16 @@
       }
     },
     methods: {
+      cancelOrder() {
+        const order = this.data.my_orders[this.selected.name][this.selected.index]
+        tezbridge({method: 'transfer', destination: getContract('main'), parameters: Cancel(order)})
+        .then(x => {
+          showTip(true, x.operation_id)
+        })
+        .catch(err => {
+          showTip(false, err)
+        })
+      },
       selectOrder(name, i, event) {
         if (this.selected.name === name && this.selected.index === i) {
           this.selected.name = ''
@@ -40,7 +52,7 @@
   <div>
     <h2>My Orders</h2>
     <div class="cancel-btn-wrapper" v-if="selected.top_px" :style="{top: selected.top_px + 'px'}">
-      <button>
+      <button @click="cancelOrder">
         <i class="fas fa-ban"></i>
         <span>CANCEL</span>
       </button>
@@ -51,8 +63,7 @@
           <tr>
             <th></th>
             <th>PRICE</th>
-            <th>MUTEZ</th>
-            <th>TOKEN AMOUNT</th>
+            <th>TEZ / TOKEN AMOUNT</th>
           </tr>
         </thead>
         <tbody v-for="(orders, name) in data.my_orders" v-if="data.ready">
@@ -60,16 +71,14 @@
             <th><b>{{name}}</b></th>
             <th></th>
             <th></th>
-            <th></th>
           </tr>
           <tr 
             @click="selectOrder(name, i, $event)"
             v-for="(order, i) in orders" 
-            :class="[order.direction ? 'bid' : 'ask', selected.name === name && selected.index === i ? 'selected' : '']">
-            <td>{{order.direction ? 'Buy' : 'Sell'}}</td>
+            :class="[order.is_buy ? 'bid' : 'ask', selected.name === name && selected.index === i ? 'selected' : '']">
+            <td>{{order.is_buy ? 'Buy' : 'Sell'}}</td>
             <td>{{order.price}}</td>
-            <td>{{order.amount_tez}}tz</td>
-            <td>{{order.amount_token}}</td>
+            <td>{{order.is_buy ? order.tez_amount / 1000000 + 'tz' : order.token_amount}}</td>
           </tr>
         </tbody>
       </table>

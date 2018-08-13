@@ -1,6 +1,15 @@
 import { CONTRACTS, TOKENS } from './contracts.js'
 import { enc58, makePlain } from './helper.js'
 
+export const TIPS = [
+]
+export function showTip(is_success, content) {
+  TIPS.unshift({mode: (is_success ? 'success' : 'error'), content})
+  setTimeout(() => {
+    TIPS.pop()
+  }, 5000)
+}
+
 export const DATA = {
   pkh: '',
   ready: false,
@@ -48,7 +57,6 @@ export function updateOrders() {
   .then(x => {
     const order_lst = x.big_map.map(x => {
       const result = makePlain(x)
-      console.log(result)
       return {
         token: enc58('contract', result[0]),
         owner: enc58('identity', result[1]),
@@ -58,7 +66,7 @@ export function updateOrders() {
         token_amount: result[5]
       }
     })
-
+    
     const orders = {}
     order_lst.forEach(x => {
       if (x.token in TOKENS) {

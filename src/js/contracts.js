@@ -14,3 +14,7 @@ export const CONTRACTS = {
 export const TOKENS = {
   KT1UHQoA3tt6wH3aEjYkgM2LSFoqBEBMjcAR: 'TES'
 }
+
+export function getContract(name) {
+  return CONTRACTS.versions[CONTRACTS.selected][`CONTRACT.${name}`]
+}
