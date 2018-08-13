@@ -14,8 +14,6 @@
     },
     mounted() {
       this.symbol = this.$route.query.symbol
-      if (this.symbol)
-        dataReady()
     }
   }
 </script>

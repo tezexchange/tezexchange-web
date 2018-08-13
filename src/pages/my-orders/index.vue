@@ -1,7 +1,7 @@
 <script>
   import { getContract } from '~/js/contracts.js'
-  import { DATA, updateMyOrders, showTip } from '~/js/data.js'
-  import { Cancel } from '~/js/parameters.js'
+  import { DATA, showTip } from '~/js/data.js'
+  import { CancelOrder } from '~/js/transactions.js'
 
   export default {
     components: {
@@ -19,9 +19,10 @@
     methods: {
       cancelOrder() {
         const order = this.data.my_orders[this.selected.name][this.selected.index]
-        tezbridge({method: 'transfer', destination: getContract('main'), parameters: Cancel(order)})
+        
+        CancelOrder(order)
         .then(x => {
-          showTip(true, x.operation_id)
+          showTip(true, 'TX:' + x.operation_id)
         })
         .catch(err => {
           showTip(false, err)

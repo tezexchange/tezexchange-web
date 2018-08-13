@@ -17,11 +17,24 @@ export const DATA = {
   my_orders: {}
 }
 
+setInterval(() => {
+  if (!DATA.ready) return false
+
+  dataRefresh()
+}, 10 * 1000)
+
 export function dataReady() {
   if (DATA.ready)
     return Promise.resolve(DATA)
   else 
     return updateOrders()
+}
+
+export function dataRefresh() {
+  return updateOrders()
+  .then(() => {
+    updateMyOrders()
+  })
 }
 
 export function updateMyOrders() {

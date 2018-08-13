@@ -1,4 +1,8 @@
 <script>
+  import { TOKENS } from '~/js/contracts.js'
+  import { CreateBuying, CreateSelling, ExecuteBuying, ExecuteSelling } from '~/js/transactions.js'
+  import { showTip } from '~/js/data.js'
+
   export default {
     props: ['symbol', 'active_order'],
     data() {
@@ -52,6 +56,40 @@
       }
     },
     methods: {
+      create(is_buy) {
+        let token = null
+        for (const contract in TOKENS) {
+          if (TOKENS[contract] === this.symbol) {
+            token = contract
+            break
+          }
+        }
+
+        const promise = is_buy ? 
+          CreateBuying(this.tez_amount, token, this.price) : 
+          CreateSelling(this.token_amount, token, this.price)
+
+        ;promise
+        .then(x => {
+          showTip(true, `TX:${x.operation_id}`)
+        })
+        .catch(err => {
+          showTip(false, err)
+        })
+      },
+      execute() {
+        const promise = this.active_order.is_buy ?
+          ExecuteBuying(this.active_order, this.token_amount) :
+          ExecuteSelling(this.active_order, this.tez_amount)
+
+        ;promise
+        .then(x => {
+          showTip(true, `TX:${x.operation_id}`)
+        })
+        .catch(err => {
+          showTip(false, err)
+        })
+      },
       floor(x) {
         const result = parseInt(x)
         return result === 0 || isNaN(result) ? '' : result
@@ -106,13 +144,13 @@
       </span>
       <span :class="mode === 'execute' ? 'active' : ''">Execute</span>
     </div>
-    <button class="buy-btn" v-if="mode === 'create'">
+    <button class="buy-btn" v-if="mode === 'create'" @click="create(true)">
       <i class="fas fa-plus-square"></i> <span>BUY {{symbol}}</span>
     </button>
-    <button class="sell-btn" v-if="mode === 'create'">
+    <button class="sell-btn" v-if="mode === 'create'" @click="create(false)">
       <i class="fas fa-plus-square"></i> <span>SELL {{symbol}}</span>
     </button>
-    <button v-if="mode === 'execute'" :class="active_order.is_buy ? 'buy-btn' : 'sell-btn'">
+    <button v-if="mode === 'execute'" :class="active_order.is_buy ? 'buy-btn' : 'sell-btn'" @click="execute">
       <i class="fas fa-handshake"></i> <span>{{active_order.is_buy ? 'SELL' : 'BUY'}} {{symbol}} @ {{active_order.price}}</span>
     </button>
   </div>

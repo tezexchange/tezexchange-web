@@ -19,6 +19,7 @@
         selection.removeAllRanges()
         selection.addRange(range)
         document.execCommand("copy")
+        selection.removeAllRanges()
         showTip(true, 'Copied')
       },
       login() {
@@ -39,7 +40,7 @@
   <div>
     <div class="tips">
       <div :class="tip.mode" v-for="(tip, i) in tips">
-        <button @click="copy('.et-' + i)"><span>COPY</span></button>
+        <b @click="copy('.et-' + i)" v-if="tip.mode === 'error'">COPY</b>
         <span :class="'et-' + i">{{tip.content}}</span>
       </div>
     </div>
@@ -103,8 +104,11 @@ select {
 .version-wrapper {transform: translate(-10px, -10px); text-align: center}
 .login-wrapper {text-align: center}
 .tips { position: fixed; z-index: 10; top: 0; left: 0; width: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-.tips > div { max-height: 64px; overflow: hidden; font-size: 12px; max-width: 480px; margin-bottom: 4px; color: white; padding: 2px 4px; animation-name: fadeIn; animation-duration: 0.5s}
-.tips .success { border: 1px solid green; background: green; }
+.tips b {float: right; text-decoration: underline; display: inline-block; margin: 3px 0 0 4px; cursor: pointer; font-size: 12px;}
+.tips span {font-size: 14px;}
+.tips > div { max-height: 128px; overflow: hidden;  max-width: 480px; margin-bottom: 4px; padding: 0px 4px 2px 4px; animation-name: fadeIn; animation-duration: 0.5s}
+.tips * {color: white; }
+.tips .success { border: 1px solid green; background: green;  }
 .tips .error { border: 1px solid red; background: red; }
 
 @keyframes fadeIn {
