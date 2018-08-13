@@ -71,7 +71,7 @@
     </div>
 
     <div class="footer">
-      <nuxt-link class="more-btn" :to="`/token/${symbol}`" v-if="mini">
+      <nuxt-link class="more-btn" :to="`/token?symbol=${symbol}`" v-if="mini">
         <i class="fas fa-ellipsis-h"></i>
       </nuxt-link>
     </div>

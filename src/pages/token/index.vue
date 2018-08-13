@@ -14,10 +14,11 @@
       }
     },
     mounted() {
-      this.symbol = this.$route.params.token
-      dataReady().then(() => {
-        this.order_info = this.data.orders[this.symbol]
-      })
+      this.symbol = this.$route.query.symbol
+      if (this.symbol)
+        dataReady().then(() => {
+          this.order_info = this.data.orders[this.symbol]
+        })
     }
   }
 </script>
