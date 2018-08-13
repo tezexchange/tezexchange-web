@@ -73,6 +73,9 @@
     </header>
     <div class="wrapper" id="body-wrapper">
 	    <nuxt />
+      <div v-if="!data.ready" class="loading">
+        <img src="/favicon.png" />
+      </div>
     </div>
     <div class="footer">
       <div>
@@ -106,10 +109,10 @@ select {
 .tips { position: fixed; z-index: 10; top: 0; left: 0; width: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
 .tips b {float: right; text-decoration: underline; display: inline-block; margin: 3px 0 0 4px; cursor: pointer; font-size: 12px;}
 .tips span {font-size: 14px;}
-.tips > div { max-height: 128px; overflow: hidden;  max-width: 480px; margin-bottom: 4px; padding: 0px 4px 2px 4px; animation-name: fadeIn; animation-duration: 0.5s}
+.tips > div { border-radius: 3px; max-height: 128px; overflow: hidden;  max-width: 480px; margin-bottom: 4px; padding: 0px 4px 2px 4px; animation-name: fadeIn; animation-duration: 0.5s}
 .tips * {color: white; }
-.tips .success { border: 1px solid green; background: green;  }
-.tips .error { border: 1px solid red; background: red; }
+.tips .success { border: 1px solid rgb(0,210,0); background: rgb(0,200,0); opacity: 0.95; }
+.tips .error { border: 1px solid rgb(210,0,0); background: rgb(200,0,0); opacity: 0.95; }
 
 @keyframes fadeIn {
   from {
@@ -118,6 +121,31 @@ select {
 
   to {
     opacity: 1
+  }
+}
+
+.loading { text-align: center; }
+.loading img { border-radius: 32px; width: 32px; animation-name: rotate; animation-iteration-count: infinite; animation-duration: .5s; animation-timing-function: linear; padding: 10px; opacity: 0.25; }
+@keyframes rotate {
+  0% {
+    border: 2px solid rgba(0,0,0,.5);
+    border-top: 2px solid rgba(0,0,0,0.2);
+  }
+  25% {
+    border: 2px solid rgba(0,0,0,.5);
+    border-left: 2px solid rgba(0,0,0,0.2);
+  }
+  50% {
+    border: 2px solid rgba(0,0,0,.5);
+    border-bottom: 2px solid rgba(0,0,0,0.2);
+  }
+  75% {
+    border: 2px solid rgba(0,0,0,.5);
+    border-right: 2px solid rgba(0,0,0,0.2);
+  }
+  100% {
+    border: 2px solid rgba(0,0,0,.5);
+    border-top: 2px solid rgba(0,0,0,0.2);
   }
 }
 
