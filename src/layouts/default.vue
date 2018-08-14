@@ -125,7 +125,7 @@ select {
 }
 
 .loading { text-align: center; }
-.loading img { border-radius: 32px; width: 32px; animation-name: rotate; animation-iteration-count: infinite; animation-duration: .5s; animation-timing-function: linear; padding: 10px; opacity: 0.25; }
+.loading img { border-radius: 32px; width: 32px; animation: rotate .5s infinite; animation-timing-function: linear; padding: 10px; opacity: 1; }
 @keyframes rotate {
   0% {
     border: 2px solid rgba(0,0,0,.5);
