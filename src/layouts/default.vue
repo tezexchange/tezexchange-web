@@ -125,27 +125,32 @@ select {
 }
 
 .loading { text-align: center; }
-.loading img { border-radius: 32px; width: 32px; animation: rotate .5s infinite; animation-timing-function: linear; padding: 10px; opacity: 1; }
+.loading img { border-radius: 32px; width: 32px; animation: rotate .5s infinite; padding: 10px; opacity: 0.25; border: 2px solid transparent; }
 @keyframes rotate {
   0% {
-    border: 2px solid rgba(0,0,0,.5);
-    border-top: 2px solid rgba(0,0,0,0.2);
+    border: 2px solid rgba(0,0,0,.1);
+    border-left: 2px solid rgba(0,0,0,0.2);
+    border-top: 2px solid rgba(0,0,0,0.3);
   }
   25% {
-    border: 2px solid rgba(0,0,0,.5);
-    border-left: 2px solid rgba(0,0,0,0.2);
+    border: 2px solid rgba(0,0,0,.1);
+    border-top: 2px solid rgba(0,0,0,0.2);
+    border-right: 2px solid rgba(0,0,0,0.3);
   }
   50% {
-    border: 2px solid rgba(0,0,0,.5);
-    border-bottom: 2px solid rgba(0,0,0,0.2);
+    border: 2px solid rgba(0,0,0,.1);
+    border-right: 2px solid rgba(0,0,0,0.2);
+    border-bottom: 2px solid rgba(0,0,0,0.3);
   }
   75% {
-    border: 2px solid rgba(0,0,0,.5);
-    border-right: 2px solid rgba(0,0,0,0.2);
+    border: 2px solid rgba(0,0,0,.1);
+    border-bottom: 2px solid rgba(0,0,0,0.2);
+    border-left: 2px solid rgba(0,0,0,0.3);
   }
   100% {
-    border: 2px solid rgba(0,0,0,.5);
-    border-top: 2px solid rgba(0,0,0,0.2);
+    border: 2px solid rgba(0,0,0,.1);
+    border-left: 2px solid rgba(0,0,0,0.2);
+    border-top: 2px solid rgba(0,0,0,0.3);
   }
 }
 
