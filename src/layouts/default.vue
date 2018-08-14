@@ -64,11 +64,12 @@
         </label>
       </div>
 
-      <div class="login-wrapper" v-if="!data.pkh">
-        <button @click="login">
+      <div class="login-wrapper">
+        <button @click="login"  v-if="!data.pkh">
           <i class="fas fa-sign-in-alt"></i>
           <span>LOGIN WITH TEZBRIDGE</span>
         </button>
+        {{data.pkh ? `/ ${data.pkh} /` : ''}}
       </div>
     </header>
     <div class="wrapper" id="body-wrapper">
@@ -105,7 +106,7 @@ select {
   appearance: none;
 }
 .version-wrapper {transform: translate(-10px, -10px); text-align: center}
-.login-wrapper {text-align: center}
+.login-wrapper {text-align: center; font-size: 12px}
 .tips { position: fixed; z-index: 10; top: 0; left: 0; width: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
 .tips b {float: right; text-decoration: underline; display: inline-block; margin: 3px 0 0 4px; cursor: pointer; font-size: 12px;}
 .tips span {font-size: 14px;}
@@ -124,7 +125,7 @@ select {
   }
 }
 
-.loading { text-align: center; }
+.loading { text-align: center; margin: 16px 0;}
 .loading img { border-radius: 32px; width: 32px; animation: rotate .5s infinite; padding: 10px; opacity: 0.25; border: 2px solid transparent; }
 @keyframes rotate {
   0% {

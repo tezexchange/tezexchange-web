@@ -27,7 +27,7 @@ export function dataReady() {
   if (DATA.ready)
     return Promise.resolve(DATA)
   else 
-    return updateOrders()
+    return dataRefresh()
 }
 
 export function dataRefresh() {
