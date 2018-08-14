@@ -213,13 +213,8 @@ input:focus {
   border-bottom: 1px solid #ccc;
 }
 input:disabled {
-  background: transparent;
-  color: #eee;
-}
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0; 
+  background: white;
+  color: #ddd;
 }
 
 button {margin: 0 4px;}
