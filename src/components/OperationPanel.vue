@@ -214,7 +214,7 @@ input:focus {
 }
 input:disabled {
   background: white;
-  color: #ddd;
+  color: #ccc;
 }
 
 button {margin: 0 4px;}

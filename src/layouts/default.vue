@@ -94,7 +94,7 @@ header { max-width: 480px; margin: 8px auto;}
 header .top-wrapper {display: flex; justify-content: center; align-items: center;}
 .logo * {font-family: 'Sacramento'; font-size: 36px;}
 .menu {margin-left: 16px}
-.footer {max-width: 480px; margin: 0 auto; text-align: center}
+.footer {max-width: 480px; margin: 16px auto; padding-top: 8px; text-align: center; border-top: 1px solid #eee;}
 .footer .logo {margin-left: 8px; font-family: 'Sacramento'; color: #000; font-size: 17px;}
 .copyright {font-size: 10px;color: #666;}
 select {

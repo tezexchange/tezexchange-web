@@ -23,9 +23,9 @@
 
 <template>
   <div>
-    <div class="title">
+    <nuxt-link class="title" :to="`/token?symbol=${symbol}`">
       / {{symbol}}
-    </div>
+    </nuxt-link>
 
     <div :class="mini ? 'slider' : ''" v-show="!mini || show_operation_in_mini || !order_info">
       <div class="operation-wrapper">
@@ -79,7 +79,7 @@
 </template>
 
 <style scoped>
-.title {font-size: 13px; padding: 4px 0 4px 8px; font-weight: 900; background: rgb(248,248,248); background: linear-gradient(45deg, rgba(248,248,248,1) 0%, rgba(255,255,255,1) 100%);}
+.title {display: block; font-size: 13px; padding: 4px 0 4px 8px; font-weight: 900; background: rgb(248,248,248); background: linear-gradient(45deg, rgba(248,248,248,1) 0%, rgba(255,255,255,1) 100%);}
 
 .operation-wrapper {overflow: hidden; text-align: center; margin: 16px 0;}
 
