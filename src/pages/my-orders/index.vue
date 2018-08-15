@@ -1,10 +1,12 @@
 <script>
+  import MyReward from '~/components/MyReward.vue'
   import { getContract } from '~/js/contracts.js'
   import { DATA, showTip } from '~/js/data.js'
   import { CancelOrder } from '~/js/transactions.js'
 
   export default {
     components: {
+      MyReward
     },
     data() {
       return {
@@ -51,7 +53,8 @@
 
 <template>
   <div>
-    <h2>My Orders</h2>
+    <my-reward></my-reward>
+    <h2>My orders</h2>
     <div class="cancel-btn-wrapper" v-if="selected.top_px" :style="{top: selected.top_px + 'px'}">
       <button @click="cancelOrder">
         <i class="fas fa-ban"></i>

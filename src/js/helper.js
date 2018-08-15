@@ -1,5 +1,18 @@
 import bs58check from 'bs58check' 
 
+export function human_date(d, need_minutes) {
+  const year = d.getFullYear()
+  const month = (1 + d.getMonth() + '').padStart(2, '0')
+  const day = (d.getDate() + '').padStart(2, '0')
+
+  if (need_minutes) {
+    const hours = (d.getHours() + '').padStart(2, '0')
+    const minutes = (d.getMinutes() + '').padStart(2, '0')
+    return `${year}-${month}-${day} ${hours}:${minutes}`
+  } else {
+    return `${year}-${month}-${day}`
+  }
+}
 
 const prefix = {
   contract: [2,90,121],

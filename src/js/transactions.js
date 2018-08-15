@@ -1,5 +1,56 @@
 import { getContract } from './contracts.js'
 
+export function TESRewardWithdraw() {
+  const parameters = {
+            "prim": "Right",
+            "args": [
+              {
+                "prim": "Left",
+                "args": [
+                  {
+                    "prim": "Pair",
+                    "args": [
+                      {
+                        "string": getContract('reward')
+                      },
+                      {
+                        "prim": "Pair",
+                        "args": [
+                          {
+                            "int": "0"
+                          },
+                          {
+                            "prim": "Some",
+                            "args": [
+                              {
+                                "prim": "Pair",
+                                "args": [
+                                  {
+                                    "string": getContract('reward')
+                                  },
+                                  {
+                                    "bytes": "05030b"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+
+  return tezbridge({
+    method: 'transfer', 
+    destination: getContract('token'), 
+    parameters
+  })
+}
+
 export function ExecuteSelling(order, amount) {
   amount = amount + ''
   const parameters = {

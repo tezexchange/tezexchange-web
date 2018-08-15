@@ -1,8 +1,7 @@
-import { CONTRACTS, TOKENS } from './contracts.js'
+import { CONTRACTS, TOKENS, getContract } from './contracts.js'
 import { enc58, makePlain } from './helper.js'
 
-export const TIPS = [
-]
+export const TIPS = []
 export function showTip(is_success, content) {
   TIPS.unshift({mode: (is_success ? 'success' : 'error'), content})
   setTimeout(() => {
@@ -13,12 +12,14 @@ export function showTip(is_success, content) {
 export const DATA = {
   pkh: '',
   ready: false,
+  tes_reward_lst: [],
   orders: {},
   my_orders: {}
 }
 
 setInterval(() => {
   if (!DATA.ready) return false
+  if (!document.hasFocus()) return false
 
   dataRefresh()
 }, 10 * 1000)
@@ -64,11 +65,9 @@ export function updateMyOrders() {
 }
 
 export function updateOrders() {
-  const contracts = CONTRACTS.versions[CONTRACTS.selected]
-
-  return tezbridge({method: 'raw_storage', contract: contracts['CONTRACT.main']})
+  return tezbridge({method: 'raw_storage', contract: getContract('main')})
   .then(x => {
-    const order_lst = x.big_map.map(x => {
+    const order_lst = Object.values(x.big_map).map(x => {
       const result = makePlain(x)
       return {
         token: enc58('contract', result[0]),
@@ -97,159 +96,38 @@ export function updateOrders() {
   })
 }
 
+export function updateReward(pkh) {
+  return tezbridge({method: 'pack_data', data: { "string": pkh }, type: { "prim": "address" }})
+  .then(packed => {
+    return tezbridge({method: 'hash_data', packed})
+  })
+  .then(hash_result => {
+    const key = [[0,2], [2,4], [4,6], [6,8], [8,10], [10,undefined]].map(x => hash_result.slice(x[0], x[1])).join('/')
 
-export const sample_my_assets = {
-  XTZ: '2312141',
-  WEQ: '3234235353',
-  ABC: '324'
-}
+    return Promise.all([
+        tezbridge({method: 'big_map_with_key', key, contract: getContract('token')}),
+        tezbridge({method: 'big_map_with_key', key, contract: getContract('reward')}),
+        tezbridge({method: 'head_custom', path: `/context/contracts/${getContract('reward')}/storage`})
+      ])
+  })
+  .then(([token_amount, last_withdraw_date, storage]) => {
+    token_amount = token_amount || {int: "0"}
+    last_withdraw_date = last_withdraw_date || {int: "0"}
 
-const sample_my_orders = {
-  WEQ: [
-    {direction: true, price: 2114, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '323'},
-    {direction: true, price: 2114, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '323'},
-    {direction: true, price: 2114, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '323'},
-    {direction: true, price: 2114, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '323'},
-    {direction: true, price: 2114, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '323'},
-    {direction: true, price: 2114, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '323'},
-    {direction: true, price: 2114, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '323'},
-    {direction: true, price: 2114, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '323'},
-    {direction: true, price: 2114, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '323'},
-    {direction: true, price: 2114, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '323'},
-    {direction: true, price: 2114, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '323'},
-    {direction: true, price: 2114, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '323'},
-    {direction: true, price: 2114, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '323'},
-    {direction: true, price: 2114, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '323'},
-    {direction: true, price: 2114, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '323'},
-    {direction: true, price: 2114, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '323'},
-    {direction: false, price: 1314, owner: 'tz1dfagfvWf', amount_tez: '133423444', amount_token: '3223'}
-  ],
-  ABC: [
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: false, price: 1145, owner: 'tz1dfagvWf', amount_tez: '144', amount_token: '3234234234223'},
-    {direction: true, price: 145, owner: 'tz1dfagvWfz', amount_tez: '1443', amount_token: '6323'},
-    {direction: false, price: 2143, owner: 'tz1dfagfvWf', amount_tez: '13232223244', amount_token: '32223232223'}
-  ]
-}
+    token_amount = parseInt(token_amount.int)
+    last_withdraw_date = last_withdraw_date.int * 1000
 
-const sample_orders = {
-	WEQ: {
-    selling: [
-      {
-        price: 345,
-        owner: 'tz1fwneonaboa',
-        tez_amount: 0,
-        token_amount: 2332
-      },
-      {
-        price: 3435,
-        owner: 'tz1fwneonaboa',
-        tez_amount: 0,
-        token_amount: 56776
-      },
-      {
-        price: 3454,
-        owner: 'tz1fwneonaboa',
-        tez_amount: 0, 
-        token_amount: 456356
-      },
-      {
-        price: 34234,
-        owner: 'tz1fwneonaboa',
-        tez_amount: 0,
-        token_amount: 24562
+    const total = parseInt(storage.args[1].args[1].int)
+
+    DATA.tes_reward_lst = storage.args[1].args[0].map(x => {
+      const date = +new Date(x.args[1].string)
+      return {
+        tez_amount: parseInt(x.args[0].int * token_amount / total),
+        date,
+        available: date > last_withdraw_date
       }
-    ],
-    buying: [
-      {
-        price: 222,
-        owner: 'tz1fniobeoine',
-        tez_amount: 132234,
-        token_amount: 0
-      },
-      {
-        price: 2232,
-        owner: 'tz1fniobeoine',
-        tez_amount: 132342,
-        token_amount: 0
-      },
-      {
-        price: 22323,
-        owner: 'tz1fniobeoine',
-        tez_amount: 3453132,
-        token_amount: 0
-      },
-      {
-        price: 223200,
-        owner: 'tz1fniobeoine',
-        tez_amount: 3433132,
-        token_amount: 0
-      }
-    ]
-  },
-  ABC: {
-    selling: [
-     {
-        price: 345,
-        owner: 'tz1fwneonaboa',
-        tez_amount: 0,
-        token_amount: 43553
-      },
-      {
-        price: 3435,
-        owner: 'tz1fwneonaboa',
-        tez_amount: 0,
-        token_amount: 21234
-      }
-    ],
-    buying: [
-      {
-        price: 22323,
-        owner: 'tz1fniobeoine',
-        tez_amount: 3245132,
-        token_amount: 0
-      },
-      {
-        price: 223200,
-        owner: 'tz1fniobeoine',
-        tez_amount: 1345232,
-        token_amount: 0
-      }
-    ]
-  }
+    })
+
+    console.log(DATA.tes_reward_lst)
+  })
 }

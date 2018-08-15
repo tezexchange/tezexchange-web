@@ -8,4 +8,8 @@ Decentralized token exchange on Tezos
 * Mobile browser compatible
 
 ## Supported Token Standard
-[doc/token.md](doc/token.md)
+[spec/token.md](spec/token.md)
+
+## Specifications
+[spec/Token.pdf](spec/Token.pdf)
+[spec/TESpec.pdf](spec/TESpec.pdf)
