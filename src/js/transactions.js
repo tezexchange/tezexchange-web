@@ -51,7 +51,7 @@ export function RewardWithdraw() {
     parameters
   })
   .then(x => {
-    showTip(true, 'TX:' + x.operation_id)
+    showTip(true, x.operation_id)
     return x
   })
   .catch(err => {
@@ -109,7 +109,7 @@ export function RewardUnlock() {
     parameters
   })
   .then(x => {
-    showTip(true, 'TX:' + x.operation_id)
+    showTip(true, x.operation_id)
     return x
   })
   .catch(err => {
@@ -168,7 +168,7 @@ export function RewardLock(token_amount) {
     parameters
   })
   .then(x => {
-    showTip(true, 'TX:' + x.operation_id)
+    showTip(true, x.operation_id)
     return x
   })
   .catch(err => {
@@ -223,7 +223,7 @@ export function ExecuteSelling(order, amount) {
     parameters
   })
   .then(x => {
-    showTip(true, 'TX:' + x.operation_id)
+    showTip(true, x.operation_id)
     return x
   })
   .catch(err => {
@@ -288,7 +288,7 @@ export function ExecuteBuying(order, amount) {
       parameters
     })
     .then(x => {
-      showTip(true, 'TX:' + x.operation_id)
+      showTip(true, x.operation_id)
       return x
     })
     .catch(err => {
@@ -355,7 +355,7 @@ export function CreateSelling(amount, token, price) {
       parameters
     })
     .then(x => {
-      showTip(true, 'TX:' + x.operation_id)
+      showTip(true, x.operation_id)
       return x
     })
     .catch(err => {
@@ -400,7 +400,7 @@ export function CreateBuying(amount, token, price) {
     parameters
   })
   .then(x => {
-    showTip(true, 'TX:' + x.operation_id)
+    showTip(true, x.operation_id)
     return x
   })
   .catch(err => {
@@ -451,7 +451,7 @@ export function CancelOrder(order) {
     parameters
   })
   .then(x => {
-    showTip(true, 'TX:' + x.operation_id)
+    showTip(true, x.operation_id)
     return x
   })
   .catch(err => {

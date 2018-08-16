@@ -40,8 +40,7 @@
   <div>
     <div class="tips">
       <div :class="tip.mode" v-for="(tip, i) in tips">
-        <b @click="copy('.et-' + i)" v-if="tip.mode === 'error'">COPY</b>
-        <span :class="'et-' + i">{{tip.content}}</span>
+        <span :class="'et-' + i" @click="copy('.et-' + i)">{{tip.content}}</span>
       </div>
     </div>
 	  <header>
@@ -101,6 +100,7 @@ select {
   font-size: 13px;
   border: 1px solid transparent;
   outline: none;
+  background: white;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -108,8 +108,7 @@ select {
 .version-wrapper {transform: translate(-10px, -10px); text-align: center}
 .login-wrapper {text-align: center; font-size: 12px}
 .tips { position: fixed; z-index: 10; top: 0; left: 0; width: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-.tips b {float: right; text-decoration: underline; display: inline-block; margin: 3px 0 0 4px; cursor: pointer; font-size: 12px;}
-.tips span {font-size: 14px;}
+.tips span {font-size: 13px;}
 .tips > div { border-radius: 3px; max-height: 128px; overflow: hidden;  max-width: 480px; margin-bottom: 4px; padding: 0px 4px 2px 4px; animation-name: fadeIn; animation-duration: 0.5s}
 .tips * {color: white; }
 .tips .success { border: 1px solid rgb(0,210,0); background: rgb(0,200,0); opacity: 0.95; }

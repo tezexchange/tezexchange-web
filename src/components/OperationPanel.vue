@@ -56,6 +56,9 @@
     },
     methods: {
       create(is_buy) {
+        if (!this.price || !this.tez_amount || !this.token_amount)
+          return false
+
         let token = null
         for (const contract in TOKENS) {
           if (TOKENS[contract] === this.symbol) {
@@ -69,6 +72,9 @@
           CreateSelling(this.token_amount, token, this.price)
       },
       execute() {
+        if (!this.price || !this.tez_amount || !this.token_amount)
+          return false
+        
         const promise = this.active_order.is_buy ?
           ExecuteBuying(this.active_order, this.token_amount) :
           ExecuteSelling(this.active_order, this.tez_amount)

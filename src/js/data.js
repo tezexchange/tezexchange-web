@@ -83,7 +83,7 @@ export function updateOrders() {
         tez_amount: result[4],
         token_amount: result[5]
       }
-    })
+    }).filter(x => x.price > 0)
     
     const orders = {}
     order_lst.forEach(x => {
