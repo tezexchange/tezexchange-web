@@ -45,9 +45,16 @@ export function dataRefresh() {
 }
 
 export function updateMyOrders() {
-  return Promise.all([dataReady(), tezbridge({method: 'public_key_hash', noalert: true})])
+  return Promise.all([
+    dataReady(), 
+    new Promise((resolve) => {
+      tezbridge({method: 'public_key_hash', noalert: true})
+      .then(pkh => resolve(pkh))
+      .catch(() => resolve())
+    })
+  ])
   .then(([_, pkh]) => {
-    if (!pkh) return Promise.reject()
+    if (!pkh) return false
 
     DATA.pkh = pkh
 
