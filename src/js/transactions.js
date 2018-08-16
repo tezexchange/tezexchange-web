@@ -1,6 +1,7 @@
 import { getContract } from './contracts.js'
+import { showTip } from './data.js'
 
-export function TESRewardWithdraw() {
+export function RewardWithdraw() {
   const parameters = {
             "prim": "Right",
             "args": [
@@ -29,7 +30,7 @@ export function TESRewardWithdraw() {
                                     "string": getContract('reward')
                                   },
                                   {
-                                    "bytes": "05030b"
+                                    "bytes": "050000"
                                   }
                                 ]
                               }
@@ -48,6 +49,130 @@ export function TESRewardWithdraw() {
     method: 'transfer', 
     destination: getContract('token'), 
     parameters
+  })
+  .then(x => {
+    showTip(true, 'TX:' + x.operation_id)
+    return x
+  })
+  .catch(err => {
+    showTip(false, err)
+  })
+}
+
+export function RewardUnlock() {
+  const parameters = {
+            "prim": "Right",
+            "args": [
+              {
+                "prim": "Left",
+                "args": [
+                  {
+                    "prim": "Pair",
+                    "args": [
+                      {
+                        "string": getContract('reward')
+                      },
+                      {
+                        "prim": "Pair",
+                        "args": [
+                          {
+                            "int": "0"
+                          },
+                          {
+                            "prim": "Some",
+                            "args": [
+                              {
+                                "prim": "Pair",
+                                "args": [
+                                  {
+                                    "string": getContract('reward')
+                                  },
+                                  {
+                                    "bytes": "050002"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+
+  return tezbridge({
+    method: 'transfer', 
+    destination: getContract('token'), 
+    parameters
+  })
+  .then(x => {
+    showTip(true, 'TX:' + x.operation_id)
+    return x
+  })
+  .catch(err => {
+    showTip(false, err)
+  })
+}
+
+export function RewardLock(token_amount) {
+  token_amount = token_amount + ''
+  const parameters = {
+            "prim": "Right",
+            "args": [
+              {
+                "prim": "Left",
+                "args": [
+                  {
+                    "prim": "Pair",
+                    "args": [
+                      {
+                        "string": getContract('reward')
+                      },
+                      {
+                        "prim": "Pair",
+                        "args": [
+                          {
+                            "int": token_amount
+                          },
+                          {
+                            "prim": "Some",
+                            "args": [
+                              {
+                                "prim": "Pair",
+                                "args": [
+                                  {
+                                    "string": getContract('reward')
+                                  },
+                                  {
+                                    "bytes": "050001"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+
+  return tezbridge({
+    method: 'transfer', 
+    destination: getContract('token'), 
+    parameters
+  })
+  .then(x => {
+    showTip(true, 'TX:' + x.operation_id)
+    return x
+  })
+  .catch(err => {
+    showTip(false, err)
   })
 }
 
@@ -92,11 +217,18 @@ export function ExecuteSelling(order, amount) {
           }
 
   return tezbridge({
-      method: 'transfer', 
-      amount: amount,
-      destination: getContract('main'), 
-      parameters
-    })
+    method: 'transfer', 
+    amount: amount,
+    destination: getContract('main'), 
+    parameters
+  })
+  .then(x => {
+    showTip(true, 'TX:' + x.operation_id)
+    return x
+  })
+  .catch(err => {
+    showTip(false, err)
+  })
 }
 
 export function ExecuteBuying(order, amount) {
@@ -154,6 +286,13 @@ export function ExecuteBuying(order, amount) {
       method: 'transfer', 
       destination: order.token, 
       parameters
+    })
+    .then(x => {
+      showTip(true, 'TX:' + x.operation_id)
+      return x
+    })
+    .catch(err => {
+      showTip(false, err)
     })
   })
 }
@@ -215,6 +354,13 @@ export function CreateSelling(amount, token, price) {
       destination: token, 
       parameters
     })
+    .then(x => {
+      showTip(true, 'TX:' + x.operation_id)
+      return x
+    })
+    .catch(err => {
+      showTip(false, err)
+    })
   })
 
 }
@@ -252,6 +398,13 @@ export function CreateBuying(amount, token, price) {
     amount: amount,
     destination: getContract('main'), 
     parameters
+  })
+  .then(x => {
+    showTip(true, 'TX:' + x.operation_id)
+    return x
+  })
+  .catch(err => {
+    showTip(false, err)
   })
 }
 
@@ -296,5 +449,12 @@ export function CancelOrder(order) {
     method: 'transfer', 
     destination: getContract('main'), 
     parameters
+  })
+  .then(x => {
+    showTip(true, 'TX:' + x.operation_id)
+    return x
+  })
+  .catch(err => {
+    showTip(false, err)
   })
 }

@@ -1,7 +1,7 @@
 <script>
   import MyReward from '~/components/MyReward.vue'
   import { getContract } from '~/js/contracts.js'
-  import { DATA, showTip } from '~/js/data.js'
+  import { DATA } from '~/js/data.js'
   import { CancelOrder } from '~/js/transactions.js'
 
   export default {
@@ -23,12 +23,6 @@
         const order = this.data.my_orders[this.selected.name][this.selected.index]
         
         CancelOrder(order)
-        .then(x => {
-          showTip(true, 'TX:' + x.operation_id)
-        })
-        .catch(err => {
-          showTip(false, err)
-        })
       },
       selectOrder(name, i, event) {
         if (this.selected.name === name && this.selected.index === i) {

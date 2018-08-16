@@ -12,7 +12,11 @@ export function showTip(is_success, content) {
 export const DATA = {
   pkh: '',
   ready: false,
-  tes_reward_lst: [],
+  tes: {
+    token_amount: 0,
+    locked_amount: 0,
+    reward_lst: []
+  },
   orders: {},
   my_orders: {}
 }
@@ -35,6 +39,8 @@ export function dataRefresh() {
   return updateOrders()
   .then(() => {
     updateMyOrders()
+    if (DATA.pkh && $nuxt.$route.path === '/my-orders')
+      updateReward(DATA.pkh)
   })
 }
 
@@ -110,24 +116,20 @@ export function updateReward(pkh) {
         tezbridge({method: 'head_custom', path: `/context/contracts/${getContract('reward')}/storage`})
       ])
   })
-  .then(([token_amount, last_withdraw_date, storage]) => {
-    token_amount = token_amount || {int: "0"}
-    last_withdraw_date = last_withdraw_date || {int: "0"}
-
-    token_amount = parseInt(token_amount.int)
-    last_withdraw_date = last_withdraw_date.int * 1000
-
+  .then(([token_info, reward_info, storage]) => {
+    const token_amount = token_info ? parseInt(token_info.int) : 0
+    const locked_amount = reward_info ? parseInt(reward_info.args[0].int) : 0
+    const last_withdraw_date = reward_info ? reward_info.args[1].int * 1000 : +new Date() * 2
     const total = parseInt(storage.args[1].args[1].int)
 
-    DATA.tes_reward_lst = storage.args[1].args[0].map(x => {
+    DATA.tes.token_amount = token_amount
+    DATA.tes.locked_amount = locked_amount
+    DATA.tes.reward_lst = storage.args[1].args[0].map(x => {
       const date = +new Date(x.args[1].string)
       return {
-        tez_amount: parseInt(x.args[0].int * token_amount / total),
-        date,
-        available: date > last_withdraw_date
+        tez_amount: date <= last_withdraw_date ? 0 : parseInt(x.args[0].int * locked_amount / total),
+        date
       }
     })
-
-    console.log(DATA.tes_reward_lst)
   })
 }

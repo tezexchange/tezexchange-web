@@ -1,7 +1,6 @@
 <script>
   import { TOKENS } from '~/js/contracts.js'
   import { CreateBuying, CreateSelling, ExecuteBuying, ExecuteSelling } from '~/js/transactions.js'
-  import { showTip } from '~/js/data.js'
 
   export default {
     props: ['symbol', 'active_order'],
@@ -68,27 +67,11 @@
         const promise = is_buy ? 
           CreateBuying(this.tez_amount, token, this.price) : 
           CreateSelling(this.token_amount, token, this.price)
-
-        ;promise
-        .then(x => {
-          showTip(true, `TX:${x.operation_id}`)
-        })
-        .catch(err => {
-          showTip(false, err)
-        })
       },
       execute() {
         const promise = this.active_order.is_buy ?
           ExecuteBuying(this.active_order, this.token_amount) :
           ExecuteSelling(this.active_order, this.tez_amount)
-
-        ;promise
-        .then(x => {
-          showTip(true, `TX:${x.operation_id}`)
-        })
-        .catch(err => {
-          showTip(false, err)
-        })
       },
       floor(x) {
         const result = parseInt(x)
