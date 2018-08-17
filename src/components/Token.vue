@@ -1,4 +1,5 @@
 <script>
+  import { DATA, updateTokenAmount } from '~/js/data.js'
   import OperationPanel from './OperationPanel'
 
   export default {
@@ -8,6 +9,7 @@
     props: ['symbol', 'order_info', 'mini'],
     data() {
       return {
+        data: DATA,
         show_operation_in_mini: false,
         active_order: {}
       }
@@ -16,7 +18,14 @@
       active_order(v) {
         if (v.price)
           this.show_operation_in_mini = true
+      },
+      'data.pkh'() {
+        updateTokenAmount(this.data.pkh, this.symbol)
       }
+    },
+    mounted() {
+      if (this.data.pkh)
+        updateTokenAmount(this.data.pkh, this.symbol)
     }
   }
 </script>
@@ -24,7 +33,7 @@
 <template>
   <div>
     <nuxt-link class="title" :to="`/token?symbol=${symbol}`">
-      / {{symbol}}
+      / {{symbol}} : {{data.tokens[symbol]}}
     </nuxt-link>
 
     <div :class="mini ? 'slider' : ''" v-show="!mini || show_operation_in_mini || !order_info">

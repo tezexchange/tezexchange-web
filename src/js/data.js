@@ -17,6 +17,7 @@ export const DATA = {
     locked_amount: 0,
     reward_lst: []
   },
+  tokens: Object.assign(...Object.values(TOKENS).map(x => ({[x]: 0}))),
   orders: {},
   my_orders: {}
 }
@@ -39,8 +40,12 @@ export function dataRefresh() {
   return updateOrders()
   .then(() => {
     updateMyOrders()
+    
     if (DATA.pkh && $nuxt.$route.path === '/my-orders')
       updateReward(DATA.pkh)
+
+    if (DATA.pkh && $nuxt.$route.query && $nuxt.$route.query.symbol)
+      updateTokenAmount(DATA.pkh, $nuxt.$route.query.symbol)
   })
 }
 
@@ -106,6 +111,33 @@ export function updateOrders() {
     DATA.orders = orders
     DATA.ready = true
     return DATA
+  })
+}
+
+export function updateTokenAmount(pkh, token_name) {
+  let token = null
+  for (const contract in TOKENS) {
+    if (TOKENS[contract] === token_name) {
+      token = contract
+      break
+    }
+  }
+
+  if (!pkh) return false
+  if (!token) return false
+
+  tezbridge({method: 'pack_data', data: { "string": pkh }, type: { "prim": "address" }})
+  .then(packed => {
+    return tezbridge({method: 'hash_data', packed})
+  })
+  .then(hash_result => {
+    const key = [[0,2], [2,4], [4,6], [6,8], [8,10], [10,undefined]].map(x => hash_result.slice(x[0], x[1])).join('/')
+
+    return tezbridge({method: 'big_map_with_key', key, contract: token})
+    .then(token_info => {
+      const token_amount = token_info ? parseInt(token_info.int) : 0
+      DATA.tokens[token_name] = token_amount
+    })
   })
 }
 

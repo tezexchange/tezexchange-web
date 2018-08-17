@@ -40,8 +40,7 @@
         }
       }
     },
-    mounted() {
-    }
+    mounted() {}
   }
 </script>
 

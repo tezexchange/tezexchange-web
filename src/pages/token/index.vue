@@ -1,6 +1,6 @@
 <script>
   import Token from '~/components/Token'
-  import { DATA, dataReady } from '~/js/data'
+  import { DATA, dataReady, updateTokenAmount } from '~/js/data'
 
   export default {
     components: {
