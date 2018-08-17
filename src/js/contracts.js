@@ -19,7 +19,8 @@ export const CONTRACTS = {
 }
 
 export const TOKENS = {
-  KT1Vu7py1imbRHcNsvgbtemxUoo16AQ1jUxq: 'TES'
+  KT1Vu7py1imbRHcNsvgbtemxUoo16AQ1jUxq: 'TES',
+  KT1WHnaEjRV6nTAtJuY9asrM3ufDcXbALizc: 'TKA'
 }
 
 export function getContract(name) {

@@ -40,7 +40,7 @@ export function dataRefresh() {
   return updateOrders()
   .then(() => {
     updateMyOrders()
-    
+
     if (DATA.pkh && $nuxt.$route.path === '/my-orders')
       updateReward(DATA.pkh)
 
@@ -75,6 +75,9 @@ export function updateMyOrders() {
         if (x.owner === pkh)
           my_orders[name].push(x)
       })
+
+      if (!my_orders[name].length)
+        delete my_orders[name]
     }
 
     DATA.my_orders = my_orders
