@@ -1,229 +1,107 @@
 parameter
-  (or
-    (contract
-      bytes)
-    (or
-      (pair
-        address
-        (pair
-          nat
-          (option
-            (pair
-              (contract
-                bytes)
-              bytes))))
-      (pair
-        nat
-        bytes)));
-storage
-  (pair
-    (big_map
-      address
-      nat)
-    (pair
-      string
-      (pair
-        string
-        (pair
-          nat
-          nat))));
-code
-  {
-    DUP ;
-    DIP
-      {
-        CDR ;
-      }
-      ;
-    CAR ;
-    DUP @parameter ;
-    IF_LEFT
-      {
-        DUUUP @storage ;
-        NIL
-          operation
-          ;
-        DUUUP @callback_contract ;
-        PUSH
-          mutez
-          0 ;
-        DUUUUUUUP ;
-        CDDDDR ;
-        DUUUUUUUUP ;
-        CDDDAR ;
-        PAIR ;
-        DUUUUUUUUP ;
-        CDDAR ;
-        PAIR ;
-        DUUUUUUUUP ;
-        CDAR ;
-        PAIR ;
-        PACK ;
-        DIIIIIP
-          {
-            DROP ;
-          }
-          ;
-        TRANSFER_TOKENS ;
-        CONS ;
-        PAIR ;
-      }
-      {
-        IF_LEFT
-          {
-            DUP ;
-            CAR @receiver_addr ;
-            DUUP ;
-            CDAR @amount ;
-            SENDER @owner ;
-            DUUP @amount ;
-            DUUUUUUUP ;
-            CAR ;
-            DUUUP @owner ;
-            GET ;
-            IF_NONE
-              {
-                PUSH
-                  nat
-                  0 ;
-              }
-              {}
-              ;
-            RENAME @owner_balance
-              ;
-            SUB ;
-            DUP ;
-            ABS ;
-            SWAP ;
-            GE ;
-            IF
-              {
-                DUUUUUUUP ;
-                CAR ;
-                DUUUUUP @receiver_addr ;
-                GET ;
-                IF_NONE
-                  {
-                    PUSH
-                      nat
-                      0 ;
-                  }
-                  {}
-                  ;
-                DUUUUP @amount ;
-                ADD @receiver_balance ;
-                DUP @receiver_balance ;
-                DUUUP @remain ;
-                PAIR ;
-                DUUUUUUUUUP @storage ;
-                CDR ;
-                DUUUUUUUUUUP ;
-                CAR ;
-                DUUUUUP @remain ;
-                DIIIIIP
-                  {
-                    DROP ;
-                  }
-                  ;
-                SOME ;
-                DUUUUUUP ;
-                UPDATE @balance_map ;
-                DUUUUP ;
-                DIIIIP
-                  {
-                    DROP ;
-                  }
-                  ;
-                SOME ;
-                DUUUUUUUP ;
-                UPDATE @balance_map ;
-                PAIR ;
-                PAIR ;
-              }
-              {
-                PUSH
-                  string
-                  "balance insufficient" ;
-                FAILWITH ;
-              }
-              ;
-            RENAME @_storage_owner_balance_receiver_balance
-              ;
-            DUP ;
-            CAR @storage ;
-            DUUP ;
-            CDAR @owner_balance ;
-            DUUUP ;
-            CDDR @receiver_balance ;
-            DUUUUUUUUP ;
-            CDDR @callback_option ;
-            IF_NONE
-              {
-                NIL
-                  operation
-                  ;
-              }
-              {
-                NIL
-                  operation
-                  ;
-                DUUP ;
-                CAR @callback_contract ;
-                PUSH
-                  mutez
-                  0 ;
-                DUUUUUP @receiver_balance ;
-                DUUUUUUUP @owner_balance ;
-                PAIR ;
-                DUUUUUUUUUUUP @amount ;
-                PAIR ;
-                DUUUUUUUUUUUUP @receiver_addr ;
-                PAIR ;
-                DUUUUUP ;
-                CDR @passing_bytes ;
-                PAIR ;
-                PACK ;
-                DIIIIP
-                  {
-                    DROP ;
-                  }
-                  ;
-                TRANSFER_TOKENS ;
-                CONS ;
-              }
-              ;
-            RENAME @ops
-              ;
-            DIP
-              {
-                DROP ;
-                DROP ;
-              }
-              ;
-            DIIP
-              {
-                DROP ;
-                DROP ;
-                DROP ;
-                DROP ;
-                DROP ;
-              }
-              ;
-            SWAP ;
-            SWAP ;
-            PAIR ;
-          }
-          {
-            UNIT ;
-            FAILWITH ;
-          }
-          ;
-      }
-      ;
-    DIP
-      {
-        DROP ;
-        DROP ;
-      }
-      ;
-  }
+  (or (contract bytes)
+      (or (pair address (pair nat (option (pair (contract bytes) bytes)))) (pair nat bytes)));
+storage (pair (big_map address nat) (pair string (pair string (pair nat nat))));
+code { DUP ;
+       DIP { CDR } ;
+       CAR ;
+       DUP @parameter ;
+       IF_LEFT
+         { DUUUP @storage ;
+           NIL operation ;
+           DUUUP @callback_contract ;
+           DIIIP { DROP } ;
+           PUSH mutez 0 ;
+           DUUUUUUP ;
+           CDDDDR ;
+           DUUUUUUUP ;
+           CDDDAR ;
+           PAIR ;
+           DUUUUUUUP ;
+           CDDAR ;
+           PAIR ;
+           DUUUUUUUP ;
+           CDAR ;
+           PAIR ;
+           PACK ;
+           TRANSFER_TOKENS ;
+           CONS ;
+           PAIR }
+         { IF_LEFT
+             { DUP ;
+               CAR @receiver_addr ;
+               DUUP ;
+               CDAR @amount ;
+               SENDER @owner ;
+               DUUP @amount ;
+               DUUUUUUUP ;
+               CAR ;
+               DUUUP @owner ;
+               GET ;
+               IF_NONE { PUSH nat 0 } {} ;
+               RENAME @owner_balance ;
+               SUB ;
+               DUP ;
+               ABS ;
+               SWAP ;
+               GE ;
+               IF { DUUUUUUUP ;
+                    CAR ;
+                    DUUP @remain ;
+                    SOME ;
+                    DUUUUP @owner ;
+                    UPDATE @balance_map ;
+                    DUP @balance_map ;
+                    DUUUUUUP @receiver_addr ;
+                    GET ;
+                    IF_NONE { PUSH nat 0 } {} ;
+                    DUUUUUP @amount ;
+                    ADD @receiver_balance ;
+                    DUP @receiver_balance ;
+                    DUUUUP @remain ;
+                    DIIIIP { DROP } ;
+                    PAIR ;
+                    DUUUUUUUUUP ;
+                    CDR ;
+                    DUUUUP ;
+                    DIIIIP { DROP } ;
+                    DUUUUP ;
+                    DIIIIP { DROP } ;
+                    SOME ;
+                    DUUUUUUUP ;
+                    UPDATE @balance_map ;
+                    PAIR ;
+                    PAIR }
+                  { PUSH string "balance insufficient" ; FAILWITH } ;
+               RENAME @_storage_owner_balance_receiver_balance ;
+               DUP ;
+               CAR @storage ;
+               DUUUUUUP ;
+               CDDR @callback_option ;
+               IF_NONE
+                 { NIL operation }
+                 { NIL operation ;
+                   DUUP ;
+                   CAR @callback_contract ;
+                   PUSH mutez 0 ;
+                   DUUUUUUP ;
+                   CDDR @receiver_balance ;
+                   DUUUUUUUP ;
+                   CDAR @owner_balance ;
+                   PAIR ;
+                   DUUUUUUUUUP @amount ;
+                   PAIR ;
+                   DUUUUUUUUUUP @receiver_addr ;
+                   PAIR ;
+                   DUUUUUP ;
+                   DIIIIIP { DROP } ;
+                   CDR @passing_bytes ;
+                   PAIR ;
+                   PACK ;
+                   TRANSFER_TOKENS ;
+                   CONS } ;
+               DIIP { DROP ; DROP ; DROP ; DROP ; DROP } ;
+               RENAME @ops ;
+               PAIR }
+             { UNIT ; FAILWITH } } ;
+       DIP { DROP ; DROP } };

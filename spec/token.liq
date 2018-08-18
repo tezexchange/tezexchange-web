@@ -36,7 +36,7 @@ let%entry main (parameter : token_parameter) (storage : token_storage) =
         Current.failwith "balance insufficient"
       | Plus remain ->
         let balance_map = Map.update owner (Some remain) storage.balance_map in
-        let receiver_balance = amount + (match Map.find receiver_addr storage.balance_map with | None -> 0p | Some x -> x) in
+        let receiver_balance = amount + (match Map.find receiver_addr balance_map with | None -> 0p | Some x -> x) in
         let balance_map = Map.update receiver_addr (Some receiver_balance) balance_map in
         ((storage.balance_map <- balance_map), remain, receiver_balance)
     in
