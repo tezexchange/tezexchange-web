@@ -27,7 +27,7 @@ setInterval(() => {
   if (!document.hasFocus()) return false
 
   dataRefresh()
-}, 10 * 1000)
+}, 30 * 1000)
 
 export function dataReady() {
   if (DATA.ready)

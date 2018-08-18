@@ -55,7 +55,7 @@
                 </table>
               </td>
               <td>
-                <button>
+                <button @click="withdraw">
                   <i class="fas fa-arrow-circle-right"></i>
                   <span>WITHDRAW REWARD</span>
                 </button>

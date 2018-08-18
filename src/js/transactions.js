@@ -1,6 +1,25 @@
 import { getContract } from './contracts.js'
 import { showTip } from './data.js'
 
+const errorHandler = (err) => {
+  let error_id = ''
+  if (typeof err === 'string') {
+    const json = JSON.parse(err.trim())
+    error_id = json[json.length - 1].id
+  } else {
+    const errors = [].concat.apply([], err[0].contents.map(x => x.metadata.operation_result.errors).filter(x => x))
+    if (errors[errors.length - 1].with)
+      return Object.values(errors[errors.length - 1].with)[0]
+    else
+      error_id = errors[errors.length - 1].id
+  }
+
+  return {
+    'proto.alpha.contract.counter_in_the_past': '[Counter in the past] Please wait a minute then retry',
+    'proto.alpha.contract.balance_too_low': 'XTZ balance is too low'
+  }[error_id]
+}
+
 export function RewardWithdraw() {
   const parameters = {
             "prim": "Right",
@@ -55,7 +74,7 @@ export function RewardWithdraw() {
     return x
   })
   .catch(err => {
-    showTip(false, err)
+    showTip(false, errorHandler(err))
   })
 }
 
@@ -113,7 +132,7 @@ export function RewardUnlock() {
     return x
   })
   .catch(err => {
-    showTip(false, err)
+    showTip(false, errorHandler(err))
   })
 }
 
@@ -172,7 +191,7 @@ export function RewardLock(token_amount) {
     return x
   })
   .catch(err => {
-    showTip(false, err)
+    showTip(false, errorHandler(err))
   })
 }
 
@@ -227,7 +246,7 @@ export function ExecuteSelling(order, amount) {
     return x
   })
   .catch(err => {
-    showTip(false, err)
+    showTip(false, errorHandler(err))
   })
 }
 
@@ -292,7 +311,7 @@ export function ExecuteBuying(order, amount) {
       return x
     })
     .catch(err => {
-      showTip(false, err)
+      showTip(false, errorHandler(err))
     })
   })
 }
@@ -359,7 +378,7 @@ export function CreateSelling(amount, token, price) {
       return x
     })
     .catch(err => {
-      showTip(false, err)
+      showTip(false, errorHandler(err))
     })
   })
 
@@ -404,7 +423,7 @@ export function CreateBuying(amount, token, price) {
     return x
   })
   .catch(err => {
-    showTip(false, err)
+    showTip(false, errorHandler(err))
   })
 }
 
@@ -455,6 +474,6 @@ export function CancelOrder(order) {
     return x
   })
   .catch(err => {
-    showTip(false, err)
+    showTip(false, errorHandler(err))
   })
 }
