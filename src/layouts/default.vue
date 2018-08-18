@@ -1,6 +1,6 @@
 <script>
   import { CONTRACTS, getTokens } from '~/js/contracts.js'
-  import { DATA, dataReady, updateMyOrders, TIPS, showTip } from '~/js/data.js'
+  import { DATA, dataReady, updateMyOrders, TIPS, showTip, dataRefresh } from '~/js/data.js'
 
   export default {
     data() {
@@ -31,8 +31,12 @@
       addCustomToken() {
         const address = prompt('Pleaes input the token address:')
         const symbol = prompt('Pleaes input the token symbol:')
-        const tokens = getTokens()
-        tokens[address] = symbol
+        if (address && symbol) {
+          const tokens = getTokens()
+          tokens[address] = symbol
+          this.data.tokens[symbol] = 0
+          dataRefresh()
+        }
       }
     },
     mounted() {
