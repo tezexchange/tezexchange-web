@@ -1,5 +1,5 @@
 <script>
-  import { TOKENS } from '~/js/contracts.js'
+  import { getTokens } from '~/js/contracts.js'
   import { CreateBuying, CreateSelling, ExecuteBuying, ExecuteSelling } from '~/js/transactions.js'
 
   export default {
@@ -60,8 +60,9 @@
           return false
 
         let token = null
-        for (const contract in TOKENS) {
-          if (TOKENS[contract] === this.symbol) {
+        const tokens = getTokens()
+        for (const contract in tokens) {
+          if (tokens[contract] === this.symbol) {
             token = contract
             break
           }

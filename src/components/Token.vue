@@ -48,7 +48,7 @@
           <tbody>
             <tr>
               <th>SIZE</th>
-              <th class="price-header">PRICE(BID)</th>
+              <th class="price-header">BID</th>
             </tr>
             <tr :class="active_order.is_buy === true && active_order.owner === order.owner && active_order.price === order.price && 'active-order'" 
                 @click="active_order = Object.assign({is_buy: true}, order)" 
@@ -64,7 +64,7 @@
         <table>
           <tbody>
             <tr>
-              <th class="price-header">PRICE(ASK)</th>
+              <th class="price-header">ASK</th>
               <th>SIZE</th>
             </tr>
             <tr :class="active_order.is_buy === false && active_order.owner === order.owner && active_order.price === order.price && 'active-order'" 

@@ -1,4 +1,4 @@
-import { CONTRACTS, TOKENS, getContract } from './contracts.js'
+import { CONTRACTS, getTokens, getContract } from './contracts.js'
 import { enc58, makePlain } from './helper.js'
 
 export const TIPS = []
@@ -17,7 +17,7 @@ export const DATA = {
     locked_amount: 0,
     reward_lst: []
   },
-  tokens: Object.assign(...Object.values(TOKENS).map(x => ({[x]: 0}))),
+  tokens: Object.assign(...Object.values(getTokens()).map(x => ({[x]: 0}))),
   orders: {},
   my_orders: {}
 }
@@ -102,8 +102,9 @@ export function updateOrders() {
     
     const orders = {}
     order_lst.forEach(x => {
-      if (x.token in TOKENS) {
-        const key = TOKENS[x.token]
+      const tokens = getTokens()
+      if (x.token in tokens) {
+        const key = tokens[x.token]
         if (!orders[key])
           orders[key] = {buying: [], selling: []}
 
@@ -119,8 +120,9 @@ export function updateOrders() {
 
 export function updateTokenAmount(pkh, token_name) {
   let token = null
-  for (const contract in TOKENS) {
-    if (TOKENS[contract] === token_name) {
+  const tokens = getTokens()
+  for (const contract in tokens) {
+    if (tokens[contract] === token_name) {
       token = contract
       break
     }

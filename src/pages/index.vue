@@ -1,7 +1,7 @@
 <script>
   import Token from '~/components/Token'
   import { DATA } from '~/js/data.js'
-  import { TOKENS } from '~/js/contracts.js'
+  import { getTokens } from '~/js/contracts.js'
 
   export default {
     components: {
@@ -10,7 +10,7 @@
     data() {
       return {
         data: DATA,
-        tokens: TOKENS
+        tokens: getTokens()
       }
     },
     mounted() {

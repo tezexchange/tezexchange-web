@@ -1,5 +1,5 @@
 <script>
-  import { CONTRACTS } from '~/js/contracts.js'
+  import { CONTRACTS, getTokens } from '~/js/contracts.js'
   import { DATA, dataReady, updateMyOrders, TIPS, showTip } from '~/js/data.js'
 
   export default {
@@ -27,6 +27,12 @@
       },
       focus() {
         updateMyOrders()
+      },
+      addCustomToken() {
+        const address = prompt('Pleaes input the token address:')
+        const symbol = prompt('Pleaes input the token symbol:')
+        const tokens = getTokens()
+        tokens[address] = symbol
       }
     },
     mounted() {
@@ -52,6 +58,7 @@
           <nuxt-link to="/my-orders">
             <i class="fas fa-list-alt my-orders-btn" title="mine"></i>
           </nuxt-link>
+          <i class="fas fa-plus-square add-token-btn" title="add custom token" @click="addCustomToken"></i>
         </div>
       </div>
       <div class="version-wrapper">
@@ -92,7 +99,9 @@
 header { max-width: 480px; margin: 8px auto;}
 header .top-wrapper {display: flex; justify-content: center; align-items: center;}
 .logo * {font-family: 'Sacramento'; font-size: 36px;}
-.menu {margin-left: 16px}
+.menu {margin-left: 8px}
+.menu > * {margin-right: 4px;}
+.add-token-btn {cursor: pointer;}
 .footer {max-width: 480px; margin: 16px auto; padding-top: 8px; text-align: center; border-top: 1px solid #eee;}
 .footer .logo {margin-left: 8px; font-family: 'Sacramento'; color: #000; font-size: 17px;}
 .copyright {font-size: 10px;color: #666;}
@@ -105,7 +114,7 @@ select {
   -moz-appearance: none;
   appearance: none;
 }
-.version-wrapper {transform: translate(-10px, -10px); text-align: center}
+.version-wrapper {transform: translate(-20px, -10px); text-align: center}
 .login-wrapper {text-align: center; font-size: 12px}
 .tips { position: fixed; z-index: 10; top: 0; left: 0; width: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
 .tips > div {  border-radius: 3px; max-height: 128px; overflow: hidden;  max-width: 480px; margin-bottom: 4px; padding: 0px 4px 2px 4px; animation-name: fadeIn; animation-duration: 0.5s}

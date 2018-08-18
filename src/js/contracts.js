@@ -19,10 +19,19 @@ export const CONTRACTS = {
 }
 
 export const TOKENS = {
-  KT1Vu7py1imbRHcNsvgbtemxUoo16AQ1jUxq: 'TES',
-  KT1WHnaEjRV6nTAtJuY9asrM3ufDcXbALizc: 'TKA'
+  testnet: {
+    KT1Vu7py1imbRHcNsvgbtemxUoo16AQ1jUxq: 'TES',
+    KT1WHnaEjRV6nTAtJuY9asrM3ufDcXbALizc: 'TKA'
+  },
+  mainnet: {
+
+  }
 }
 
 export function getContract(name) {
   return CONTRACTS.versions[CONTRACTS.selected][`CONTRACT.${name}`]
+}
+
+export function getTokens() {
+  return TOKENS[CONTRACTS.selected.slice(0, 7)]
 }
