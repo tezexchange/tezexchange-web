@@ -17,17 +17,17 @@ export const CONTRACTS = {
     },
     "testnet#3": {
       "ADMIN": "tz1UJPFiywU6uGeMpZnPrY4w7zNhLekvJaUo",
-      "CONTRACT.token": "KT1CAfm9sFGnPescjCyxj5h5AJxMw9JKdeaD",
-      "CONTRACT.reward": "KT18qyttHjJE4cwHNkxMktSGSKqi67qQBgjm",
-      "CONTRACT.main": "KT1VBH3cxdVkgtgDmYQ5QtQvsqGN6k9teyCd",
-      "CONTRACT.adapter": "KT1MxvgVruBSSTKrnC2KtrLypE6VkcfjGW6Q"
+      "CONTRACT.token": "KT1WuNaA5HEujWvXXFNe5kyDLdsVfXdTW1FV",
+      "CONTRACT.reward": "KT1L9dPozLBsg554S2U8KPxCFyLmWHuHDzb8",
+      "CONTRACT.main": "KT1XXjDco86pHU9Jwas5EubiaSHKwv9ZWggQ",
+      "CONTRACT.adapter": "KT1WRh4bdwDcsbPFhhLqrQCyoJMCU8Xy34Dj"
     }
   }
 }
 
 export const TOKENS = {
   testnet: {
-    KT1CAfm9sFGnPescjCyxj5h5AJxMw9JKdeaD: 'TES'
+    KT1WuNaA5HEujWvXXFNe5kyDLdsVfXdTW1FV: 'TES'
   },
   mainnet: {
 
