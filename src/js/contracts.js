@@ -1,5 +1,5 @@
 export const CONTRACTS = {
-  selected: "testnet#2",
+  selected: "testnet#3",
   versions: {
     "testnet#1": {
       "ADMIN": "tz1e8FzYbvNdaHijnBTfZMAHHugKP5eKDhgu",
@@ -14,14 +14,20 @@ export const CONTRACTS = {
       "CONTRACT.reward": "KT1GbB51GRq4zhpMroCSFrKAb3MVDb7yeEW2",
       "CONTRACT.main": "KT1Q2Me8wUuDE88NnwEGwT8zWxxYLg3GfTct",
       "CONTRACT.adapter": "KT1AgWWKwXfJaJPFjDB7eMhCgmBvxhJMqgjk"
+    },
+    "testnet#3": {
+      "ADMIN": "tz1UJPFiywU6uGeMpZnPrY4w7zNhLekvJaUo",
+      "CONTRACT.token": "KT1CAfm9sFGnPescjCyxj5h5AJxMw9JKdeaD",
+      "CONTRACT.reward": "KT18qyttHjJE4cwHNkxMktSGSKqi67qQBgjm",
+      "CONTRACT.main": "KT1VBH3cxdVkgtgDmYQ5QtQvsqGN6k9teyCd",
+      "CONTRACT.adapter": "KT1MxvgVruBSSTKrnC2KtrLypE6VkcfjGW6Q"
     }
   }
 }
 
 export const TOKENS = {
   testnet: {
-    KT1Vu7py1imbRHcNsvgbtemxUoo16AQ1jUxq: 'TES',
-    KT1WHnaEjRV6nTAtJuY9asrM3ufDcXbALizc: 'TKA'
+    KT1CAfm9sFGnPescjCyxj5h5AJxMw9JKdeaD: 'TES'
   },
   mainnet: {
 
