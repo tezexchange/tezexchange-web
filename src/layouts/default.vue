@@ -22,6 +22,13 @@
         selection.removeAllRanges()
         showTip(true, 'Copied')
       },
+      login_signer() {
+        tezbridgeSigner.init()
+        tezbridgeSigner.connect()
+        .then(() => {
+          updateMyOrders()
+        })
+      },
       login() {
         window.open('https://www.tezbridge.com')
       },
@@ -75,10 +82,17 @@
       </div>
 
       <div class="login-wrapper">
-        <button @click="login"  v-if="!data.pkh">
-          <i class="fas fa-sign-in-alt"></i>
-          <span>LOGIN WITH TEZBRIDGE</span>
-        </button>
+        <div v-if="!data.pkh">
+          <span>Login with</span>
+          <button @click="login" >
+            <i class="fas fa-sign-in-alt"></i>
+            <span>TEZBRIDGE</span>
+          </button>
+          <button @click="login_signer">
+            <i class="fas fa-broadcast-tower"></i>
+            <span>REMOTE SIGNER</span>
+          </button>
+        </div>
         {{data.pkh ? `/ ${data.pkh} /` : ''}}
       </div>
     </header>
@@ -120,6 +134,7 @@ select {
 }
 .version-wrapper {transform: translate(-20px, -10px); text-align: center}
 .login-wrapper {text-align: center; font-size: 12px}
+.login-wrapper > div > * {margin: 0 2px; vertical-align: middle}
 .tips { position: fixed; z-index: 10; top: 0; left: 0; width: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
 .tips > div {  border-radius: 3px; max-height: 128px; overflow: hidden;  max-width: 480px; margin-bottom: 4px; padding: 0px 4px 2px 4px; animation-name: fadeIn; animation-duration: 0.5s}
 .tips * {color: white; font-size: 13px; word-break: break-all;}
