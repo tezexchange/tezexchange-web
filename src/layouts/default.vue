@@ -24,7 +24,6 @@
       },
       login_signer() {
         tezbridgeSigner.init()
-        tezbridgeSigner.connect()
         .then(() => {
           updateMyOrders()
         })
