@@ -72,7 +72,14 @@ code { DUP ;
                     UPDATE @balance_map ;
                     PAIR ;
                     PAIR }
-                  { PUSH string "balance insufficient" ; FAILWITH } ;
+                  { PUSH (list string) { "/100" } ;
+                    DUUUUUUUUP ;
+                    CDAR ;
+                    CONS ;
+                    PUSH string "TOKEN/" ;
+                    CONS ;
+                    CONCAT ;
+                    FAILWITH } ;
                RENAME @_storage_owner_balance_receiver_balance ;
                DUP ;
                CAR @storage ;

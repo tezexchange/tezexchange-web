@@ -33,7 +33,7 @@ let%entry main (parameter : token_parameter) (storage : token_storage) =
     in
     let (storage, owner_balance, receiver_balance) = match%nat owner_balance - amount with
       | Minus _ ->
-        Current.failwith "balance insufficient"
+        Current.failwith (String.concat ["TOKEN/"; storage.symbol; "/100"])
       | Plus remain ->
         let balance_map = Map.update owner (Some remain) storage.balance_map in
         let receiver_balance = amount + (match Map.find receiver_addr balance_map with | None -> 0p | Some x -> x) in
