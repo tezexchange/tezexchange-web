@@ -112,6 +112,11 @@ export function updateOrders() {
       }
     })
 
+    for (const key in orders) {
+      orders[key].buying.sort((a, b) => Math.floor(a.price) >= Math.floor(b.price) ? -1 : 1)
+      orders[key].selling.sort((a, b) => Math.floor(a.price) >= Math.floor(b.price) ? 1 : -1)
+    }
+
     DATA.orders = orders
     DATA.ready = true
     return DATA
